@@ -6,7 +6,8 @@ django-grappelli==2.7.3
 djangorestframework==3.3.2
 Fabric==1.10.2
 fake-factory==0.5.3
-graphene[django]==0.7.3
+graphene[django]==0.10.2
 Markdown==2.6.5
 Pillow==3.1.0
 singledispatch==3.4.0.3
+pycrypto==2.6.1
