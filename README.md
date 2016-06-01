@@ -1,6 +1,8 @@
 # crudl django example
 This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
+## Requirements
+
 ## Installation
 1. Create and activate a python **virtual environment**.
 
@@ -33,16 +35,14 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with one of the users.
 You have 3 users (patrick, axel, vaclav) with password "crudl" for each one.
 
-Install crudl-admin (REST)
---------------------------
+### Install crudl-admin (REST)
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
 ```
 $ npm install
 $ npm run watchify
 ```
 
-Install crudl-admin (GraphQL)
------------------------------
+### Install crudl-admin (GraphQL)
 Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
 ```
 $ npm install
