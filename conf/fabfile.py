@@ -31,9 +31,18 @@ faker = Factory.create()
 
 
 def create_users():
-    User.objects.create_superuser("patrick", "patrick@vonautomatisch.at", "crudl")
-    User.objects.create_superuser("axel", "axel@vonautomatisch.at", "crudl")
-    User.objects.create_superuser("vaclav", "vaclav.mikolasek@gmail.com", "crudl")
+    user1 = User.objects.create_superuser("patrick", "patrick@vonautomatisch.at", "crudl")
+    user1.first_name = u"Patrick"
+    user1.last_name = u"Kranzlmüller"
+    user1.save()
+    user2 = User.objects.create_superuser("axel", "axel@vonautomatisch.at", "crudl")
+    user2.first_name = u"Axel"
+    user2.last_name = u"Swoboda"
+    user2.save()
+    user3 = User.objects.create_superuser("vaclav", "vaclav.mikolasek@gmail.com", "crudl")
+    user3.first_name = u"Vaclav"
+    user3.last_name = u"Mikolasek"
+    user3.save()
 
 
 def create_categories():

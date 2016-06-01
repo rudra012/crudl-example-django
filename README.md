@@ -2,6 +2,10 @@
 This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
 ## Requirements
+* Node.js
+* python
+* virtualenv
+* SQLite
 
 ## Installation
 1. Create and activate a python **virtual environment**.
