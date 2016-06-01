@@ -77,7 +77,7 @@ class EntryNode(DjangoNode):
 
 class EntryLinkNode(DjangoNode):
     connection_type = Connection
-    
+
     class Meta:
         model = EntryLink
         filter_fields = {
@@ -177,7 +177,7 @@ class CreateCategory(relay.ClientIDMutation):
             return CreateCategory(category=category)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return CreateCategory(category=None, errors=errors)
 
@@ -197,17 +197,21 @@ class ChangeCategory(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         category = get_category(input.get('id'))
-        if input.get('user'): category.user_id = get_user_id(input.get('user'))
-        if input.get('name'): category.name = input.get('name')
-        if input.get('slug'): category.slug = input.get('slug')
-        if input.get('position'): category.position = input.get('position')
+        if input.get('user'):
+            category.user_id = get_user_id(input.get('user'))
+        if input.get('name'):
+            category.name = input.get('name')
+        if input.get('slug'):
+            category.slug = input.get('slug')
+        if input.get('position'):
+            category.position = input.get('position')
         try:
             category.full_clean()
             category.save()
             return ChangeCategory(category=category)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return ChangeCategory(category=category, errors=errors)
 
@@ -250,7 +254,7 @@ class CreateTag(relay.ClientIDMutation):
             return CreateTag(tag=tag)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return CreateTag(tag=None, errors=errors)
 
@@ -268,15 +272,17 @@ class ChangeTag(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         tag = get_tag(input.get('id'))
-        if input.get('user'): tag.user_id = get_user_id(input.get('user'))
-        if input.get('name'): tag.name = input.get('name')
+        if input.get('user'):
+            tag.user_id = get_user_id(input.get('user'))
+        if input.get('name'):
+            tag.name = input.get('name')
         try:
             tag.full_clean()
             tag.save()
             return ChangeTag(tag=tag)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return ChangeTag(tag=tag, errors=errors)
 
@@ -335,7 +341,7 @@ class CreateEntry(relay.ClientIDMutation):
             return CreateEntry(entry=entry)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return CreateEntry(entry=None, errors=errors)
 
@@ -361,23 +367,33 @@ class ChangeEntry(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entry = get_entry(input.get('id'))
-        if input.get('user'): entry.user_id = get_user_id(input.get('user'))
-        if input.get('title'): entry.title = input.get('title')
-        if input.get('date'): entry.date = input.get('date')
-        if input.get('date_from'): entry.date_from = input.get('date_from')
-        if input.get('date_until'): entry.date_until = input.get('date_until')
-        if input.get('sticky'): entry.sticky = input.get('sticky')
-        if input.get('status'): entry.status = input.get('status')
-        if input.get('category'): entry.category_id = get_category_id(input.get('category'))
-        if input.get('body'): entry.body = input.get('body')
-        if input.get('tags'): entry.tags = get_tags_ids(input.get('tags'))
+        if input.get('user'):
+            entry.user_id = get_user_id(input.get('user'))
+        if input.get('title'):
+            entry.title = input.get('title')
+        if input.get('date'):
+            entry.date = input.get('date')
+        if input.get('date_from'):
+            entry.date_from = input.get('date_from')
+        if input.get('date_until'):
+            entry.date_until = input.get('date_until')
+        if input.get('sticky'):
+            entry.sticky = input.get('sticky')
+        if input.get('status'):
+            entry.status = input.get('status')
+        if input.get('category'):
+            entry.category_id = get_category_id(input.get('category'))
+        if input.get('body'):
+            entry.body = input.get('body')
+        if input.get('tags'):
+            entry.tags = get_tags_ids(input.get('tags'))
         try:
             entry.full_clean()
             entry.save()
             return ChangeEntry(entry=entry)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return ChangeEntry(entry=entry, errors=errors)
 
@@ -426,7 +442,7 @@ class CreateEntryLink(relay.ClientIDMutation):
             return CreateEntryLink(entrylink=entrylink)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return CreateEntryLink(entrylink=None, errors=errors)
 
@@ -447,18 +463,23 @@ class ChangeEntryLink(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entrylink = get_entrylink(input.get('id'))
-        if input.get('user'): entrylink.entry_id = get_entry_id(input.get('entry'))
-        if input.get('url'): entrylink.url = input.get('url')
-        if input.get('title'): entrylink.title = input.get('title')
-        if input.get('description'): entrylink.description = input.get('description')
-        if input.get('position'): entrylink.position = input.get('position')
+        if input.get('user'):
+            entrylink.entry_id = get_entry_id(input.get('entry'))
+        if input.get('url'):
+            entrylink.url = input.get('url')
+        if input.get('title'):
+            entrylink.title = input.get('title')
+        if input.get('description'):
+            entrylink.description = input.get('description')
+        if input.get('position'):
+            entrylink.position = input.get('position')
         try:
             entrylink.full_clean()
             entrylink.save()
             return ChangeEntryLink(entrylink=entrylink)
         except ValidationError as e:
             fields = e.message_dict.keys()
-            messages = [ '; '.join(m) for m in e.message_dict.values()]
+            messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return ChangeEntryLink(entrylink=entrylink, errors=errors)
 

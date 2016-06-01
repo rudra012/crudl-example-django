@@ -12,6 +12,7 @@ class Query(apps.blog.schema.Query):
     # as we begin to add more apps to our project
     pass
 
+
 class Mutation(apps.blog.schema.Mutation):
     pass
 
