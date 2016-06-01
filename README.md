@@ -11,21 +11,18 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     $ cd crudl-example-django
     ```
 
-3. Then, install the python requirements:
+3. Install the python requirements:
 
     ```
     $ pip install -r conf/requirements.txt
     ```
 
-4. Now you can setup the database (SQLite) and add some contents:
+4. Setup the database (SQLite) and add contents:
 
     ```
-    $ python manage.py migrate  
+    $ python manage.py migrate
     $ fab init -f conf/fabfile
     ```
-
-    You have now 3 superusers (patrick, axel, vaclav) with pw "crudl" for each one.
-    Besides, you'll get lots of categories, tags and some blog entries.
 
 5. Start the django development server:
 
@@ -34,6 +31,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     ```
 
 Now you can open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with one of the superusers.
+You have now 3 superusers (patrick, axel, vaclav) with pw "crudl" for each one.
 
 Install crudl-admin (REST)
 --------------------------
@@ -76,11 +74,13 @@ There are a couple of foreign keys being used (e.g. Category with Entry) and one
 
 ### Relation with different endpoint
 The collection Links is an example of related objects which are assigned through an intermediary table with additional fields.
-You can either use the main menu in order to handle all Links are an individual Entry in order to XXX (which are shown using tabs).
+You can either use the main menu in order to handle all Links are an individual Entry in order to edit the Links assigned to this Entry (which are shown using tabs).
 
 ### Autocompletes
 We decided to use autocomplete fields for all foreign-key and many-to-many relations.
-XXX
 
 ### Custom fields
 With Users, we added a custom field Name which is not part of the database or the API.
+
+## Development
+This example mainly shows how to use crudl. It is not intended for development on crudl itself.
