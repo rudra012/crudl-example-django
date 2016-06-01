@@ -85,7 +85,7 @@ changeView.fields = [
         field: 'Autocomplete',
         props: {
             // allowNone: false,
-            searchEmptyQuery: true,
+            showAll: true,
         },
         actions: {
             select: (req, cxs) => {
