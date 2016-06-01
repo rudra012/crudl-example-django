@@ -30,8 +30,8 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     $ python manage.py runserver
     ```
 
-Now you can open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with one of the superusers.
-You have now 3 superusers (patrick, axel, vaclav) with pw "crudl" for each one.
+Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with one of the users.
+You have 3 users (patrick, axel, vaclav) with password "crudl" for each one.
 
 Install crudl-admin (REST)
 --------------------------
@@ -66,21 +66,22 @@ Both the REST and GraphQL API is only accessible for logged-in users based on To
 Authentication for GraphQL is done with a decorator wrapping the basic URL.
 
 ### Mutually dependent fields
-When adding or editing an Entry, the Categories depend on the selected User.
-If you change the field User, the options of field Category is populated based on the chosen User.
+When adding or editing an _Entry_, the _Categories_ depend on the selected _User_.
+If you change the field _User_, the options of field _Category_ are populated based on the chosen _User_.
 
 ### Foreign Key, Many-to-Many
-There are a couple of foreign keys being used (e.g. Category with Entry) and one many-to-many field (Tags with Entry).
+There are a couple of foreign keys being used (e.g. _Category_ with _Entry_) and one many-to-many field (_Tags_ with _Entry_).
 
 ### Relation with different endpoint
-The collection Links is an example of related objects which are assigned through an intermediary table with additional fields.
-You can either use the main menu in order to handle all Links are an individual Entry in order to edit the Links assigned to this Entry (which are shown using tabs).
+The collection _Links_ is an example of related objects which are assigned through an intermediary table with additional fields.
+You can either use the main menu in order to handle all Links are an individual _Entry_ in order to edit the _Links_ assigned to this _Entry_ (which are shown using tabs).
 
 ### Autocompletes
 We decided to use autocomplete fields for all foreign-key and many-to-many relations.
 
 ### Custom fields
-With Users, we added a custom field Name which is not part of the database or the API.
+With _Users_, we added a custom field _Name_ which is not part of the database or the API.
+The methods _normalize_ and _denormalize_ are being used in order to manipulate the data stream.
 
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
