@@ -2,7 +2,6 @@
 
 # DJANGO IMPORTS
 import django_filters
-from django.contrib.admin.utils import NestedObjects, get_deleted_objects
 
 # REST IMPORTS
 from rest_framework import viewsets, filters, response
@@ -35,27 +34,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return User.objects.all()
 
-    # @detail_route(methods=['get'])
-    # def related(self, request, *args, **kwargs):
-    #     related_objects = []
-    #     obj = self.get_object()
-    #     # collector = NestedObjects()
-    #     # collector.collect([obj])
-    #     # print "XXX", collector.nested()
-    #     # (deleted_objects, model_count, perms_needed, protected) = get_deleted_objects([obj], opts, request.user, self.admin_site, using)
-    #     # print "XXX", get_deleted_objects()
-    #     related = [rel.get_accessor_name() for rel in obj._meta.get_all_related_objects()]
-    #     for r in related:
-    #         objects = getattr(obj, r).all()
-    #         for rel_obj in objects:
-    #             related_objects.append({
-    #                 "class": rel_obj._meta.model_name,
-    #                 "verbose_name": rel_obj._meta.verbose_name,
-    #                 "verbose_name_plural": rel_obj._meta.verbose_name_plural,
-    #                 "obj": "%s" % rel_obj
-    #             })
-    #     return response.Response(related_objects)
-
 
 class CategoryFilter(django_filters.FilterSet):
     user = django_filters.NumberFilter(name="user", lookup_type="exact")
@@ -82,6 +60,7 @@ class TagFilter(django_filters.FilterSet):
     class Meta:
         model = Tag
         fields = ("user",)
+
 
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
