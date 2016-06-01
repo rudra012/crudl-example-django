@@ -120,38 +120,6 @@ class EntryViewSet(viewsets.ModelViewSet):
         return response.Response(serializer.data)
 
 
-class EntryNestedViewSet(viewsets.ModelViewSet):
-    serializer_class = EntryNestedSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    filter_class = EntryFilter
-    search_fields = ('title',)
-
-    def get_queryset(self):
-        return Entry.objects.all()
-
-    @detail_route(methods=['get'])
-    def links(self, request, *args, **kwargs):
-        entry = self.get_object()
-        serializer = EntryLinkSerializer(entry.links.all(), many=True)
-        return response.Response(serializer.data)
-
-
-class EntryNestedReadWriteViewSet(viewsets.ModelViewSet):
-    serializer_class = EntryNestedReadWriteSerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter,)
-    filter_class = EntryFilter
-    search_fields = ('title',)
-
-    def get_queryset(self):
-        return Entry.objects.all()
-
-    @detail_route(methods=['get'])
-    def links(self, request, *args, **kwargs):
-        entry = self.get_object()
-        serializer = EntryLinkSerializer(entry.links.all(), many=True)
-        return response.Response(serializer.data)
-
-
 class EntryLinkFilter(django_filters.FilterSet):
     entry = django_filters.NumberFilter(name="entry", lookup_type="exact")
 
