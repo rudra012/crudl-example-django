@@ -59,7 +59,7 @@ var changeView = {
     },
     denormalize: (data) => {
         let index = data.full_name.indexOf(',')
-        if (index < 1) {
+        if (index < 0) {
             throw ({
                 full_name: 'The required format is <Last name>, <First name>'
             })
