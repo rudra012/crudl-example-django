@@ -70,47 +70,62 @@ var changeView = {
     }
 }
 
-changeView.fields = [
+changeView.fieldsets = [
     {
-        name: 'username',
-        label: 'Username',
-        field: 'String',
+        collapse: 'none', // open, close
+        fields: [
+            {
+                name: 'username',
+                label: 'Username',
+                field: 'String',
+            },
+            {
+                name: 'full_name',
+                label: 'Name',
+                field: 'String',
+            },
+            {
+                name: 'email',
+                label: 'Email address',
+                field: 'String',
+            },
+        ],
     },
     {
-        name: 'full_name',
-        label: 'Name',
-        field: 'String',
+        title: 'Roles',
+        collapse: 'open', // open, close
+        fields: [
+            {
+                name: 'is_staff',
+                label: 'Staff member',
+                field: 'Checkbox',
+            },
+            {
+                name: 'is_active',
+                label: 'Active',
+                field: 'Checkbox',
+            },
+        ],
     },
     {
-        name: 'email',
-        label: 'Email address',
-        field: 'String',
-    },
-    {
-        name: 'is_staff',
-        label: 'Staff member',
-        field: 'Checkbox',
-    },
-    {
-        name: 'is_active',
-        label: 'Active',
-        field: 'Checkbox',
-    },
-    /* FIXME: date_joined should be read only with the frontend */
-    {
-        name: 'date_joined',
-        label: 'Date joined',
-        field: 'Date',
-    },
-    /* FIXME: add field password with help_text explaining how
-    to reset the password (custom page) */
+        title: 'More...',
+        collapse: 'close', // open, close
+        fields: [
+            /* FIXME: date_joined should be read only with the frontend */
+            {
+                name: 'date_joined',
+                label: 'Date joined',
+                field: 'Date',
+            },
+        ],
+    }
 ]
 
 //-------------------------------------------------------------------
 var addView = {
     path: 'users/new',
     title: 'New User',
-    fields: changeView.fields,
+    fieldsets: changeView.fieldsets,
     actions: {
         add: function (req, connexes) { return connexes.users.create(req) },
     },
