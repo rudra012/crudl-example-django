@@ -9,6 +9,10 @@ var listView = {
 
 listView.fields = [
     {
+        name: 'user',
+        label: 'User',
+    },
+    {
         name: 'title',
         label: 'Title',
         sortable: true,
@@ -27,12 +31,7 @@ listView.fields = [
         sortable: true,
         sorted: 'descending',
         sortpriority: '1',
-    },
-    {
-        name: 'tags',
-        label: 'Tags',
-        sortable: true,
-    },
+    }
 ]
 
 listView.filters = {

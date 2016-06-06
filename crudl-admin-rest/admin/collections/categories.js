@@ -20,6 +20,10 @@ var listView = {
 
 listView.fields = [
     {
+        name: 'user',
+        label: 'User',
+    },
+    {
         name: 'name',
         label: 'Name',
         main: true,
@@ -37,7 +41,13 @@ listView.filters = {
             label: 'User',
             field: 'Select',
             actions: {
-                asyncProps: (req, cxs) => cxs.users_options.read(req),
+                asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', 'all'))
+                .then(res => res.set('data', {
+                    options: res.data.map(user => ({
+                        value: user.id,
+                        label: user.username,
+                    }))
+                }))
             },
             initialValue: '',
         },
