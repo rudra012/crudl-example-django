@@ -72,13 +72,16 @@ var changeView = {
 
 changeView.fieldsets = [
     {
-        collapse: 'none', // open, close
         fields: [
             {
                 name: 'username',
                 label: 'Username',
                 field: 'String',
-            },
+            },            
+        ],
+    },
+    {
+        fields: [
             {
                 name: 'full_name',
                 label: 'Name',
@@ -93,7 +96,7 @@ changeView.fieldsets = [
     },
     {
         title: 'Roles',
-        collapse: 'open', // open, close
+        expanded: true,
         fields: [
             {
                 name: 'is_staff',
@@ -109,7 +112,8 @@ changeView.fieldsets = [
     },
     {
         title: 'More...',
-        collapse: 'close', // open, close
+        expanded: false,
+        description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         fields: [
             /* FIXME: date_joined should be read only with the frontend */
             {
