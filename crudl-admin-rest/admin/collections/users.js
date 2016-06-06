@@ -59,11 +59,6 @@ var changeView = {
     },
     denormalize: (data) => {
         let index = data.full_name.indexOf(',')
-        if (index < 0) {
-            throw ({
-                full_name: 'The required format is <Last name>, <First name>'
-            })
-        }
         data.last_name = data.full_name.slice(0, index)
         data.first_name = data.full_name.slice(index+1)
         return data
@@ -77,7 +72,7 @@ changeView.fieldsets = [
                 name: 'username',
                 label: 'Username',
                 field: 'String',
-            },            
+            },
         ],
     },
     {
@@ -86,6 +81,11 @@ changeView.fieldsets = [
                 name: 'full_name',
                 label: 'Name',
                 field: 'String',
+                validate: (value) => {
+                    if (!value || value.indexOf(',') < 0) {
+                        return 'The required format is <Last name>, <First name>'
+                    }
+                },
             },
             {
                 name: 'email',
