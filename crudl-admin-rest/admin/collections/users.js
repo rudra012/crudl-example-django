@@ -120,6 +120,7 @@ changeView.fieldsets = [
                 name: 'date_joined',
                 label: 'Date joined',
                 field: 'Date',
+                readOnly: true,
             },
         ],
     }
