@@ -49,12 +49,18 @@ var changeView = {
     },
     normalize: (data, error) => {
         if (error) {
-            if (error.first_name) {
+            if (error.first_name)
                 error.full_name = 'First name: ' + error.first_name
-            }
+            if (error.last_name)
+                error.full_name = 'Last name: ' + error.last_name
             throw error
         }
+        // full_name
         data.full_name = data.last_name + ', ' + data.first_name
+        // split date_joined into date_joined and time_joined
+        let T = data.date_joined.indexOf('T')
+        data.time_joined = data.date_joined.slice(T+1, T+6)
+        data.day_joined = data.date_joined.slice(0, T)
         return data
     },
     denormalize: (data) => {
@@ -115,11 +121,16 @@ changeView.fieldsets = [
         expanded: false,
         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         fields: [
-            /* FIXME: date_joined should be read only with the frontend */
             {
-                name: 'date_joined',
+                name: 'day_joined',
                 label: 'Date joined',
                 field: 'Date',
+                readOnly: true,
+            },
+            {
+                name: 'time_joined',
+                label: 'Time joined',
+                field: 'Text',
                 readOnly: true,
             },
         ],
