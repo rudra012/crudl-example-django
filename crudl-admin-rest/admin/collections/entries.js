@@ -17,7 +17,8 @@ var listView = {
         list: function (req, cxs) {
             let entries = cxs.entries.read(req)
             let users = cxs.users.read(req.paginate(false))
-            return join(entries, users, 'user', 'id')
+            let categories = cxs.categories.read(req.filter('limit', 10000))
+            return join(join(entries, users, 'user', 'id'), categories, 'category', 'id')
         },
     },
 }
@@ -41,6 +42,7 @@ listView.fields = [
     },
     {
         name: 'category',
+        key: 'category.name',
         label: 'Category',
         main: true,
         render: 'number',
