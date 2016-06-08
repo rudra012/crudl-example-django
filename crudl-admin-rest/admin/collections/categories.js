@@ -80,16 +80,14 @@ changeView.fields = [
             setInitialValue: (name) => slugify(name),
         },
         props: {
-            helpText: 'If left blank, the slug will be automatically generated.'
+            helpText: 'If left blank, the slug will be automatically generated.',
+            comment: 'More about slugs <a href="http://en.wikipedia.org/wiki/Slug">here</a>'
         }
     },
     {
         name: 'user',
         label: 'User',
         field: 'Autocomplete',
-        props: {
-            helpText: 'Help!'
-        },
         actions: {
             select: (req, cxs) => {
                 return Promise.all(req.data.selection.map(item => {

@@ -183,6 +183,7 @@ changeView.tabs = [
                 return cxs.links.read(req)
             },
         },
+        itemTitle: '{url}',
         fields: [
             {
                 name: 'url',
