@@ -196,7 +196,7 @@ changeView.tabs = [
         title: 'Links',
         actions: {
             list: (req, cxs) => {
-                req.filter("entry", req.context.id)
+                req.filter("entry", req.id.id)
                 req.paginate(false)
                 return cxs.links.read(req)
             },
