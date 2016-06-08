@@ -1,15 +1,31 @@
+
+function join(p1, p2, var1, var2) {
+    return Promise.all([p1, p2])
+    .then(responses => {
+        return responses[0].set('data', responses[0].data.map(item => {
+            item[var1] = responses[1].data.find(obj => obj[var2] == item[var1])
+            return item
+        }))
+    })
+}
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'entries',
     title: 'Blog Entries',
     actions: {
-        list: function (req, cxs) { return cxs.entries.read(req) },
+        list: function (req, cxs) {
+            let entries = cxs.entries.read(req)
+            let users = cxs.users.read(req.paginate(false))
+            return join(entries, users, 'user', 'id')
+        },
     },
 }
 
 listView.fields = [
     {
         name: 'user',
+        key: 'user.username',
         label: 'User',
     },
     {
