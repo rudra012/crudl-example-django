@@ -1,3 +1,4 @@
+var utils = require('../utils')
 
 // Credits for this function go to https://gist.github.com/mathewbyrne
 function slugify(text) {
@@ -14,13 +15,18 @@ var listView = {
     path: 'categories',
     title: 'Categories',
     actions: {
-        list: function (req, connexes) { return connexes.categories.read(req) },
-    },
+        list: function (req, cxs) {
+            let categories = cxs.categories.read(req)
+            //let users = cxs.users.read(req.filter('limit', '1000'))
+            return categories
+        },
+    }
 }
 
 listView.fields = [
     {
         name: 'user',
+        //key: 'user.username',
         label: 'User',
     },
     {
@@ -41,7 +47,7 @@ listView.filters = {
             label: 'User',
             field: 'Select',
             actions: {
-                asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', 'all'))
+                asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', '1000'))
                 .then(res => res.set('data', {
                     options: res.data.map(user => ({
                         value: user.id,

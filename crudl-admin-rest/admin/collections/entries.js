@@ -1,3 +1,4 @@
+var utils = require('../utils')
 
 function join(p1, p2, var1, var2) {
     return Promise.all([p1, p2])
@@ -18,7 +19,7 @@ var listView = {
             let entries = cxs.entries.read(req)
             let users = cxs.users.read(req.paginate(false))
             let categories = cxs.categories.read(req.filter('limit', 10000))
-            return join(join(entries, users, 'user', 'id'), categories, 'category', 'id')
+            return utils.join(utils.join(entries, users, 'user', 'id'), categories, 'category', 'id')
         },
     },
 }
