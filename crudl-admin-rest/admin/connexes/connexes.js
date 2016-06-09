@@ -78,18 +78,6 @@ module.exports = [
         use: 'categories',
     },
     {
-        id: 'entries_nested',
-        url: 'entries-nested-read-write/',
-        pagination,
-        transform: {
-            readResData: data => data.results,
-        },
-    },
-    {
-        id: 'entry_nested',
-        url: 'entries-nested-read-write/:id/',
-    },
-    {
         id: 'tags_options',
         use: 'entries_options',
         transform: {
@@ -100,18 +88,6 @@ module.exports = [
                 }
             }),
         },
-    },
-    {
-        id: 'entries_nested_rw',
-        url: 'entries-nested-read-write/',
-        pagination,
-        transform: {
-            readResData: data => data.results,
-        },
-    },
-    {
-        id: 'entry_nested_rw',
-        url: 'entries-nested-read-write/:id/',
     },
     {
         id: 'links',
