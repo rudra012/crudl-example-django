@@ -7,6 +7,7 @@ var listView = {
     },
     normalize: (list) => list.map(item => {
         item.full_name = item.last_name + ', ' + item.first_name
+        item.full_name = item.full_name.replace(/(^, )|(, $)/, '')
         return item
     })
 }
@@ -57,6 +58,7 @@ var changeView = {
         }
         // full_name
         data.full_name = data.last_name + ', ' + data.first_name
+        data.full_name = data.full_name.replace(/(^, )|(, $)/, '')
         // split date_joined into date_joined and time_joined
         let T = data.date_joined.indexOf('T')
         data.time_joined = data.date_joined.slice(T+1, T+6)
