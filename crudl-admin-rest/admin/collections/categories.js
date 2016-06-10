@@ -87,7 +87,7 @@ changeView.fields = [
         },
         props: {
             helpText: 'If left blank, the slug will be automatically generated.',
-            comment: 'More about slugs <a href="http://en.wikipedia.org/wiki/Slug">here</a>'
+            comment: 'More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.'
         }
     },
     {
