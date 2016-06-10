@@ -107,14 +107,28 @@ changeView.fieldsets = [
         expanded: true,
         fields: [
             {
-                name: 'is_staff',
-                label: 'Staff member',
-                field: 'Checkbox',
-            },
-            {
                 name: 'is_active',
                 label: 'Active',
                 field: 'Checkbox',
+                props: {
+                    helpText: 'Designates whether this user should be treated as active. Unselect this instead of deleting accounts.'
+                },
+            },
+            {
+                name: 'is_staff',
+                label: 'Staff member',
+                field: 'Checkbox',
+                props: {
+                    helpText: 'Designates whether the user can log into crudl.'
+                },
+            },
+            {
+                name: 'is_superuser',
+                label: 'Superuser',
+                field: 'Checkbox',
+                props: {
+                    helpText: 'Designates that this user has all permissions without explicitly assigning them.'
+                },
             },
         ],
     },
@@ -138,7 +152,7 @@ changeView.fieldsets = [
         ],
     },
     {
-        title: 'Change password',
+        title: 'Password',
         expanded: false,
         description: "Raw passwords are not stored, so there is no way to see this user's password, but you can set a new password.",
         fields: [
