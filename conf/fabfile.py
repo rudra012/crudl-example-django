@@ -39,9 +39,10 @@ def create_users():
     user2.first_name = u"Axel"
     user2.last_name = u"Swoboda"
     user2.save()
-    user3 = User.objects.create_superuser("vaclav", "vaclav.mikolasek@gmail.com", "crudl")
+    user3 = User.objects.create_user("vaclav", "vaclav.mikolasek@gmail.com", "crudl")
     user3.first_name = u"Vaclav"
     user3.last_name = u"Mikolasek"
+    user2.is_staff = True
     user3.save()
 
 
