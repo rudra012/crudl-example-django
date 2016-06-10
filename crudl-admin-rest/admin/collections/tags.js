@@ -1,52 +1,113 @@
-import { types } from '../../Definitions'
-import { root } from './settings'
-
-var actions = {
-    list: (req, connexes) => connexes.tags.read(req),
-    add: (req, connexes) => connexes.tags.create(req),
-    get: (req, connexes) => connexes.tag.read(req),
-    delete: (req, connexes) => connexes.tag.delete(req),
-    save: (req, connexes) => connexes.tag.update(req),
-}
+var utils = require('../utils')
 
 //-------------------------------------------------------------------
-var collection = {
-    meta: {
-        type: types.TYPE_COLLECTION,
-        path: 'tags',
-        actions,
-    },
+var listView = {
+    path: 'tags',
     title: 'Tags',
-    fields: [ 'name', ],
+    actions: {
+        list: function (req, cxs) {
+            let tags = cxs.tags.read(req)
+            return tags
+        },
+    }
 }
 
-//-------------------------------------------------------------------
-collection.resource =  {
-    meta: {
-        type: types.TYPE_RESOURCE,
-        path: 'tags/:id',
-        actions,
-    },
-    title: 'Entry Tag',
-}
-
-//-------------------------------------------------------------------
-collection.resource.add = {
-    meta: {
-        type: types.TYPE_ADD_RESOURCE,
-        actions,
-    },
-    path: 'tags/new',
-}
-
-//-------------------------------------------------------------------
-collection.resource.fields = [
+listView.fields = [
     {
-        meta: { type: types.TYPE_FIELD },
+        name: 'user',
+        label: 'User',
+    },
+    {
+        name: 'name',
+        label: 'Name',
+        main: true,
+    },
+    {
+        name: 'slug',
+        label: 'Slug',
+    },
+]
+
+listView.filters = {
+    fields: [
+        {
+            name: 'user',
+            label: 'User',
+            field: 'Select',
+            actions: {
+                asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', '1000'))
+                .then(res => res.set('data', {
+                    options: res.data.map(user => ({
+                        value: user.id,
+                        label: user.username,
+                    }))
+                }))
+            },
+            initialValue: '',
+        },
+    ]
+}
+
+//-------------------------------------------------------------------
+var changeView = {
+    path: 'tags/:id',
+    title: 'Tag',
+    actions: {
+        get: function (req, connexes) { return connexes.tag.read(req) },
+        delete: function (req, connexes) { return connexes.tag.delete(req) },
+        save: function (req, connexes) { return connexes.tag.update(req) },
+    },
+}
+
+changeView.fields = [
+    {
         name: 'name',
         label: 'Name',
         field: 'String',
     },
+    {
+        name: 'slug',
+        label: 'Slug',
+        field: 'String',
+    },
+    {
+        name: 'user',
+        label: 'User',
+        field: 'Autocomplete',
+        actions: {
+            select: (req, cxs) => {
+                return Promise.all(req.data.selection.map(item => {
+                    return cxs.user.read(req.with('id', item.value))
+                    .then(res => res.set('data', {
+                        value: res.data.id,
+                        label: res.data.username,
+                    }))
+                }))
+            },
+            search: (req, cxs) => {
+                return cxs.users.read(req.filter('username', req.data.query))
+                .then(res => res.set('data', res.data.map(user => ({
+                    value: user.id,
+                    label: user.username,
+                }))))
+            }
+        }
+    },
 ]
 
-export default { collections: [collection] }
+//-------------------------------------------------------------------
+var addView = {
+    path: 'tags/new',
+    title: 'New Tag',
+    fields: changeView.fields,
+    actions: {
+        add: function (req, connexes) { return connexes.tags.create(req) },
+    },
+}
+
+
+module.exports = {
+    listView,
+    changeView,
+    addView,
+}
