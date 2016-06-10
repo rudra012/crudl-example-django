@@ -99,14 +99,6 @@ changeView.fieldsets = [
                 name: 'email',
                 label: 'Email address',
                 field: 'String',
-            },
-            {
-                name: 'password',
-                label: 'Password',
-                field: 'Password',
-                props: {
-                    helpText: "Raw passwords are not stored, so there is no way to see this user's password, but you can change the password using <a href'#'>this form</a>."
-                }
             }
         ],
     },
@@ -144,6 +136,23 @@ changeView.fieldsets = [
                 readOnly: true,
             },
         ],
+    },
+    {
+        title: 'Change password',
+        expanded: false,
+        description: "Raw passwords are not stored, so there is no way to see this user's password, but you can set a new password.",
+        fields: [
+            {
+                name: 'password',
+                label: 'Password',
+                field: 'Password',
+            },
+            {
+                name: 'password_confirm',
+                label: 'Password (Confirm)',
+                field: 'Password',
+            },
+        ]
     }
 ]
 
