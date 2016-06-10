@@ -27,13 +27,18 @@ listView.fields = [
         label: 'Email address',
     },
     {
+        name: 'is_active',
+        label: 'Active',
+        render: 'boolean',
+    },
+    {
         name: 'is_staff',
         label: 'Staff member',
         render: 'boolean',
     },
     {
-        name: 'is_active',
-        label: 'Active',
+        name: 'is_superuser',
+        label: 'Superuser',
         render: 'boolean',
     },
 ]
