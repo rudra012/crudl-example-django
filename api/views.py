@@ -32,7 +32,9 @@ class UserViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'username', 'is_staff', 'is_active', 'date_joined',)
 
     def get_queryset(self):
-        return User.objects.all()
+        if self.request.user.is_superuser:
+            return User.objects.all()
+        return User.objects.filter(id=self.request.user.id)
 
 
 class CategoryFilter(django_filters.FilterSet):
