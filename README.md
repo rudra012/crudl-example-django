@@ -87,5 +87,8 @@ We decided to use autocomplete fields for all foreign-key and many-to-many relat
 With _Users_, we added a custom field _Name_ which is not part of the database or the API.
 The methods _normalize_ and _denormalize_ are being used in order to manipulate the data stream.
 
+### Superuser vs staff user
+All 3 _Users_ are able to login to crudl (because is_staff is True). But only superusers (patrick, axel) are allowed to edit all objects. The third user (vaclav) is only able to see and edit his own objects.
+
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.

@@ -51,7 +51,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'user', 'name', 'slug', 'position',)
 
     def get_queryset(self):
-        return Category.objects.all()
+        if self.request.user.is_superuser:
+            return Category.objects.all()
+        return Category.objects.filter(user=self.request.user)
 
 
 class TagFilter(django_filters.FilterSet):
@@ -69,7 +71,9 @@ class TagViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'user', 'name', 'slug',)
 
     def get_queryset(self):
-        return Tag.objects.all()
+        if self.request.user.is_superuser:
+            return Tag.objects.all()
+        return Tag.objects.filter(user=self.request.user)
 
 
 class EntryFilter(django_filters.FilterSet):
@@ -90,7 +94,9 @@ class EntryViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'title', 'date', 'category', 'tags',)
 
     def get_queryset(self):
-        return Entry.objects.all()
+        if self.request.user.is_superuser:
+            return Entry.objects.all()
+        return Entry.objects.filter(user=self.request.user)
 
     @detail_route(methods=['get'])
     def links(self, request, *args, **kwargs):
@@ -114,4 +120,6 @@ class EntryLinkViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'entry', 'title', 'position',)
 
     def get_queryset(self):
-        return EntryLink.objects.all()
+        if self.request.user.is_superuser:
+            return EntryLink.objects.all()
+        return EntryLink.objects.filter(entry__user=self.request.user)
