@@ -17,7 +17,8 @@ var listView = {
     actions: {
         list: function (req, cxs) {
             let categories = cxs.categories.read(req)
-            //let users = cxs.users.read(req.filter('limit', '1000'))
+            let users = cxs.users.read(req.paginate(false).filter('limit', '10000'))
+            // return utils.join(categories, users, 'user', 'id')
             return categories
         },
     }
@@ -26,7 +27,7 @@ var listView = {
 listView.fields = [
     {
         name: 'user',
-        //key: 'user.username',
+        key: 'user.username',
         label: 'User',
     },
     {
@@ -86,8 +87,8 @@ changeView.fields = [
             setInitialValue: (name) => slugify(name),
         },
         props: {
-            helpText: 'If left blank, the slug will be automatically generated.',
-            comment: 'More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.'
+            helpText: `If left blank, the slug will be automatically generated.
+            More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>`,
         }
     },
     {

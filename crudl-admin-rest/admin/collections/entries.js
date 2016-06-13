@@ -123,7 +123,7 @@ changeView.fieldsets = [
                         for: 'user',
                         setProps: user => ({
                             disabled: !user,
-                            comment: !user ? "In order to select a category, you have to select a user first" : '',
+                            helpText: !user ? "In order to select a category, you have to select a user first" : "Select a category",
                         }),
                     }
                 ],
@@ -144,6 +144,7 @@ changeView.fieldsets = [
                             return cxs.categories.read(req
                                 .filter('name', req.data.query)
                                 .filter('user', req.context.user))
+                            .then(res => res())
                             .then(res => res.set('data', res.data.map(d => ({
                                 value: d.id,
                                 label: `<b>${d.name}</b> (${d.slug})`,
