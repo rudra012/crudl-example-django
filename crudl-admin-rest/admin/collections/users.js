@@ -175,6 +175,11 @@ changeView.fieldsets = [
                 name: 'password_confirm',
                 label: 'Password (Confirm)',
                 field: 'Password',
+                validate: (value, allValues) => {
+                    if (value != allValues.password) {
+                        return 'The passwords do not match.'
+                    }
+                }
             },
         ]
     }
