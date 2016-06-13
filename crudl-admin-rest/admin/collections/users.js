@@ -50,7 +50,7 @@ var changeView = {
     actions: {
         get: function (req, connexes) { return connexes.user.read(req) },
         /* FIXME: delete should throw a warning with related objects (intermediary page) */
-        delete: function (req, connexes) { return connexes.user.delete(req) },
+        // delete: function (req, connexes) { return connexes.user.delete(req) },
         save: function (req, connexes) { return connexes.user.update(req) },
     },
     normalize: (data, error) => {
