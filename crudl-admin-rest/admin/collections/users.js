@@ -72,8 +72,13 @@ var changeView = {
     },
     denormalize: (data) => {
         let index = data.full_name.indexOf(',')
-        data.last_name = data.full_name.slice(0, index)
-        data.first_name = data.full_name.slice(index+1)
+        if (index >= 0) {
+            data.last_name = data.full_name.slice(0, index)
+            data.first_name = data.full_name.slice(index+1)
+        } else {
+            data.last_name = ''
+            data.first_name = ''
+        }
         return data
     }
 }
@@ -94,9 +99,9 @@ changeView.fieldsets = [
                 name: 'full_name',
                 label: 'Name',
                 field: 'String',
-                validate: (value) => {
-                    if (!value || value.indexOf(',') < 0) {
-                        return 'The required format is <Last name>, <First name>'
+                validate: (value, values) => {
+                    if (value && value.indexOf(',') < 0) {
+                        return 'The required format is: LastName, FirstName'
                     }
                 },
             },
