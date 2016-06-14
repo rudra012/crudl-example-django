@@ -156,7 +156,7 @@ changeView.fieldsets = [
             {
                 name: 'time_joined',
                 label: 'Time joined',
-                field: 'Text',
+                field: 'Time',
                 readOnly: true,
             },
         ],
