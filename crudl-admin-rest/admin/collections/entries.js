@@ -62,19 +62,16 @@ listView.filters = {
             actions: {
                 asyncProps: (req, cxs) => cxs.users_options.read(req),
             },
-            initialValue: '',
         },
         {
             name: 'date_gt',
             label: 'Published after',
             field: 'Date',
-            initialValue: '',
         },
         {
             name: 'search',
             label: 'Search',
             field: 'Search',
-            initialValue: '',
         },
     ]
 }
@@ -103,6 +100,7 @@ changeView.fieldsets = [
                 name: 'user',
                 label: 'User',
                 field: 'Select',
+                initialValue: (context) => context.auth.user,
                 props: {
                     canBeNone: true,
                     helpText: 'Select a user'
@@ -163,6 +161,10 @@ changeView.fieldsets = [
                 name: 'date',
                 label: 'Date',
                 field: 'Datetime',
+                initialValue: () => {
+                    let d = new Date()
+                    return d.toJSON().slice(0, 10)
+                }
             },
             {
                 name: 'body',
