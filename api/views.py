@@ -4,8 +4,12 @@
 import django_filters
 
 # REST IMPORTS
-from rest_framework import viewsets, filters, response
+from rest_framework import viewsets, filters, response, parsers, renderers
 from rest_framework.decorators import detail_route
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 # PROJECT IMPORTS
 from django.contrib.auth.models import User
@@ -125,3 +129,25 @@ class EntryLinkViewSet(viewsets.ModelViewSet):
         if self.request.user.is_superuser:
             return EntryLink.objects.all()
         return EntryLink.objects.filter(entry__user=self.request.user)
+
+
+class ObtainAuthToken(APIView):
+    """
+    custom obtain auth token class in order to return the token and
+    the user (the user is neede for initialvalue with entries)
+    """
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key, 'user': user.id})
+
+
+obtain_auth_token = ObtainAuthToken.as_view()

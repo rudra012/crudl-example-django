@@ -9,12 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 # REST
-from rest_framework.authtoken import views
 from rest_framework.authtoken.models import Token
 from rest_framework.authentication import get_authorization_header
 
 # DRF API
 from api.urls import router
+from api.views import obtain_auth_token
 
 # GRAPHENE
 from graphene.contrib.django.views import GraphQLView
@@ -58,7 +58,7 @@ urlpatterns = [
     url(r'^crudl-graphql/', TemplateView.as_view(template_name="crudl-admin-graphql/index.html")),
     # DRF
     url(r'^rest-api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^rest-api/api-token-auth/', views.obtain_auth_token),
+    url(r'^rest-api/api-token-auth/', obtain_auth_token),
     url(r"^rest-api/", include(router.urls)),
     # GRAPHQL
     url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
