@@ -100,9 +100,9 @@ changeView.fieldsets = [
                 name: 'user',
                 label: 'User',
                 field: 'Select',
+                required: false,
                 initialValue: (context) => context.auth.user,
                 props: {
-                    canBeNone: true,
                     helpText: 'Select a user'
                 },
                 actions: {
@@ -113,7 +113,9 @@ changeView.fieldsets = [
                 name: 'category',
                 label: 'Category',
                 field: 'Autocomplete',
+                required: false,
                 props: {
+                    showAll: true,
                     helpText: "Select a category",
                 },
                 watch: [
@@ -173,9 +175,11 @@ changeView.fieldsets = [
             {
                 name: 'tags',
                 label: 'Tags',
-                field: 'Autocomplete',
+                field: 'AutocompleteMultiple',
+                required: false,
                 props: {
-                    multiple: true,
+                    showAll: false,
+                    helpText: "Select a category",
                 },
                 actions: {
                     search: (req, cxs) => {
