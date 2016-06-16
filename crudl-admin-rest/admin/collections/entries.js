@@ -91,6 +91,11 @@ changeView.fieldsets = [
     {
         fields: [
             {
+                name: 'id',
+                label: 'ID',
+                field: 'Text',
+            },
+            {
                 name: 'title',
                 label: 'Title',
                 field: 'Text',
@@ -212,7 +217,7 @@ changeView.tabs = [
                 req.paginate(false)
                 return cxs.links.read(req)
             },
-            add: (req, cxs) => cxs.links.post(req),
+            add: (req, cxs) => cxs.links.create(req),
             save: (req, cxs) => cxs.link.update(req.with('id', req.data.id)),
             delete: (req, cxs) => cxs.link.delete(req.with('id', req.data.id))
         },
@@ -235,6 +240,12 @@ changeView.tabs = [
                 name: 'id',
                 label: 'ID',
                 field: 'Text',
+            },
+            {
+                name: 'entry',
+                label: 'Entry',
+                field: 'Text',
+                initialValue: (context) => context.data.id,
             },
         ]
     },
