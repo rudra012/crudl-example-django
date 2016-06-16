@@ -208,6 +208,9 @@ changeView.tabs = [
                 req.paginate(false)
                 return cxs.links.read(req)
             },
+            add: (req, cxs) => cxs.links.post(req),
+            save: (req, cxs) => cxs.link.update(req.with('id', req.data.id)),
+            delete: (req, cxs) => cxs.link.delete(req.with('id', req.data.id))
         },
         itemTitle: '{url}',
         fields: [
@@ -223,6 +226,11 @@ changeView.tabs = [
                 name: 'title',
                 label: 'Title',
                 field: 'String',
+            },
+            {
+                name: 'id',
+                label: 'ID',
+                field: 'Text',
             },
         ]
     },
