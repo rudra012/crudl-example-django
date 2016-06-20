@@ -92,8 +92,8 @@ changeView.fieldsets = [
         fields: [
             {
                 name: 'id',
-                label: 'ID',
                 field: 'Text',
+                hidden: true,
             },
             {
                 name: 'title',
@@ -238,14 +238,14 @@ changeView.tabs = [
             },
             {
                 name: 'id',
-                label: 'ID',
                 field: 'Text',
+                hidden: true,
             },
             {
                 name: 'entry',
-                label: 'Entry',
                 field: 'Text',
                 initialValue: (context) => context.data.id,
+                hidden: true,
             },
         ]
     },
