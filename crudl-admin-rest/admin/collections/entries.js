@@ -240,7 +240,47 @@ changeView.tabs = [
                 field: 'hidden',
                 initialValue: (context) => context.data.id,
             },
-        ]
+        ],
+        // fieldsets: [
+        //     {
+        //         title: 'Original',
+        //         expanded: true,
+        //         fields: [
+        //             {
+        //                 name: 'url',
+        //                 label: 'URL',
+        //                 field: 'URL',
+        //                 props: {
+        //                     link: true,
+        //                 },
+        //             },
+        //             {
+        //                 name: 'title',
+        //                 label: 'Title',
+        //                 field: 'String',
+        //             },
+        //         ]
+        //     },
+        //     {
+        //         title: 'Senseless Copy',
+        //         expanded: true,
+        //         fields: [
+        //             {
+        //                 name: 'urlX',
+        //                 label: 'URL',
+        //                 field: 'URL',
+        //                 props: {
+        //                     link: true,
+        //                 },
+        //             },
+        //             {
+        //                 name: 'titleX',
+        //                 label: 'Title',
+        //                 field: 'String',
+        //             },
+        //         ]
+        //     }
+        // ]
     },
 ]
 
