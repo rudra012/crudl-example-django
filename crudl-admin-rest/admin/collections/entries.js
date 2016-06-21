@@ -81,9 +81,9 @@ var changeView = {
     path: 'entries/:id',
     title: 'Blog Entry',
     actions: {
-        get: function (req, cxs) { return cxs.entry.read(req) },
-        delete: function (req, cxs) { return cxs.entry.delete(req) },
-        save: function (req, cxs) { return cxs.entry.update(req) },
+        get: function (req, cxs) { return cxs.entry(req.id).read(req) },
+        delete: function (req, cxs) { return cxs.entry(req.id).delete(req) },
+        save: function (req, cxs) { return cxs.entry(req.id).update(req) },
     },
 }
 
@@ -134,7 +134,7 @@ changeView.fieldsets = [
                 actions: {
                     select: (req, cxs) => {
                         return Promise.all(req.data.selection.map(item => {
-                            return cxs.category.read(req.with('id', item.value))
+                            return cxs.category(item.value).read(req)
                             .then(res => res.set('data', {
                                 value: res.data.id,
                                 label: res.data.name,
@@ -194,7 +194,7 @@ changeView.fieldsets = [
                     },
                     select: (req, cxs) => {
                         return Promise.all(req.data.selection.map(item => {
-                            return cxs.tag.read(req.with('id', item.value))
+                            return cxs.tag(item.value).read(req)
                             .then(res => res.set('data', {
                                 value: res.data.id,
                                 label: res.data.name,
@@ -211,14 +211,10 @@ changeView.tabs = [
     {
         title: 'Links',
         actions: {
-            list: (req, cxs) => {
-                req.filter("entry", req.id.id)
-                req.paginate(false)
-                return cxs.links.read(req)
-            },
+            list: (req, cxs) => cxs.links.read(req.filter('entry', req.id)),
             add: (req, cxs) => cxs.links.create(req),
-            save: (req, cxs) => cxs.link.update(req.with('id', req.data.id)),
-            delete: (req, cxs) => cxs.link.delete(req.with('id', req.data.id))
+            save: (req, cxs) => cxs.link(req.data.id).update(req),
+            delete: (req, cxs) => cxs.link(req.data.id).delete(req)
         },
         itemTitle: '{url}',
         fields: [

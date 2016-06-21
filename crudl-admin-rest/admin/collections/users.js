@@ -48,10 +48,10 @@ var changeView = {
     path: 'users/:id',
     title: 'User',
     actions: {
-        get: function (req, connexes) { return connexes.user.read(req) },
+        get: function (req, connexes) { return connexes.user(req.id).read(req) },
         /* FIXME: delete should throw a warning with related objects (intermediary page) */
         // delete: function (req, connexes) { return connexes.user.delete(req) },
-        save: function (req, connexes) { return connexes.user.update(req) },
+        save: function (req, connexes) { return connexes.user(req.id).update(req) },
     },
     normalize: (data, error) => {
         if (error) {

@@ -66,9 +66,9 @@ var changeView = {
     path: 'categories/:id',
     title: 'Category',
     actions: {
-        get: function (req, connexes) { return connexes.category.read(req) },
-        delete: function (req, connexes) { return connexes.category.delete(req) },
-        save: function (req, connexes) { return connexes.category.update(req) },
+        get: function (req, cxs) { return cxs.category(req.id).read(req) },
+        delete: function (req, cxs) { return cxs.category(req.id).delete(req) },
+        save: function (req, cxs) { return cxs.category(req.id).update(req) },
     },
 }
 
@@ -98,7 +98,7 @@ changeView.fields = [
         actions: {
             select: (req, cxs) => {
                 return Promise.all(req.data.selection.map(item => {
-                    return cxs.user.read(req.with('id', item.value))
+                    return cxs.user(item.value).read(req)
                     .then(res => res.set('data', {
                         value: res.data.id,
                         label: res.data.username,
@@ -122,7 +122,7 @@ var addView = {
     title: 'New Category',
     fields: changeView.fields,
     actions: {
-        add: function (req, connexes) { return connexes.categories.create(req) },
+        add: function (req, cxs) { return cxs.categories.create(req) },
     },
 }
 

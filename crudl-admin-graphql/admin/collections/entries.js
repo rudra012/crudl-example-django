@@ -3,7 +3,7 @@ var listView = {
     path: 'entries',
     title: 'Blog Entries',
     actions: {
-        list: (req, connexes) => connexes.entries.read(req),
+        list: (req, cxs) => cxs.entries.read(req),
     },
 }
 
@@ -28,9 +28,9 @@ var changeView = {
     path: 'entries/:id',
     title: 'Blog Entry',
     actions: {
-        get: (req, connexes) => connexes.entry.read(req),
-        delete: (req, connexes) => connexes.entry.delete(req),
-        save: (req, connexes) => connexes.entry.update(req),
+        get: (req, cxs) => cxs.entry(req.id).read(req),
+        delete: (req, cxs) => cxs.entry(req.id).delete(req),
+        save: (req, cxs) => cxs.entry(req.id).update(req),
     },
 }
 
@@ -46,7 +46,7 @@ changeView.fields = [
         label: 'Category',
         field: 'Select',
         actions: {
-            asyncProps: (req, connexes) => connexes.categories_options.read(req),
+            asyncProps: (req, cxs) => Promise.resolve([]),
         },
     },
     {
@@ -62,7 +62,7 @@ var addView = {
     title: 'New Blog Entry',
     fields: changeView.fields,
     actions: {
-        add: (req, connexes) => connexes.entries.create(req),
+        add: (req, cxs) => cxs.entries.create(req),
     },
 }
 
