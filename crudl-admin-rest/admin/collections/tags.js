@@ -53,9 +53,9 @@ var changeView = {
     path: 'tags/:id',
     title: 'Tag',
     actions: {
-        get: function (req, connexes) { return connexes.tag.read(req) },
-        delete: function (req, connexes) { return connexes.tag.delete(req) },
-        save: function (req, connexes) { return connexes.tag.update(req) },
+        get: function (req, cxs) { return cxs.tag(req.id).read(req) },
+        delete: function (req, cxs) { return cxs.tag(req.id).delete(req) },
+        save: function (req, cxs) { return cxs.tag(req.id).update(req) },
     },
 }
 
@@ -77,7 +77,7 @@ changeView.fields = [
         actions: {
             select: (req, cxs) => {
                 return Promise.all(req.data.selection.map(item => {
-                    return cxs.user.read(req.with('id', item.value))
+                    return cxs.user(item.value).read(req)
                     .then(res => res.set('data', {
                         value: res.data.id,
                         label: res.data.username,
@@ -101,7 +101,7 @@ var addView = {
     title: 'New Tag',
     fields: changeView.fields,
     actions: {
-        add: function (req, connexes) { return connexes.tags.create(req) },
+        add: function (req, cxs) { return cxs.tags.create(req) },
     },
 }
 
