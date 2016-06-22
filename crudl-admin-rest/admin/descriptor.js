@@ -5,6 +5,7 @@ var tags = require('./collections/tags')
 var entries = require('./collections/entries')
 var connexes = require('./connexes/connexes')
 var auth = require('./auth')
+// var DateTimeField = require('./fields/DateTimeField')
 
 var descriptor = {
     connexes,
@@ -17,4 +18,4 @@ descriptor.collections.push(categories)
 descriptor.collections.push(tags)
 descriptor.collections.push(entries)
 
-module.exports = descriptor
+export default descriptor

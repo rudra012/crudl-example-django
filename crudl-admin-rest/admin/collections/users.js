@@ -64,10 +64,6 @@ var changeView = {
         // full_name
         data.full_name = data.last_name + ', ' + data.first_name
         data.full_name = data.full_name.replace(/(^, )|(, $)/, '')
-        // split date_joined into date_joined and time_joined
-        let T = data.date_joined.indexOf('T')
-        data.time_joined = data.date_joined.slice(T+1, T+6)
-        data.day_joined = data.date_joined.slice(0, T)
         return data
     },
     denormalize: (data) => {
@@ -149,16 +145,20 @@ changeView.fieldsets = [
         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         fields: [
             {
-                name: 'day_joined',
+                name: 'date_joined',
                 label: 'Date joined',
-                field: 'Date',
                 readOnly: true,
-            },
-            {
-                name: 'time_joined',
-                label: 'Time joined',
-                field: 'Time',
-                readOnly: true,
+                field: 'SplitDateTime',
+                props: {
+                    getTime: (date) => {
+                        let T = date.indexOf('T')
+                        return date.slice(T+1, T+6)
+                    },
+                    getDate: (date) => {
+                        let T = date.indexOf('T')
+                        return date.slice(0, T)
+                    },
+                }
             },
         ],
     },
