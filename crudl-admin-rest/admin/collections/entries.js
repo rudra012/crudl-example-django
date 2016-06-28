@@ -18,7 +18,7 @@ var listView = {
         list: function (req, cxs) {
             let entries = cxs.entries.read(req)
             let users = cxs.users.read(req.paginate(false))
-            let categories = cxs.categories.read(req.filter('limit', 10000))
+            let categories = cxs.categories.read(req.paginate(false).filter('limit', 10000))
             return utils.join(utils.join(entries, users, 'user', 'id'), categories, 'category', 'id')
         },
     },
