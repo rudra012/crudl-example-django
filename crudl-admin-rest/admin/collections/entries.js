@@ -110,7 +110,15 @@ changeView.fieldsets = [
                     helpText: 'Select a user'
                 },
                 actions: {
-                    asyncProps: (req, cxs) => cxs.users_options.read(req),
+                    asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', 10000))
+                    .then(res => res.set('data', {
+                        options: res.data.map(user => (
+                            {
+                                value: user.id,
+                                label: user.username,
+                            }
+                        ))
+                    })),
                 },
             },
             {
@@ -125,6 +133,7 @@ changeView.fieldsets = [
                 watch: [
                     {
                         for: 'user',
+                        setValue: '',
                         setProps: user => ({
                             disabled: !user,
                             helpText: !user ? "In order to select a category, you have to select a user first" : "Select a category",
@@ -148,155 +157,155 @@ changeView.fieldsets = [
                             return cxs.categories.read(req
                                 .filter('name', req.data.query)
                                 .filter('user', req.context.user))
-                            .then(res => res.set('data', res.data.map(d => ({
-                                value: d.id,
-                                label: `<b>${d.name}</b> (${d.slug})`,
-                            }))))
-                        }
+                                .then(res => res.set('data', res.data.map(d => ({
+                                    value: d.id,
+                                    label: `<b>${d.name}</b> (${d.slug})`,
+                                }))))
+                            }
+                        },
                     },
                 },
-            },
-        ],
-    },
-    {
-        title: 'Content',
-        expanded: true,
-        fields: [
-            {
-                name: 'date',
-                label: 'Date',
-                field: 'Datetime',
-                initialValue: () => {
-                    let d = new Date()
-                    return d.toJSON().slice(0, 10)
-                }
-            },
-            {
-                name: 'body',
-                label: 'Text',
-                field: 'Textarea',
-            },
-            {
-                name: 'tags',
-                label: 'Tags',
-                field: 'AutocompleteMultiple',
-                required: false,
-                props: {
-                    showAll: false,
-                    helpText: "Select a category",
-                },
-                actions: {
-                    search: (req, cxs) => {
-                        return cxs.tags_options.read(req)
-                        .then(res => res.set('data', res.data.filter(tag => {
-                            return tag.label.toLowerCase().indexOf(req.data.query.toLowerCase()) >= 0
-                        })))
-                    },
-                    select: (req, cxs) => {
-                        return Promise.all(req.data.selection.map(item => {
-                            return cxs.tag(item.value).read(req)
-                            .then(res => res.set('data', {
-                                value: res.data.id,
-                                label: res.data.name,
-                            }))
-                        }))
-                    },
-                },
-            }
-        ]
-    }
-]
-
-changeView.tabs = [
-    {
-        title: 'Links',
-        actions: {
-            list: (req, cxs) => cxs.links.read(req.filter('entry', req.id)),
-            add: (req, cxs) => cxs.links.create(req),
-            save: (req, cxs) => cxs.link(req.data.id).update(req),
-            delete: (req, cxs) => cxs.link(req.data.id).delete(req)
+            ],
         },
-        itemTitle: '{url}',
-        fields: [
-            {
-                name: 'url',
-                label: 'URL',
-                field: 'URL',
-                props: {
-                    link: true,
+        {
+            title: 'Content',
+            expanded: true,
+            fields: [
+                {
+                    name: 'date',
+                    label: 'Date',
+                    field: 'Datetime',
+                    initialValue: () => {
+                        let d = new Date()
+                        return d.toJSON().slice(0, 10)
+                    }
                 },
-            },
-            {
-                name: 'title',
-                label: 'Title',
-                field: 'String',
-            },
-            {
-                name: 'id',
-                field: 'hidden',
-            },
-            {
-                name: 'entry',
-                field: 'hidden',
-                initialValue: (context) => context.data.id,
-            },
-        ],
-        // fieldsets: [
-        //     {
-        //         title: 'Original',
-        //         expanded: true,
-        //         fields: [
-        //             {
-        //                 name: 'url',
-        //                 label: 'URL',
-        //                 field: 'URL',
-        //                 props: {
-        //                     link: true,
-        //                 },
-        //             },
-        //             {
-        //                 name: 'title',
-        //                 label: 'Title',
-        //                 field: 'String',
-        //             },
-        //         ]
-        //     },
-        //     {
-        //         title: 'Senseless Copy',
-        //         expanded: true,
-        //         fields: [
-        //             {
-        //                 name: 'urlX',
-        //                 label: 'URL',
-        //                 field: 'URL',
-        //                 props: {
-        //                     link: true,
-        //                 },
-        //             },
-        //             {
-        //                 name: 'titleX',
-        //                 label: 'Title',
-        //                 field: 'String',
-        //             },
-        //         ]
-        //     }
-        // ]
-    },
-]
+                {
+                    name: 'body',
+                    label: 'Text',
+                    field: 'Textarea',
+                },
+                {
+                    name: 'tags',
+                    label: 'Tags',
+                    field: 'AutocompleteMultiple',
+                    required: false,
+                    props: {
+                        showAll: false,
+                        helpText: "Select a category",
+                    },
+                    actions: {
+                        search: (req, cxs) => {
+                            return cxs.tags_options.read(req)
+                            .then(res => res.set('data', res.data.filter(tag => {
+                                return tag.label.toLowerCase().indexOf(req.data.query.toLowerCase()) >= 0
+                            })))
+                        },
+                        select: (req, cxs) => {
+                            return Promise.all(req.data.selection.map(item => {
+                                return cxs.tag(item.value).read(req)
+                                .then(res => res.set('data', {
+                                    value: res.data.id,
+                                    label: res.data.name,
+                                }))
+                            }))
+                        },
+                    },
+                }
+            ]
+        }
+    ]
 
-//-------------------------------------------------------------------
-var addView = {
-    path: 'entries/new',
-    title: 'New Blog Entry',
-    fieldsets: changeView.fieldsets,
-    actions: {
-        add: function (req, cxs) { return cxs.entries.create(req) },
-    },
-}
+    changeView.tabs = [
+        {
+            title: 'Links',
+            actions: {
+                list: (req, cxs) => cxs.links.read(req.filter('entry', req.id)),
+                add: (req, cxs) => cxs.links.create(req),
+                save: (req, cxs) => cxs.link(req.data.id).update(req),
+                delete: (req, cxs) => cxs.link(req.data.id).delete(req)
+            },
+            itemTitle: '{url}',
+            fields: [
+                {
+                    name: 'url',
+                    label: 'URL',
+                    field: 'URL',
+                    props: {
+                        link: true,
+                    },
+                },
+                {
+                    name: 'title',
+                    label: 'Title',
+                    field: 'String',
+                },
+                {
+                    name: 'id',
+                    field: 'hidden',
+                },
+                {
+                    name: 'entry',
+                    field: 'hidden',
+                    initialValue: (context) => context.data.id,
+                },
+            ],
+            // fieldsets: [
+            //     {
+            //         title: 'Original',
+            //         expanded: true,
+            //         fields: [
+            //             {
+            //                 name: 'url',
+            //                 label: 'URL',
+            //                 field: 'URL',
+            //                 props: {
+            //                     link: true,
+            //                 },
+            //             },
+            //             {
+            //                 name: 'title',
+            //                 label: 'Title',
+            //                 field: 'String',
+            //             },
+            //         ]
+            //     },
+            //     {
+            //         title: 'Senseless Copy',
+            //         expanded: true,
+            //         fields: [
+            //             {
+            //                 name: 'urlX',
+            //                 label: 'URL',
+            //                 field: 'URL',
+            //                 props: {
+            //                     link: true,
+            //                 },
+            //             },
+            //             {
+            //                 name: 'titleX',
+            //                 label: 'Title',
+            //                 field: 'String',
+            //             },
+            //         ]
+            //     }
+            // ]
+        },
+    ]
 
-//-------------------------------------------------------------------
-module.exports = {
-    listView,
-    addView,
-    changeView,
-}
+    //-------------------------------------------------------------------
+    var addView = {
+        path: 'entries/new',
+        title: 'New Blog Entry',
+        fieldsets: changeView.fieldsets,
+        actions: {
+            add: function (req, cxs) { return cxs.entries.create(req) },
+        },
+    }
+
+    //-------------------------------------------------------------------
+    module.exports = {
+        listView,
+        addView,
+        changeView,
+    }
