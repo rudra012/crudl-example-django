@@ -16,7 +16,7 @@ var listView = {
     title: 'Categories',
     actions: {
         list: function (req, cxs) {
-            let categories = cxs.categories.read(req)
+            let categories = cxs.categories.read(req.filter('user', req.authInfo.user))
             let users = cxs.users.read(req.paginate(false))
             return utils.join(categories, users, 'user', 'id')
         },
@@ -39,26 +39,6 @@ listView.fields = [
         label: 'Slug',
     },
 ]
-
-listView.filters = {
-    fields: [
-        {
-            name: 'user',
-            label: 'User',
-            field: 'Select',
-            actions: {
-                asyncProps: (req, cxs) => cxs.users.read(req.filter('limit', '1000'))
-                .then(res => res.set('data', {
-                    options: res.data.map(user => ({
-                        value: user.id,
-                        label: user.username,
-                    }))
-                }))
-            },
-            initialValue: '',
-        },
-    ]
-}
 
 //-------------------------------------------------------------------
 var changeView = {
@@ -94,6 +74,7 @@ changeView.fields = [
         name: 'user',
         label: 'User',
         field: 'Autocomplete',
+        initialValue: context => context.auth.user,
         actions: {
             select: (req, cxs) => {
                 return Promise.all(req.data.selection.map(item => {
