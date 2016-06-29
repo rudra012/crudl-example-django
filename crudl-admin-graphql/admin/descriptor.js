@@ -1,10 +1,10 @@
 
 var entries = require('./collections/entries')
-var connexes = require('./connexes/connexes')
+var connectors = require('./connectors/connectors')
 var auth = require('./auth')
 
 var descriptor = {
-    connexes,
+    connectors,
     collections: [],
     auth,
 }

@@ -48,8 +48,8 @@ module.exports = [
         },
         pagination,
         transform: {
-            readResData: data => data.data.allEntries.edges.map(e => e.node),
-            createResData: data => {
+            readResponseData: data => data.data.allEntries.edges.map(e => e.node),
+            createResponseData: data => {
                 if (data.data.createEntry.errors) {
                     throw data.data.createEntry.errors
                 }
@@ -82,14 +82,14 @@ module.exports = [
             }`,
         },
         transform: {
-            readResData: data => data.data.entry,
-            updateResData: data => {
+            readResponseData: data => data.data.entry,
+            updateResponseData: data => {
                 if (data.data.changeEntry.errors) {
                     throw data.data.changeEntry.errors
                 }
                 return data.data.changeEntry.entry
             },
-            deleteResData: data => data.data,
+            deleteResponseData: data => data.data,
         }
     },
     {
@@ -98,7 +98,7 @@ module.exports = [
             read: `{allCategories{edges{node{id,name}}}}`,
         },
         transform: {
-            readResData: data => data.data.allCategories.edges.map(e => e.node)
+            readResponseData: data => data.data.allCategories.edges.map(e => e.node)
         },
     },
     {
@@ -106,7 +106,7 @@ module.exports = [
         url: '/rest-api/api-token-auth/',
         mapping: { read: 'post', },
         transform: {
-            readResData: data => ({
+            readResponseData: data => ({
                 requestHeaders: { "Authorization": `Token ${data.token}` },
                 authInfo: data,
             })

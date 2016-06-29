@@ -33,7 +33,7 @@ module.exports = [
         url: 'users/',
         pagination,
         transform: {
-            readResData: data => data.results,
+            readResponseData: data => data.results,
         },
     },
     {
@@ -46,7 +46,7 @@ module.exports = [
         urlQuery,
         pagination,
         transform: {
-            readResData: data => data.results,
+            readResponseData: data => data.results,
         },
     },
     {
@@ -66,7 +66,7 @@ module.exports = [
         pagination,
         enableDepagination: true,
         transform: {
-            readResData: data => data.results,
+            readResponseData: data => data.results,
         },
     },
     {
@@ -81,7 +81,7 @@ module.exports = [
         id: 'tags_options',
         use: 'entries_options',
         transform: {
-            readResData: data => data.actions.POST.tags.choices.map(function (c) {
+            readResponseData: data => data.actions.POST.tags.choices.map(function (c) {
                 return {
                     value: c.value,
                     label: c.display_name,
@@ -95,7 +95,7 @@ module.exports = [
         pagination,
         enableDepagination: true,
         transform: {
-            readResData: data => data.results,
+            readResponseData: data => data.results,
         },
     },
     {
@@ -107,7 +107,7 @@ module.exports = [
         url: 'tags/',
         pagination,
         transform: {
-            readResData: data => data.results,
+            readResponseData: data => data.results,
         },
     },
     {
@@ -119,7 +119,7 @@ module.exports = [
         url: 'entries/',
         mapping: { read: 'options', },
         transform: {
-            readResData: data => ({
+            readResponseData: data => ({
                 options: data.actions.POST.user.choices.map(function (c) {
                     return {
                         value: c.value,
@@ -134,7 +134,7 @@ module.exports = [
         url: '/rest-api/api-token-auth/',
         mapping: { read: 'post', },
         transform: {
-            readResData: data => ({
+            readResponseData: data => ({
                 requestHeaders: { "Authorization": `Token ${data.token}` },
                 authInfo: data,
             })

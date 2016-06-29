@@ -75,7 +75,7 @@ In order for CRUDL to work, you need to define _connections_ and _collections_ .
     urlQuery,
     pagination,
     transform: {
-        readResData: data => data.results,
+        readResponseData: data => data.results,
     },
 },
 {
@@ -103,7 +103,7 @@ id: 'auth_token',
 url: '/rest-api/api-token-auth/',
 mapping: { read: 'post', },
 transform: {
-    readResData: data => ({
+    readResponseData: data => ({
         requestHeaders: { "Authorization": `Token ${data.token}` },
         authInfo: data,
     })

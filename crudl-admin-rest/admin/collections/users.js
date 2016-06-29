@@ -3,7 +3,7 @@ var listView = {
     path: 'users',
     title: 'Users',
     actions: {
-        list: function (req, connexes) { return connexes.users.read(req) },
+        list: function (req, connectors) { return connectors.users.read(req) },
     },
     normalize: (list) => list.map(item => {
         item.full_name = item.last_name + ', ' + item.first_name
@@ -48,10 +48,10 @@ var changeView = {
     path: 'users/:id',
     title: 'User',
     actions: {
-        get: function (req, connexes) { return connexes.user(req.id).read(req) },
+        get: function (req, connectors) { return connectors.user(req.id).read(req) },
         /* FIXME: delete should throw a warning with related objects (intermediary page) */
-        // delete: function (req, connexes) { return connexes.user.delete(req) },
-        save: function (req, connexes) { return connexes.user(req.id).update(req) },
+        // delete: function (req, connectors) { return connectors.user.delete(req) },
+        save: function (req, connectors) { return connectors.user(req.id).update(req) },
     },
     normalize: (data, error) => {
         if (error) {
@@ -192,7 +192,7 @@ var addView = {
     title: 'New User',
     fieldsets: changeView.fieldsets,
     actions: {
-        add: function (req, connexes) { return connexes.users.create(req) },
+        add: function (req, connectors) { return connectors.users.create(req) },
     },
 }
 

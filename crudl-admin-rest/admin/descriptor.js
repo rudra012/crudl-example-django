@@ -3,12 +3,12 @@ var users = require('./collections/users')
 var categories = require('./collections/categories')
 var tags = require('./collections/tags')
 var entries = require('./collections/entries')
-var connexes = require('./connexes/connexes')
+var connectors = require('./connectors/connectors')
 var auth = require('./auth')
 // var DateTimeField = require('./fields/DateTimeField')
 
 var descriptor = {
-    connexes,
+    connectors,
     collections: [],
     auth,
 }
