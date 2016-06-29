@@ -51,6 +51,21 @@ var changeView = {
     },
 }
 
+changeView.infoScreen = {
+    html: (entries) => {
+        return `
+        <div>
+            Blog entries belonging in this category:
+            ${entries.map(entry => `
+                <a href="/crudl-rest/entries/${entry.id}">${entry.title}</a>
+            `)}
+        </div>`
+    },
+    actions: {
+        getInfo: (req, cxs) => cxs.entries.read(req.filter('category', req.id).filter('limit', 10000))
+    }
+}
+
 changeView.fields = [
     {
         name: 'name',
