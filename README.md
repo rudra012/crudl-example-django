@@ -228,6 +228,21 @@ If there exist an API call that can return such a list (e.g. /rest-api/users/?ha
 
 Without such an API, one would have to make an unpaginated call to /rest-api/tags/ and filter the result in the asyncProps action.
 
+### Filter list
+With Users, we only show the currently logged-in user (although the API returns a list of all available users).
+
+```
+var listView = {
+    path: 'users',
+    title: 'Users',
+    actions: {
+        list: function (req, connectors) {
+            return connectors.users.read(req.filter('id', req.authInfo.user))
+        },
+    },
+}
+```
+
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
 
