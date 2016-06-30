@@ -143,7 +143,7 @@ There are a couple of foreign keys being used (e.g. _Category_ with _Entry_) and
 name: 'user',
 field: 'Select',
 actions: {
-    asyncProps: (req, cxs) => cxs.users_options.read(req),
+    asyncProps: (req, connectors) => connectors.users_options.read(req),
 },
 ```
 
@@ -158,14 +158,14 @@ changeView.tabs = [
     {
         title: 'Links',
         actions: {
-            list: (req, cxs) => {
+            list: (req, connectors) => {
                 req.filter("entry", req.id.id)
                 req.paginate(false)
-                return cxs.links.read(req)
+                return connectors.links.read(req)
             },
-            add: (req, cxs) => cxs.links.create(req),
-            save: (req, cxs) => cxs.link.update(req.with('id', req.data.id)),
-            delete: (req, cxs) => cxs.link.delete(req.with('id', req.data.id))
+            add: (req, connectors) => connectors.links.create(req),
+            save: (req, connectors) => connectors.link.update(req.with('id', req.data.id)),
+            delete: (req, connectors) => connectors.link.delete(req.with('id', req.data.id))
         },
         itemTitle: '{url}',
         fields: [...]
