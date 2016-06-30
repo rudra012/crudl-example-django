@@ -135,7 +135,7 @@ changeView.fieldsets = [
                         for: 'user',
                         setValue: '',
                         setProps: user => ({
-                            disabled: !user,
+                            readOnly: !user,
                             helpText: !user ? "In order to select a category, you have to select a user first" : "Select a category",
                         }),
                     }
@@ -174,10 +174,10 @@ changeView.fieldsets = [
                 {
                     name: 'date',
                     label: 'Date',
-                    field: 'Datetime',
-                    initialValue: () => {
-                        let d = new Date()
-                        return d.toJSON().slice(0, 10)
+                    field: 'Date',
+                    initialValue: () => utils.formatDate(new Date()),
+                    props: {
+                        formatDate: utils.formatDate
                     }
                 },
                 {
