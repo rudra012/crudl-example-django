@@ -1,6 +1,11 @@
 # crudl django example
 This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
+## Important notes
+* crudl is still under development and the syntax might change (esp. with connectors and descriptors).
+* The relevant part for your admin interface is within the folder crudl-admin-rest (resp. crudl-admin-graphql).
+All other files are only used for this example and are usually not required when using crudl.
+
 ## Requirements
 * Node.js
 * python
@@ -128,6 +133,8 @@ watch: [
     }
 ],
 ```
+
+You can use the same syntax with list filters (see entries.js).
 
 ### Foreign Key, Many-to-Many
 There are a couple of foreign keys being used (e.g. _Category_ with _Entry_) and one many-to-many field (_Tags_ with _Entry_).
