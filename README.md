@@ -36,8 +36,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     $ python manage.py runserver
     ```
 
-Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with one of the users.
-You have 3 users (patrick, axel, vaclav) with password "crudl" for each one.
+Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with the user (demo/demo).
 
 ### Install crudl-admin (REST)
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
@@ -65,8 +64,8 @@ $ npm run watchify
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
-### Connections and Descriptions
-In order for CRUDL to work, you need to define _connections_ and _collections_ ...
+### Connectors and Descriptor
+In order for CRUDL to work, you need to define _connectors_ (defining the API) and a _descriptor_ (the visual representation). The _descriptor_ consists of _collections_ (XXX) and the _authentification_.
 
 ```
 {
@@ -97,6 +96,8 @@ var addView = {}
 ### Authentication
 Both the REST and GraphQL API is only accessible for logged-in users based on TokenAuthentication.
 Authentication for GraphQL is done with a decorator wrapping the basic URL.
+
+Please note the besides the Token, we also add an attribute _authInfo_ in order to subsequently have access to the currently logged-in user (e.g. for filtering).
 
 ```
 id: 'auth_token',
