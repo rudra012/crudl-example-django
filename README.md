@@ -257,17 +257,17 @@ This example mainly shows how to use crudl. It is not intended for development o
 ## TODO
 There is still a long list with open issues, but here are the some of the bigger ones:
 
-* Improve connections & collections
-* Improve Authentication
-* Permissions
-* Documentation
-* Tests
-* Internationalization (i18n)
-* Dashboard/Menus
-* Custom and intermediary pages
-* Custom bulk actions
-* ListView hierarchies
-* Show relations with delete
-* Drag/Drop with RelationView and ListView
-* RTE
-* Finish UI
+* Improve: connectors & descriptors
+* Improve: Authentication
+* Improve: Finish UI
+* Add: Permissions
+* Add: Documentation
+* Add: Tests
+* Add: Internationalization (i18n)
+* Add: Dashboard/Menus
+* Add: Custom and intermediary pages
+* Add: Custom bulk actions
+* Add: ListView hierarchies
+* Add: Show relations with delete
+* Add: Drag/Drop with RelationView and ListView
+* Add: RTE
