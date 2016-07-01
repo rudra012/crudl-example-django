@@ -100,6 +100,10 @@ listView.filters = {
     ]
 }
 
+listView.search = {
+    name: 'search',
+}
+
 //-------------------------------------------------------------------
 var changeView = {
     path: 'entries/:id',
