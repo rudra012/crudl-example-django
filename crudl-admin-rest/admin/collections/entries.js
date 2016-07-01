@@ -10,6 +10,12 @@ function join(p1, p2, var1, var2) {
     })
 }
 
+function transform(p, func) {
+    return p.then(response => {
+        return response.set('data', response.data.map(func))
+    })
+}
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'entries',
@@ -19,9 +25,18 @@ var listView = {
             let entries = cxs.entries.read(req)
             let users = cxs.users.read(req.paginate(false))
             let categories = cxs.categories.read(req.paginate(false).filter('limit', 10000))
-            return utils.join(utils.join(entries, users, 'user', 'id'), categories, 'category', 'id')
+            let combined = utils.join(utils.join(entries, users, 'user', 'id'), categories, 'category', 'id')
+            let withCustomColumn = transform(combined, (item) => {
+                item.is_owner = req.authInfo.user == item.user.id
+                return item
+            })
+            return withCustomColumn
         },
     },
+    normalize: (item) => {
+        item.random = Math.random() >= 0.5
+        return item
+    }
 }
 
 listView.fields = [
@@ -50,7 +65,17 @@ listView.fields = [
         sortable: true,
         sorted: 'descending',
         sortpriority: '1',
-    }
+    },
+    {
+        name: 'is_owner',
+        label: 'Are you the owner?',
+        render: 'boolean',
+    },
+    {
+        name: 'random',
+        label: 'Random',
+        render: 'boolean',
+    },
 ]
 
 listView.filters = {
