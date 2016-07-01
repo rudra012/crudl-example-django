@@ -6,8 +6,13 @@ var listView = {
         list: function (req, connectors) { return connectors.users.read(req) },
     },
     normalize: (list) => list.map(item => {
-        item.full_name = item.last_name + ', ' + item.first_name
-        item.full_name = item.full_name.replace(/(^, )|(, $)/, '')
+        if (!item.last_name) {
+            item.full_name = item.first_name
+        } else if (!item.first_name) {
+            item.full_name = `<b>${item.last_name}</b>`
+        } else {
+            item.full_name = `<b>${item.last_name}</b>, ${item.first_name}`
+        }
         return item
     })
 }

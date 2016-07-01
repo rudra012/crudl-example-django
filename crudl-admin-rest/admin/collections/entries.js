@@ -61,7 +61,6 @@ listView.fields = [
         key: 'category.name',
         label: 'Category',
         main: true,
-        render: 'number',
         sortable: true,
         sorted: 'descending',
         sortpriority: '1',
