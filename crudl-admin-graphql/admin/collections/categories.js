@@ -72,15 +72,8 @@ changeView.fields = [
         label: 'Section',
         field: 'Select',
         required: true,
-        /* Here we build the list of possible options with an extra API call */
         actions: {
-            asyncProps: (req, connectors) => connectors.sections.read(req)
-            .then(res => res.set('data', {
-                options: res.data.map(section => ({
-                    value: section.id,
-                    label: section.name,
-                }))
-            }))
+            asyncProps: (req, connectors) => connectors.sections_options.read(req)
         }
     },
     {

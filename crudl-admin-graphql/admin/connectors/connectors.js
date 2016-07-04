@@ -193,7 +193,6 @@ module.exports = [
         transform: {
             readResponseData: data => ({
                 options: data.data.allSections.edges.map(function(item) {
-                    console.log(item)
                     return { value: item.node.id, label: item.node.name }
                 }),
             })
@@ -202,31 +201,35 @@ module.exports = [
 
     // category_options
     // a helper for retrieving the categories used with select fields
-    // {
-    //     id: 'categories_options',
-    //     url: 'categories/',
-    //     transform: {
-    //         readResponseData: data => ({
-    //             options: data.results.map(function(item) {
-    //                 return { value: item.id, label: item.name }
-    //             }),
-    //         })
-    //     },
-    // },
+    {
+        id: 'categories_options',
+        query: {
+            read: `{allCategories{edges{node{id,name}}}}`,
+        },
+        transform: {
+            readResponseData: data => ({
+                options: data.data.allCategories.edges.map(function(item) {
+                    return { value: item.node.id, label: item.node.name }
+                }),
+            })
+        },
+    },
 
     // tags_options
     // a helper for retrieving the tags used with select fields
-    // {
-    //     id: 'tags_options',
-    //     url: 'tags/',
-    //     transform: {
-    //         readResponseData: data => ({
-    //             options: data.results.map(function(item) {
-    //                 return { value: item.id, label: item.name }
-    //             }),
-    //         })
-    //     },
-    // },
+    {
+        id: 'tags_options',
+        query: {
+            read: `{allTags{edges{node{id,name}}}}`,
+        },
+        transform: {
+            readResponseData: data => ({
+                options: data.data.allTags.edges.map(function(item) {
+                    return { value: item.node.id, label: item.node.name }
+                }),
+            })
+        },
+    },
 
     // AUTHENTICATION
     {
