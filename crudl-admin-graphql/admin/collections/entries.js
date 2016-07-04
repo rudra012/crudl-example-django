@@ -13,31 +13,32 @@ var listView = {
     actions: {
         list: function (req, connectors) {
             let entries = connectors.entries.read(req)
-            return entries
+            //return entries
             /* here we add a custom column based on the currently logged-in user */
-            // let entriesWithCustomColumn = transform(entries, (item) => {
-            //     item.is_owner = req.authInfo.user == item.owner
-            //     return item
-            // })
-            // return entriesWithCustomColumn
+            let entriesWithCustomColumn = transform(entries, (item) => {
+                console.log(req.authInfo.user, item.owner)
+                item.is_owner = req.authInfo.user == item.owner.id
+                return item
+            })
+            return entriesWithCustomColumn
         }
     },
 }
 
 listView.fields = [
     {
-        name: 'id',
+        name: 'originalId',
         label: 'ID',
     },
     {
         name: 'section',
-        key: 'section_name',
+        key: 'section.name',
         label: 'Section',
         sortable: true,
     },
     {
         name: 'category',
-        key: 'category_name',
+        key: 'category.name',
         label: 'Category',
         sortable: true,
     },

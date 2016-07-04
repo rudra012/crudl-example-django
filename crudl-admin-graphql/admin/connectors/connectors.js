@@ -26,12 +26,14 @@ function listQuery(options) {
 }
 
 module.exports = [
+
+    // USERS
     {
         id: 'users',
         query: {
             read: listQuery({
                 name: 'allUsers',
-                fields: 'id, username',
+                fields: 'id, originalId, username',
                 args: { first: 20, }
             }),
         },
@@ -39,12 +41,14 @@ module.exports = [
             readResponseData: data => data.data.allUsers.edges.map(e => e.node)
         },
     },
+
+    // SECTIONS
     {
         id: 'sections',
         query: {
             read: listQuery({
                 name: 'allSections',
-                fields: 'id, name, slug',
+                fields: 'id, originalId, name, slug',
                 args: { first: 20, }
             }),
         },
@@ -53,20 +57,42 @@ module.exports = [
         },
     },
     {
+        id: 'section',
+        query: {
+            read: `{section(id: "%id"){id,name,slug,position}}`,
+        },
+        transform: {
+            readResponseData: data => data.data.section
+        }
+    },
+
+    // CATEGORIES
+    {
         id: 'categories',
         query: {
-            read: `{allCategories{edges{node{id,name}}}}`,
+            read: `{allCategories{edges{node{id,originalId,section{id,name},name,slug,position}}}}`,
         },
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node)
         },
     },
     {
+        id: 'category',
+        query: {
+            read: `{category(id: "%id"){id,section{id,name},name,slug,position}}`,
+        },
+        transform: {
+            readResponseData: data => data.data.category
+        }
+    },
+
+    // TAGS
+    {
         id: 'tags',
         query: {
             read: listQuery({
                 name: 'allTags',
-                fields: 'id, name, slug',
+                fields: 'id, originalId, name, slug',
                 args: { first: 20, }
             }),
         },
@@ -75,11 +101,22 @@ module.exports = [
         },
     },
     {
+        id: 'tag',
+        query: {
+            read: `{tag(id: "%id"){id,name,slug}}`,
+        },
+        transform: {
+            readResponseData: data => data.data.tag
+        }
+    },
+
+    // ENTRIES
+    {
         id: 'entries',
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, title, date, section{id, name}, category{id, name}',
+                fields: 'id, originalId, title, date, section{id, name}, category{id, name}, owner{id, username}',
                 args: { first: 20, }
             }),
             create: `mutation ($input: CreateEntryInput!) {
@@ -141,6 +178,57 @@ module.exports = [
             deleteResponseData: data => data.data,
         }
     },
+
+    // ENTRYLINKS
+
+    // SPECIAL CONNECTORS
+
+    // sections_options
+    // a helper for retrieving the sections used with select fields
+    {
+        id: 'sections_options',
+        query: {
+            read: `{allSections{edges{node{id,name}}}}`,
+        },
+        transform: {
+            readResponseData: data => ({
+                options: data.data.allSections.edges.map(function(item) {
+                    console.log(item)
+                    return { value: item.node.id, label: item.node.name }
+                }),
+            })
+        },
+    },
+
+    // category_options
+    // a helper for retrieving the categories used with select fields
+    // {
+    //     id: 'categories_options',
+    //     url: 'categories/',
+    //     transform: {
+    //         readResponseData: data => ({
+    //             options: data.results.map(function(item) {
+    //                 return { value: item.id, label: item.name }
+    //             }),
+    //         })
+    //     },
+    // },
+
+    // tags_options
+    // a helper for retrieving the tags used with select fields
+    // {
+    //     id: 'tags_options',
+    //     url: 'tags/',
+    //     transform: {
+    //         readResponseData: data => ({
+    //             options: data.results.map(function(item) {
+    //                 return { value: item.id, label: item.name }
+    //             }),
+    //         })
+    //     },
+    // },
+
+    // AUTHENTICATION
     {
         id: 'login',
         url: '/rest-api/login/',

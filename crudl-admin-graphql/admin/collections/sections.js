@@ -11,7 +11,7 @@ var listView = {
 
 listView.fields = [
     {
-        name: 'id',
+        name: 'originalId',
         label: 'ID',
     },
     {

@@ -22,6 +22,8 @@ class Connection(DjangoConnection):
 
 
 class UserNode(DjangoNode):
+    original_id = graphene.Int()
+
     class Meta:
         model = User
         filter_fields = {
@@ -31,9 +33,13 @@ class UserNode(DjangoNode):
         }
         filter_order_by = ['id', 'username', 'is_staff', 'is_active', 'date_joined']
 
+    def resolve_original_id(self, args, info):
+        return self.id
+
 
 class SectionNode(DjangoNode):
     connection_type = Connection
+    original_id = graphene.Int()
 
     class Meta:
         model = Section
@@ -42,9 +48,13 @@ class SectionNode(DjangoNode):
         }
         filter_order_by = ['id', 'name', 'slug', 'position']
 
+    def resolve_original_id(self, args, info):
+        return self.id
+
 
 class CategoryNode(DjangoNode):
     connection_type = Connection
+    original_id = graphene.Int()
 
     class Meta:
         model = Category
@@ -54,9 +64,13 @@ class CategoryNode(DjangoNode):
         }
         filter_order_by = ['id', 'section', 'name', 'slug', 'position']
 
+    def resolve_original_id(self, args, info):
+        return self.id
+
 
 class TagNode(DjangoNode):
     connection_type = Connection
+    original_id = graphene.Int()
 
     class Meta:
         model = Tag
@@ -65,14 +79,18 @@ class TagNode(DjangoNode):
         }
         filter_order_by = ['id', 'name', 'slug']
 
+    def resolve_original_id(self, args, info):
+        return self.id
+
 
 class EntryNode(DjangoNode):
     connection_type = Connection
+    original_id = graphene.Int()
 
     class Meta:
         model = Entry
         # error with image (therefore we currently use only_fields)
-        only_fields = ('id', 'title', 'date', 'section', 'category', 'tags',)
+        only_fields = ('id', 'title', 'status', 'date', 'sticky', 'section', 'category', 'tags', 'summary', 'body', 'owner', 'locked', 'createdate', 'updatedate',)
         filter_fields = {
             'title': ['icontains'],
             'date': ['exact'],
@@ -84,9 +102,13 @@ class EntryNode(DjangoNode):
         }
         filter_order_by = ['id', 'title', 'date', 'section', 'category', 'tags']
 
+    def resolve_original_id(self, args, info):
+        return self.id
+
 
 class EntryLinkNode(DjangoNode):
     connection_type = Connection
+    original_id = graphene.Int()
 
     class Meta:
         model = EntryLink
@@ -94,6 +116,9 @@ class EntryLinkNode(DjangoNode):
             'entry': ['exact']
         }
         filter_order_by = ['id', 'entry', 'title', 'position']
+
+    def resolve_original_id(self, args, info):
+        return self.id
 
 
 def get_user(relayId, otherwise=None):

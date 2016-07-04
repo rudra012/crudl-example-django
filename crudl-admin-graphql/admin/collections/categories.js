@@ -5,22 +5,13 @@ var listView = {
     path: 'categories',
     title: 'Categories',
     actions: {
-        /* The list of categories contains a section ID, but we need
-        the section object in order to show the section.name with the listView.
-        Instead, we could also add the section object (or name) to the list of
-        categories within the API. In that case, no join is required (see entries.js
-        for the alternative solution) */
-        list: function (req, connectors) {
-            let categories = connectors.categories.read(req)
-            let sections = connectors.sections.read(req)
-            return join(categories, sections, 'section', 'id')
-        },
+        list: function (req, connectors) { return connectors.categories.read(req) }
     }
 }
 
 listView.fields = [
     {
-        name: 'id',
+        name: 'originalId',
         label: 'ID',
     },
     {
@@ -57,13 +48,7 @@ listView.filters = {
             label: 'Section',
             field: 'Select',
             actions: {
-                asyncProps: (req, connectors) => connectors.sections.read(req)
-                .then(res => res.set('data', {
-                    options: res.data.map(section => ({
-                        value: section.id,
-                        label: section.name,
-                    }))
-                }))
+                asyncProps: (req, connectors) => connectors.sections_options.read(req)
             },
             initialValue: '',
         },
