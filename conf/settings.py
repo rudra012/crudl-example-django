@@ -59,7 +59,6 @@ INSTALLED_APPS = (
     # APPS
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken',
     'apps.blog',
     # GRAPHQL
     'django_graphiql',
@@ -140,7 +139,7 @@ REST_FRAMEWORK = {
         'user': '10000/day'
     },
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
+        'api.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (

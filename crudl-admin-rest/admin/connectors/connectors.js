@@ -1,73 +1,40 @@
-
-function pagination(res) {
-
-    function url2page(url) {
-        let match = /page=(\d+)/.exec(url)
-        return match ? parseInt(match[1]) : 1
-    }
-
-    let nextPage = res.data.next && url2page(res.data.next)
-
-    // Return the pagination descriptor
-    return {
-        next: nextPage ? { page: nextPage } : undefined,
-    }
-}
-
-function urlQuery(req) {
-    return Object.assign({},
-        req.filters,
-        req.page,
-        {
-            ordering: req.sorting.map(field => {
-                let prefix = field.sorted == 'ascending' ? '' : '-'
-                return prefix + field.name
-            }).join(',')
-        }
-    )
-}
+import { pagination, urlQuery } from '../utils'
 
 module.exports = [
+
+    // USERS
     {
         id: 'users',
         url: 'users/',
         pagination,
-        transform: {
-            readResponseData: data => data.results,
-        },
+        transform: { readResponseData: data => data.results },
     },
     {
         id: 'user',
         url: 'users/:id/',
     },
+
+    // SECTIONS
     {
-        id: 'entries',
-        url: 'entries/',
+        id: 'sections',
+        url: 'sections/',
         urlQuery,
         pagination,
-        transform: {
-            readResponseData: data => data.results,
-        },
+        transform: { readResponseData: data => data.results },
     },
     {
-        id: 'entries_options',
-        url: 'entries/',
-        mapping: {
-            read: 'options',
-        }
+        id: 'section',
+        url: 'sections/:id/',
     },
-    {
-        id: 'entry',
-        url: 'entries/:id/',
-    },
+
+    // CATEGORIES
     {
         id: 'categories',
         url: 'categories/',
+        urlQuery,
         pagination,
         enableDepagination: true,
-        transform: {
-            readResponseData: data => data.results,
-        },
+        transform: { readResponseData: data => data.results },
     },
     {
         id: 'category',
@@ -77,61 +44,94 @@ module.exports = [
         id: 'allCategories',
         use: 'categories',
     },
-    {
-        id: 'tags_options',
-        use: 'entries_options',
-        transform: {
-            readResponseData: data => data.actions.POST.tags.choices.map(function (c) {
-                return {
-                    value: c.value,
-                    label: c.display_name,
-                }
-            }),
-        },
-    },
-    {
-        id: 'links',
-        url: 'entrylinks/',
-        pagination,
-        enableDepagination: true,
-        transform: {
-            readResponseData: data => data.results,
-        },
-    },
-    {
-        id: 'link',
-        url: 'entrylinks/:id/',
-    },
+
+    // TAGS
     {
         id: 'tags',
         url: 'tags/',
+        urlQuery,
         pagination,
-        transform: {
-            readResponseData: data => data.results,
-        },
+        transform: { readResponseData: data => data.results },
     },
     {
         id: 'tag',
         url: 'tags/:id/',
     },
+
+    // ENTRIES
     {
-        id: 'users_options',
+        id: 'entries',
         url: 'entries/',
-        mapping: { read: 'options', },
+        urlQuery,
+        pagination,
+        transform: { readResponseData: data => data.results },
+    },
+    {
+        id: 'entry',
+        url: 'entries/:id/',
+    },
+
+    // ENTRIELINKS
+    {
+        id: 'links',
+        url: 'entrylinks/',
+        pagination,
+        enableDepagination: true,
+        transform: { readResponseData: data => data.results },
+    },
+    {
+        id: 'link',
+        url: 'entrylinks/:id/',
+    },
+
+    // SPECIAL CONNECTORS
+
+    // sections_options
+    // a helper for retrieving the sections used with select fields
+    {
+        id: 'sections_options',
+        url: 'sections/',
         transform: {
             readResponseData: data => ({
-                options: data.actions.POST.user.choices.map(function (c) {
-                    return {
-                        value: c.value,
-                        label: c.display_name,
-                    }
+                options: data.results.map(function(item) {
+                    return { value: item.id, label: item.name }
                 }),
             })
         },
     },
+
+    // category_options
+    // a helper for retrieving the categories used with select fields
     {
-        id: 'auth_token',
-        url: '/rest-api/api-token-auth/',
+        id: 'categories_options',
+        url: 'categories/',
+        transform: {
+            readResponseData: data => ({
+                options: data.results.map(function(item) {
+                    return { value: item.id, label: item.name }
+                }),
+            })
+        },
+    },
+
+    // tags_options
+    // a helper for retrieving the tags used with select fields
+    {
+        id: 'tags_options',
+        url: 'tags/',
+        transform: {
+            readResponseData: data => ({
+                options: data.results.map(function(item) {
+                    return { value: item.id, label: item.name }
+                }),
+            })
+        },
+    },
+
+    // AUTHENTICATION
+    {
+        id: 'login',
+        url: '/rest-api/login/',
         mapping: { read: 'post', },
         transform: {
             readResponseData: data => ({
@@ -139,5 +139,6 @@ module.exports = [
                 authInfo: data,
             })
         }
-    }
+    },
+
 ]

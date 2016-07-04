@@ -1,4 +1,3 @@
-
 export default {
     debug: true,
     basePath: '/crudl-rest/',  // FIXME: rename to adminBasePath

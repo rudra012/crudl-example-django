@@ -3,8 +3,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 
 ## Important notes
 * crudl is still under development and the syntax might change (esp. with connectors and descriptors).
-* The relevant part for your admin interface is within the folder crudl-admin-rest (resp. crudl-admin-graphql).
-All other files are only used for this example and are usually not required when using crudl.
+* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/).
 
 ## Requirements
 * Node.js
@@ -32,7 +31,7 @@ All other files are only used for this example and are usually not required when
 
     ```
     $ python manage.py migrate
-    $ fab init -f conf/fabfile
+    $ python manage.py loaddata apps/blog/fixtures/blog.json
     ```
 
 5. Start the django development server:
@@ -44,6 +43,8 @@ All other files are only used for this example and are usually not required when
 Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with the user (demo/demo).
 
 ### Install crudl-admin (REST)
+In order to change the REST admin interface, you need to build a new bundle ...
+
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
 ```
 $ npm install
@@ -51,6 +52,8 @@ $ npm run watchify
 ```
 
 ### Install crudl-admin (GraphQL)
+In order to change the GraphQL admin interface, you need to build a new bundle ...
+
 Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
 ```
 $ npm install
@@ -65,6 +68,7 @@ $ npm run watchify
 /crudl-graphql/     # Crudl Admin (GraphQL)
 /admin/             # Django Admin (Grappelli)
 ```
+If you want to use /admin/ you need to create a superuser first.
 
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
@@ -198,7 +202,7 @@ denormalize: (data) => {
 ```
 
 ### Custom components
-XXX
+We have added a custom component _SplitDateTimeField.jsx_ (see admin/fields) in order to show how you're able to implement fields which are not part of the core package.
 
 ### Superuser vs staff user
 All 3 _Users_ are able to login to crudl (because is_staff is True). But only superusers (patrick, axel) are allowed to edit all objects. The third user (vaclav) is only able to see and edit his own objects. Besides, only superusers are able to change a users password (user vaclav has no permission to edit his own password).
@@ -269,5 +273,5 @@ There is still a long list with open issues, but here are the some of the bigger
 * Add: Custom bulk actions
 * Add: ListView hierarchies
 * Add: Show relations with delete
-* Add: Drag/Drop with RelationView and ListView
+* Add: Reorder via drag & drop with RelationView and ListView
 * Add: RTE

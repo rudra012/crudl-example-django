@@ -27,11 +27,59 @@ function listQuery(options) {
 
 module.exports = [
     {
+        id: 'users',
+        query: {
+            read: listQuery({
+                name: 'allUsers',
+                fields: 'id, username',
+                args: { first: 20, }
+            }),
+        },
+        transform: {
+            readResponseData: data => data.data.allUsers.edges.map(e => e.node)
+        },
+    },
+    {
+        id: 'sections',
+        query: {
+            read: listQuery({
+                name: 'allSections',
+                fields: 'id, name, slug',
+                args: { first: 20, }
+            }),
+        },
+        transform: {
+            readResponseData: data => data.data.allSections.edges.map(e => e.node)
+        },
+    },
+    {
+        id: 'categories',
+        query: {
+            read: `{allCategories{edges{node{id,name}}}}`,
+        },
+        transform: {
+            readResponseData: data => data.data.allCategories.edges.map(e => e.node)
+        },
+    },
+    {
+        id: 'tags',
+        query: {
+            read: listQuery({
+                name: 'allTags',
+                fields: 'id, name, slug',
+                args: { first: 20, }
+            }),
+        },
+        transform: {
+            readResponseData: data => data.data.allTags.edges.map(e => e.node)
+        },
+    },
+    {
         id: 'entries',
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, title, date, category { id, name }',
+                fields: 'id, title, date, section{id, name}, category{id, name}',
                 args: { first: 20, }
             }),
             create: `mutation ($input: CreateEntryInput!) {
@@ -40,7 +88,8 @@ module.exports = [
                     entry {
                         id,
                         title,
-                        category { id, name }
+                        section{id, name},
+                        category{id, name},
                         date,
                     }
                 }
@@ -60,7 +109,7 @@ module.exports = [
     {
         id: 'entry',
         query: {
-            read: `{entry(id: "%id"){id,title,date,category{id,name}}}`,
+            read: `{entry(id: "%id"){id,title,date,section{id,name}},category{id,name}}}`,
             update: `mutation ($input: ChangeEntryInput!) {
                 changeEntry(input: $input) {
                     errors
@@ -93,17 +142,8 @@ module.exports = [
         }
     },
     {
-        id: 'categories',
-        query: {
-            read: `{allCategories{edges{node{id,name}}}}`,
-        },
-        transform: {
-            readResponseData: data => data.data.allCategories.edges.map(e => e.node)
-        },
-    },
-    {
-        id: 'auth_token',
-        url: '/rest-api/api-token-auth/',
+        id: 'login',
+        url: '/rest-api/login/',
         mapping: { read: 'post', },
         transform: {
             readResponseData: data => ({

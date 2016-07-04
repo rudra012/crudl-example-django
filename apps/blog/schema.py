@@ -11,8 +11,7 @@ from graphene.contrib.django.types import DjangoNode, DjangoConnection
 from graphql_relay.node.node import from_global_id
 
 # PROJECT IMPORTS
-from django.contrib.auth.models import User
-from apps.blog.models import Category, Tag, Entry, EntryLink
+from apps.blog.models import User, Section, Category, Tag, Entry, EntryLink
 
 
 class Connection(DjangoConnection):
@@ -33,16 +32,27 @@ class UserNode(DjangoNode):
         filter_order_by = ['id', 'username', 'is_staff', 'is_active', 'date_joined']
 
 
+class SectionNode(DjangoNode):
+    connection_type = Connection
+
+    class Meta:
+        model = Section
+        filter_fields = {
+            'name': ['icontains'],
+        }
+        filter_order_by = ['id', 'name', 'slug', 'position']
+
+
 class CategoryNode(DjangoNode):
     connection_type = Connection
 
     class Meta:
         model = Category
         filter_fields = {
-            'user': ['exact'],
+            'section': ['exact'],
             'name': ['icontains'],
         }
-        filter_order_by = ['id', 'user', 'name', 'slug', 'position']
+        filter_order_by = ['id', 'section', 'name', 'slug', 'position']
 
 
 class TagNode(DjangoNode):
@@ -51,10 +61,9 @@ class TagNode(DjangoNode):
     class Meta:
         model = Tag
         filter_fields = {
-            'user': ['exact'],
             'name': ['icontains'],
         }
-        filter_order_by = ['id', 'user', 'name', 'slug']
+        filter_order_by = ['id', 'name', 'slug']
 
 
 class EntryNode(DjangoNode):
@@ -63,16 +72,17 @@ class EntryNode(DjangoNode):
     class Meta:
         model = Entry
         # error with image (therefore we currently use only_fields)
-        only_fields = ('id', 'user', 'title', 'date', 'category', 'tags',)
+        only_fields = ('id', 'title', 'date', 'section', 'category', 'tags',)
         filter_fields = {
-            'user': ['exact'],
             'title': ['icontains'],
             'date': ['exact'],
             'status': ['exact'],
+            'section': ['exact'],
             'category': ['exact'],
             'tags': ['exact'],
+            'owner': ['exact'],
         }
-        filter_order_by = ['id', 'title', 'date', 'category', 'tags']
+        filter_order_by = ['id', 'title', 'date', 'section', 'category', 'tags']
 
 
 class EntryLinkNode(DjangoNode):
@@ -89,6 +99,13 @@ class EntryLinkNode(DjangoNode):
 def get_user(relayId, otherwise=None):
     try:
         return User.objects.get(pk=from_global_id(relayId).id)
+    except:
+        return otherwise
+
+
+def get_section(relayId, otherwise=None):
+    try:
+        return Section.objects.get(pk=from_global_id(relayId).id)
     except:
         return otherwise
 
@@ -128,6 +145,13 @@ def get_user_id(relayId, otherwise=None):
         return otherwise
 
 
+def get_section_id(relayId, otherwise=None):
+    try:
+        return from_global_id(relayId).id
+    except:
+        return otherwise
+
+
 def get_category_id(relayId, otherwise=None):
     try:
         return from_global_id(relayId).id
@@ -153,10 +177,86 @@ def get_entry_id(relayId, otherwise=None):
         return otherwise
 
 
+class CreateSection(relay.ClientIDMutation):
+
+    class Input:
+        name = String(required=True)
+        slug = String(required=False)
+        position = Int(required=False)
+
+    section = Field(SectionNode)
+    errors = String().List
+
+    @classmethod
+    def mutate_and_get_payload(cls, input, info):
+        try:
+            section = Section()
+            section.name = input.get('name')
+            section.slug = input.get('slug')
+            section.position = input.get('position')
+            section.full_clean()
+            section.save()
+            return CreateSection(section=section)
+        except ValidationError as e:
+            fields = e.message_dict.keys()
+            messages = ['; '.join(m) for m in e.message_dict.values()]
+            errors = [i for pair in zip(fields, messages) for i in pair]
+            return CreateSection(section=None, errors=errors)
+
+
+class ChangeSection(relay.ClientIDMutation):
+
+    class Input:
+        id = String(required=True)
+        name = String(required=False)
+        slug = String(required=False)
+        position = Int(required=False)
+
+    section = Field(SectionNode)
+    errors = String().List
+
+    @classmethod
+    def mutate_and_get_payload(cls, input, info):
+        section = get_section(input.get('id'))
+        if input.get('name'):
+            section.name = input.get('name')
+        if input.get('slug'):
+            section.slug = input.get('slug')
+        if input.get('position'):
+            section.position = input.get('position')
+        try:
+            section.full_clean()
+            section.save()
+            return ChangeSection(section=section)
+        except ValidationError as e:
+            fields = e.message_dict.keys()
+            messages = ['; '.join(m) for m in e.message_dict.values()]
+            errors = [i for pair in zip(fields, messages) for i in pair]
+            return ChangeSection(section=section, errors=errors)
+
+
+class DeleteSection(relay.ClientIDMutation):
+
+    class Input:
+        id = String(required=True)
+
+    deleted = Boolean()
+    category = Field(CategoryNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, input, info):
+        try:
+            section = get_section(input.get('id'))
+            section.delete()
+            return DeleteSection(deleted=True, section=section)
+        except:
+            return DeleteSection(deleted=False, section=None)
+
+
 class CreateCategory(relay.ClientIDMutation):
 
     class Input:
-        user = ID(required=True)
+        section = ID(required=True)
         name = String(required=True)
         slug = String(required=False)
         position = Int(required=False)
@@ -168,7 +268,7 @@ class CreateCategory(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, input, info):
         try:
             category = Category()
-            category.user_id = get_user_id(input.get('user'))
+            category.section_id = get_section_id(input.get('section'))
             category.name = input.get('name')
             category.slug = input.get('slug')
             category.position = input.get('position')
@@ -186,7 +286,7 @@ class ChangeCategory(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        user = ID(required=False)
+        section = ID(required=False)
         name = String(required=False)
         slug = String(required=False)
         position = Int(required=False)
@@ -197,8 +297,8 @@ class ChangeCategory(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         category = get_category(input.get('id'))
-        if input.get('user'):
-            category.user_id = get_user_id(input.get('user'))
+        if input.get('section'):
+            category.section_id = get_section_id(input.get('section'))
         if input.get('name'):
             category.name = input.get('name')
         if input.get('slug'):
@@ -237,7 +337,6 @@ class DeleteCategory(relay.ClientIDMutation):
 class CreateTag(relay.ClientIDMutation):
 
     class Input:
-        user = ID(required=True)
         name = String(required=True)
 
     tag = Field(TagNode)
@@ -247,7 +346,6 @@ class CreateTag(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, input, info):
         try:
             tag = Tag()
-            tag.user_id = get_user_id(input.get('user'))
             tag.name = input.get('name')
             tag.full_clean()
             tag.save()
@@ -263,7 +361,6 @@ class ChangeTag(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        user = ID(required=False)
         name = String(required=False)
 
     tag = Field(TagNode)
@@ -272,8 +369,6 @@ class ChangeTag(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         tag = get_tag(input.get('id'))
-        if input.get('user'):
-            tag.user_id = get_user_id(input.get('user'))
         if input.get('name'):
             tag.name = input.get('name')
         try:
@@ -308,14 +403,14 @@ class DeleteTag(relay.ClientIDMutation):
 class CreateEntry(relay.ClientIDMutation):
 
     class Input:
-        user = ID(required=True)
         title = String(required=True)
         date = String(required=True)
         date_from = String(required=False)
         date_until = String(required=False)
         sticky = Boolean(required=False)
         status = String(required=False)
-        category = ID(required=True)
+        section = ID(required=True)
+        category = ID(required=False)
         tags = List(ID())
         body = String(required=False)
 
@@ -326,13 +421,13 @@ class CreateEntry(relay.ClientIDMutation):
     def mutate_and_get_payload(cls, input, info):
         try:
             entry = Entry()
-            entry.user_id = get_user_id(input.get('user'))
             entry.title = input.get('title')
             entry.date = input.get('date')
             entry.date_from = input.get('date_from')
             entry.date_until = input.get('date_until')
             entry.sticky = input.get('sticky')
             entry.status = input.get('status')
+            entry.section_id = get_section_id(input.get('section'))
             entry.category_id = get_category_id(input.get('category'))
             entry.body = input.get('body')
             entry.full_clean()
@@ -350,13 +445,13 @@ class ChangeEntry(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        user = ID(required=False)
         title = String(required=False)
         date = String(required=False)
         date_from = String(required=False)
         date_until = String(required=False)
         sticky = Boolean(required=False)
         status = String(required=False)
+        section = ID(required=False)
         category = ID(required=False)
         tags = List(ID())
         body = String(required=False)
@@ -367,8 +462,6 @@ class ChangeEntry(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entry = get_entry(input.get('id'))
-        if input.get('user'):
-            entry.user_id = get_user_id(input.get('user'))
         if input.get('title'):
             entry.title = input.get('title')
         if input.get('date'):
@@ -381,6 +474,8 @@ class ChangeEntry(relay.ClientIDMutation):
             entry.sticky = input.get('sticky')
         if input.get('status'):
             entry.status = input.get('status')
+        if input.get('section'):
+            entry.section_id = get_section_id(input.get('section'))
         if input.get('category'):
             entry.category_id = get_category_id(input.get('category'))
         if input.get('body'):
@@ -463,7 +558,7 @@ class ChangeEntryLink(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entrylink = get_entrylink(input.get('id'))
-        if input.get('user'):
+        if input.get('entry'):
             entrylink.entry_id = get_entry_id(input.get('entry'))
         if input.get('url'):
             entrylink.url = input.get('url')
@@ -507,6 +602,9 @@ class Query(ObjectType):
     user = relay.NodeField(UserNode)
     all_users = DjangoFilterConnectionField(UserNode)
     # category
+    section = relay.NodeField(SectionNode)
+    all_sections = DjangoFilterConnectionField(SectionNode)
+    # category
     category = relay.NodeField(CategoryNode)
     all_categories = DjangoFilterConnectionField(CategoryNode)
     # tag
@@ -525,6 +623,10 @@ class Query(ObjectType):
 
 class Mutation(ObjectType):
     # user
+    # section
+    create_section = Field(CreateSection)
+    change_section = Field(ChangeSection)
+    delete_section = Field(DeleteSection)
     # category
     create_category = Field(CreateCategory)
     change_category = Field(ChangeCategory)

@@ -9,12 +9,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 
 # REST
-from rest_framework.authtoken.models import Token
 from rest_framework.authentication import get_authorization_header
 
 # DRF API
 from api.urls import router
-from api.views import obtain_auth_token
+from api.views import login_view
+from apps.blog.models import User
 
 # GRAPHENE
 from graphene.contrib.django.views import GraphQLView
@@ -25,7 +25,7 @@ def api_auth_required(view_func):
     def _wrapped_view_func(request, *args, **kwargs):
 
         auth = get_authorization_header(request).split()
-        token = None
+        user = None
         req_token = None
         if not auth or auth[0].lower() != "token":  # Invalid token header
             return HttpResponse("Unauthorized", status=401)
@@ -39,10 +39,10 @@ def api_auth_required(view_func):
             return HttpResponse("Unauthorized", status=401)
 
         try:
-            token = Token.objects.select_related('user').get(key=req_token)
-        except Token.DoesNotExist:  # Invalid token
+            user = User.objects.get(token=req_token)
+        except User.DoesNotExist:  # Invalid token
             return HttpResponse("Unauthorized", status=401)
-        if not token.user.is_active:  # User inactive or deleted
+        if not user.is_active:  # User inactive or deleted
             return HttpResponse("Unauthorized", status=401)
 
         return view_func(request, *args, **kwargs)
@@ -58,9 +58,10 @@ urlpatterns = [
     url(r'^crudl-graphql/', TemplateView.as_view(template_name="crudl-admin-graphql/index.html")),
     # DRF
     url(r'^rest-api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^rest-api/api-token-auth/', obtain_auth_token),
+    url(r'^rest-api/login/', login_view),
     url(r"^rest-api/", include(router.urls)),
     # GRAPHQL
+    # url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
     url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
     url(r'^graphiql', include('django_graphiql.urls')),
 ]
