@@ -119,9 +119,22 @@ module.exports = [
                 fields: 'id, originalId, name, slug, counterEntries',
                 args: { first: 20, }
             }),
+            create: `mutation ($input: CreateTagInput!) {
+                createTag(input: $input) {
+                    errors
+                    tag {id,name,slug}
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.allTags.edges.map(e => e.node)
+            readResponseData: data => data.data.allTags.edges.map(e => e.node),
+            createResponseData: data => {
+                console.log(data)
+                if (data.data.createTag.errors) {
+                    throw data.data.createTag.errors
+                }
+                return data.data.createTag.tag
+            },
         },
     },
     {
