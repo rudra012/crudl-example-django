@@ -1,7 +1,6 @@
 # crudl django example
 This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
-## Important notes
 * crudl is still under development and the syntax might change (esp. with connectors and descriptors).
 * The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/).
 
@@ -13,8 +12,8 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 
 ## TOC
 * [Installation](#installation)
-    * [Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
-    * [Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
+    * [Optional: Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
+    * [Optional: Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
 * [URLs](#urls)
 * [Notes](#notes)
     * [Connectors and Descriptors](#connectors-and-descriptors)
@@ -65,22 +64,24 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 Open your browser and go to ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ### Install crudl-admin-rest (REST)
-In order to change the REST admin interface, you need to build a new bundle ...
-
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
+
 ```
 $ npm install
 $ npm run watchify
 ```
+
+This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-rest/.
 
 ### Install crudl-admin-graphql (GraphQL)
-In order to change the GraphQL admin interface, you need to build a new bundle ...
-
 Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
+
 ```
 $ npm install
 $ npm run watchify
 ```
+
+This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-graphql/.
 
 ## URLs
 ```
