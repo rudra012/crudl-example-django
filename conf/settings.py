@@ -7,7 +7,6 @@ PROJECT_PATH = os.path.dirname(BASE_PATH)
 
 # ALLOWED HOSTS#
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = ['*']
 
 # Database
@@ -98,6 +97,7 @@ TEMPLATES = [
         ],
         'APP_DIRS': True,
         'OPTIONS': {
+            'debug': DEBUG,
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
