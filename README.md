@@ -392,4 +392,3 @@ crudl and crudl-django-example is written and maintained by vonautomatisch (Patr
 * http://crudl.io
 * https://twitter.com/crudlio
 * http://vonautomatisch.at
-* https://twitter.com/sehmaschine
