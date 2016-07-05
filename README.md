@@ -108,6 +108,7 @@ With collections, you create the visual representation by defining the _listView
 var listView = {}
 listView.fields = []
 listView.filters = []
+listView.search = []
 var changeView = {}
 changeView.fields = []
 changeView.tabs = []
@@ -121,14 +122,16 @@ Authentication for GraphQL is done with a decorator wrapping the basic URL.
 Please note the besides the Token, we also add an attribute _authInfo_ in order to subsequently have access to the currently logged-in user (e.g. for filtering).
 
 ```javascript
-id: 'auth_token',
-url: '/rest-api/login/',
-mapping: { read: 'post', },
-transform: {
-    readResponseData: data => ({
-        requestHeaders: { 'Authorization': `Token ${data.token}` },
-        authInfo: data,
-    })
+{
+    id: 'login',
+    url: '/rest-api/login/',
+    mapping: { read: 'post', },
+    transform: {
+        readResponseData: data => ({
+            requestHeaders: { 'Authorization': `Token ${data.token}` },
+            authInfo: data,
+        })
+    }
 }
 ```
 
@@ -137,17 +140,24 @@ When adding or editing an _Entry_, the _Categories_ depend on the selected _Sect
 If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_.
 
 ```javascript
-name: 'category',
-field: 'Autocomplete',
-watch: [
-    {
-        for: 'section',
-        setProps: section => ({
-            disabled: !section,
-            helpText: !section ? "In order to select a category, you have to select a section first" : "Select a category",
-        }),
-    }
-],
+{
+    name: 'category',
+    field: 'Autocomplete',
+    watch: [
+        {
+            for: 'section',
+            setProps: section => ({
+                disabled: !section,
+                helpText: !section ? "In order to select a category, you have to select a section first" : "Select a category",
+            }),
+        }
+    ],
+    actions: {
+        asyncProps: (req, connectors) => {
+            /* return the filtered categories */
+        }
+    },
+}
 ```
 
 You can use the same syntax with list filters (see entries.js).
