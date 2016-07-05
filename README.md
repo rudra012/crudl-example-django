@@ -11,6 +11,16 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 * virtualenv
 * SQLite
 
+## TOC
+* [Installation](#installation)
+* Install crudl-admin-rest (REST)
+* Install crudl-admin-graphql (GraphQL)
+* URLs
+* Notes
+* Development
+* TODO
+* Credits & Links
+
 ## Installation
 1. Create and activate a python **virtual environment**.
 
@@ -378,3 +388,11 @@ There is still a long list with open issues, but here are the some of the bigger
 * Add: Show relations with delete
 * Add: Reorder via drag & drop with RelationView and ListView
 * Add: RTE
+
+## Credits & Links
+crudl and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
+
+* http://vonautomatisch.at
+* http://crudl.io
+* https://twitter.com/crudlio
+* https://twitter.com/sehmaschine
