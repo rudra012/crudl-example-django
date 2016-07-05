@@ -40,6 +40,7 @@ class UserNode(DjangoNode):
 class SectionNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
+    counter_entries = graphene.Int()
 
     class Meta:
         model = Section
@@ -51,10 +52,14 @@ class SectionNode(DjangoNode):
     def resolve_original_id(self, args, info):
         return self.id
 
+    def resolve_counter_entries(self, args, info):
+        return self.counter_entries()
+
 
 class CategoryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
+    counter_entries = graphene.Int()
 
     class Meta:
         model = Category
@@ -67,10 +72,14 @@ class CategoryNode(DjangoNode):
     def resolve_original_id(self, args, info):
         return self.id
 
+    def resolve_counter_entries(self, args, info):
+        return self.counter_entries()
+
 
 class TagNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
+    counter_entries = graphene.Int()
 
     class Meta:
         model = Tag
@@ -82,15 +91,20 @@ class TagNode(DjangoNode):
     def resolve_original_id(self, args, info):
         return self.id
 
+    def resolve_counter_entries(self, args, info):
+        return self.counter_entries()
+
 
 class EntryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
+    counter_links = graphene.Int()
+    counter_tags = graphene.Int()
 
     class Meta:
         model = Entry
         # error with image (therefore we currently use only_fields)
-        only_fields = ('id', 'title', 'status', 'date', 'sticky', 'section', 'category', 'tags', 'summary', 'body', 'owner', 'locked', 'createdate', 'updatedate',)
+        only_fields = ('id', 'title', 'status', 'date', 'sticky', 'section', 'category', 'tags', 'summary', 'body', 'owner', 'locked', 'createdate', 'updatedate', 'counter_links', 'counter_tags',)
         filter_fields = {
             'title': ['icontains'],
             'date': ['exact'],
@@ -104,6 +118,12 @@ class EntryNode(DjangoNode):
 
     def resolve_original_id(self, args, info):
         return self.id
+
+    def resolve_counter_links(self, args, info):
+        return self.counter_links()
+
+    def resolve_counter_tags(self, args, info):
+        return self.counter_tags()
 
 
 class EntryLinkNode(DjangoNode):

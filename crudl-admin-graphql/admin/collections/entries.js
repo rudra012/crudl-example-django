@@ -75,12 +75,12 @@ listView.fields = [
         render: 'boolean',
     },
     {
-        name: 'counter_links',
+        name: 'counterLinks',
         label: 'No. Links',
         render: 'number',
     },
     {
-        name: 'counter_tags',
+        name: 'counterTags',
         label: 'No. Tags',
         render: 'number',
     },

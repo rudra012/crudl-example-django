@@ -28,7 +28,7 @@ listView.fields = [
         sortable: true,
     },
     {
-        name: 'counter_entries',
+        name: 'counterEntries',
         label: 'No. Entries',
     },
 ]

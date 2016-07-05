@@ -48,7 +48,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allSections',
-                fields: 'id, originalId, name, slug',
+                fields: 'id, originalId, name, slug, position, counterEntries',
                 args: { first: 20, }
             }),
         },
@@ -70,7 +70,7 @@ module.exports = [
     {
         id: 'categories',
         query: {
-            read: `{allCategories{edges{node{id,originalId,section{id,name},name,slug,position}}}}`,
+            read: `{allCategories{edges{node{id,originalId,section{id,name},name,slug,position,counterEntries}}}}`,
         },
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node)
@@ -92,7 +92,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allTags',
-                fields: 'id, originalId, name, slug',
+                fields: 'id, originalId, name, slug, counterEntries',
                 args: { first: 20, }
             }),
         },
@@ -116,7 +116,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, originalId, title, date, section{id, name}, category{id, name}, owner{id, username}',
+                fields: 'id, originalId, title, date, section{id, name}, category{id, name}, owner{id, username}, counterLinks, counterTags',
                 args: { first: 20, }
             }),
             create: `mutation ($input: CreateEntryInput!) {
