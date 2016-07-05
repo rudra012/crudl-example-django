@@ -149,63 +149,63 @@ class EntryLinkNode(DjangoNode):
 
 def get_user(relayId, otherwise=None):
     try:
-        return User.objects.get(pk=from_global_id(relayId).id)
+        return User.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_section(relayId, otherwise=None):
     try:
-        return Section.objects.get(pk=from_global_id(relayId).id)
+        return Section.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_category(relayId, otherwise=None):
     try:
-        return Category.objects.get(pk=from_global_id(relayId).id)
+        return Category.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_tag(relayId, otherwise=None):
     try:
-        return Tag.objects.get(pk=from_global_id(relayId).id)
+        return Tag.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_entry(relayId, otherwise=None):
     try:
-        return Entry.objects.get(pk=from_global_id(relayId).id)
+        return Entry.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_entrylink(relayId, otherwise=None):
     try:
-        return EntryLink.objects.get(pk=from_global_id(relayId).id)
+        return EntryLink.objects.get(pk=from_global_id(relayId)[1])
     except:
         return otherwise
 
 
 def get_user_id(relayId, otherwise=None):
     try:
-        return from_global_id(relayId).id
+        return from_global_id(relayId)[1]
     except:
         return otherwise
 
 
 def get_section_id(relayId, otherwise=None):
     try:
-        return from_global_id(relayId).id
+        return from_global_id(relayId)[1]
     except:
         return otherwise
 
 
 def get_category_id(relayId, otherwise=None):
     try:
-        return from_global_id(relayId).id
+        return from_global_id(relayId)[1]
     except:
         return otherwise
 
@@ -215,7 +215,7 @@ def get_tags_ids(relayIdList, otherwise=None):
     if relayIdList:
         for relayId in relayIdList:
             try:
-                tags.append(from_global_id(relayId).id)
+                tags.append(from_global_id(relayId)[1])
             except:
                 pass
     return tags
@@ -223,7 +223,7 @@ def get_tags_ids(relayIdList, otherwise=None):
 
 def get_entry_id(relayId, otherwise=None):
     try:
-        return from_global_id(relayId).id
+        return from_global_id(relayId)[1]
     except:
         return otherwise
 
@@ -318,6 +318,7 @@ class CreateCategory(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         try:
+            print "XXX", input, input.get('section'), get_section_id(input.get('section'))
             category = Category()
             category.section_id = get_section_id(input.get('section'))
             category.name = input.get('name')
@@ -327,6 +328,7 @@ class CreateCategory(relay.ClientIDMutation):
             category.save()
             return CreateCategory(category=category)
         except ValidationError as e:
+            print "YYY"
             fields = e.message_dict.keys()
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
