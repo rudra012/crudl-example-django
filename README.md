@@ -17,6 +17,17 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     * [Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
 * [URLs](#urls)
 * [Notes](#notes)
+    * [Connectors and Descriptors](#connectors-and-descriptor)
+    * [Authentication](#authentication)
+    * [Field dependency](#field-dependency)
+    * [Foreign Key, Many-to-Many](#foreign-key-many-to-many)
+    * [Relation with different endpoint](#relation-with-different-endpoint)
+    * [Normalize/denormalize](#normalizedenormalize)
+    * [Custom components](#custom-components)
+    * [Initial values](#initial-values)
+    * [Validate fields and form](#validate-fields-and-form)
+    * [Custom column with listView](#custom-column-with-listview)
+    * [Multiple sort with listView](#multiple-sort-with-listview)
 * [Development](#development)
 * [TODO](#todo)
 * [Credits & Links](#credits--links)
@@ -83,7 +94,7 @@ If you want to use /admin/ you need to create a superuser first.
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
-### Connectors and Descriptor
+### Connectors and Descriptors
 In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ consists of _collections_ and the _authentification_.
 
 Here is the basic structure of a REST connector:
@@ -335,7 +346,7 @@ Validation should usually be handled with the API. That said, it sometimes makes
 },
 ```
 
-### Custom column with ListView
+### Custom column with listView
 With _Entries_, we added a custom column to the _listView_ based on the currently logged-in user.
 
 ```javascript
@@ -365,7 +376,10 @@ listView.fields = [
 ]
 ```
 
-### Multiple sort with ListView
+### Multiple sort with listView
+XXX
+
+### Filtering with listView
 XXX
 
 ## Development
@@ -384,15 +398,15 @@ There is still a long list with open issues, but here are the some of the bigger
 * Add: Dashboard/Menus
 * Add: Custom and intermediary pages
 * Add: Custom bulk actions
-* Add: ListView hierarchies
+* Add: listView hierarchies
 * Add: Show relations with delete
-* Add: Reorder via drag & drop with RelationView and ListView
+* Add: Reorder via drag & drop with RelationView and listView
 * Add: RTE
 
 ## Credits & Links
 crudl and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
 
-* http://vonautomatisch.at
 * http://crudl.io
 * https://twitter.com/crudlio
+* http://vonautomatisch.at
 * https://twitter.com/sehmaschine
