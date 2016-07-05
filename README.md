@@ -209,30 +209,45 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
 
 ### Relation with different endpoint
 The collection _Links_ is an example of related objects which are assigned through an intermediary table with additional fields.
-You can either use the main menu in order to handle all Links are an individual _Entry_ in order to edit the _Links_ assigned to this _Entry_ (which are shown using tabs).
 
-```
+```javascript
 changeView.tabs = [
     {
         title: 'Links',
         actions: {
-            list: (req, connectors) => {
-                req.filter("entry", req.id.id)
-                req.paginate(false)
-                return connectors.links.read(req)
-            },
+            list: (req, connectors) => connectors.links.read(req.filter('entry', req.id)),
             add: (req, connectors) => connectors.links.create(req),
-            save: (req, connectors) => connectors.link.update(req.with('id', req.data.id)),
-            delete: (req, connectors) => connectors.link.delete(req.with('id', req.data.id))
+            save: (req, connectors) => connectors.link(req.data.id).update(req),
+            delete: (req, connectors) => connectors.link(req.data.id).delete(req)
         },
         itemTitle: '{url}',
-        fields: [...]
+        fields: [
+            {
+                name: 'url',
+                label: 'URL',
+                field: 'URL',
+                props: {
+                    link: true,
+                },
+            },
+            {
+                name: 'title',
+                label: 'Title',
+                field: 'String',
+            },
+            {
+                name: 'id',
+                field: 'hidden',
+            },
+            {
+                name: 'entry',
+                field: 'hidden',
+                initialValue: (context) => context.data.id,
+            },
+        ],
     },
 ]
 ```
-
-### Autocompletes
-We decided to use autocomplete fields for all foreign-key and many-to-many relations.
 
 ### Custom fields
 With _Users_, we added a custom field _Name_ which is not part of the database or the API.
