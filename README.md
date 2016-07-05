@@ -163,14 +163,64 @@ If you change the field _Section_, the options of field _Category_ are populated
 You can use the same syntax with list filters (see entries.js).
 
 ### Foreign Key, Many-to-Many
-There are a couple of foreign keys being used (e.g. _Category_ with _Entry_) and one many-to-many field (_Tags_ with _Entry_).
+There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with _Entry_) and one many-to-many field (_Tags_ with _Entry_).
 
-```
-name: 'user',
-field: 'Select',
-actions: {
-    asyncProps: (req, connectors) => connectors.users_options.read(req),
+```javascript
+{
+    name: 'section',
+    label: 'Section',
+    field: 'Select',
+    actions: {
+        asyncProps: (req, connectors) => connectors.sections_options.read(req),
+    },
 },
+{
+    name: 'category',
+    label: 'Category',
+    field: 'Autocomplete',
+    actions: {
+        /* return the value and label when selecting a category */
+        select: (req, connectors) => {
+            return Promise.all(req.data.selection.map(item => {
+                return connectors.category(item.value).read(req)
+                .then(res => res.set('data', {
+                    value: res.data.id,
+                    label: res.data.name,
+                }))
+            }))
+        },
+        /* return the value and a custom label when searching
+        for a category */
+        search: (req, connectors) => {
+            return connectors.categories.read(req
+                .filter('name', req.data.query)
+            .then(res => res.set('data', res.data.map(d => ({
+                value: d.id,
+                label: `<b>${d.name}</b> (${d.slug})`,
+            }))))
+        },
+    },
+},
+{
+    name: 'tags',
+    label: 'Tags',
+    field: 'AutocompleteMultiple',
+    actions: {
+        select: (req, connectors) => {
+            return Promise.all(req.data.selection.map(item => {
+                return connectors.tag(item.value).read(req)
+                .then(res => res.set('data', {
+                    value: res.data.id,
+                    label: res.data.name,
+                }))
+            }))
+        },
+        search: (req, connectors) => {
+            return connectors.tags_options.read(req.filter('name', req.data.query.toLowerCase()))
+            .then(res => res.set('data', res.data.options))
+        },
+    },
+}
 ```
 
 A more complex example is the field _Category_ with _Entries_. It is an autocomplete field with different actions for select and search.
