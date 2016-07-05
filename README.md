@@ -303,7 +303,7 @@ Crudl.render(descriptor, options)
 ```
 
 ### Initial values
-XXX
+You can set initial values with every field (based on context, if needed).
 
 ```javascript
 {
@@ -379,10 +379,10 @@ listView.fields = [
 ```
 
 ### Multiple sort with listView
-XXX
+The listView supports ordering by multiple columns (see entries.js).
 
 ### Filtering with listView
-XXX
+Filtering is done by defining fields with _listView.filters_ (see entries.js). You have all the options available with the changeView (e.g. initial values, field dependency, autocompletes, ...).
 
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
