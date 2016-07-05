@@ -42,7 +42,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 
 Open your browser and go to ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
-### Install crudl-admin (REST)
+### Install crudl-admin-rest (REST)
 In order to change the REST admin interface, you need to build a new bundle ...
 
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
@@ -51,7 +51,7 @@ $ npm install
 $ npm run watchify
 ```
 
-### Install crudl-admin (GraphQL)
+### Install crudl-admin-graphql (GraphQL)
 In order to change the GraphQL admin interface, you need to build a new bundle ...
 
 Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
@@ -103,7 +103,7 @@ And here is a similar connector with GraphQL:
 },
 ```
 
-With collections, you create the visual representation by defining the _listView_ and _changeView_ of each object:
+With collections, you create the visual representation by defining the _listView_, _changeView_ and _addView_ of each object:
 ```javascript
 var listView = {}
 listView.fields = []
@@ -116,10 +116,7 @@ var addView = {}
 ```
 
 ### Authentication
-Both the REST and GraphQL API is only accessible for logged-in users based on TokenAuthentication.
-Authentication for GraphQL is done with a decorator wrapping the basic URL.
-
-Please note the besides the Token, we also add an attribute _authInfo_ in order to subsequently have access to the currently logged-in user (e.g. for filtering).
+Both the REST and GraphQL API is only accessible for logged-in users based on TokenAuthentication. Besides the Token, we also return an attribute _authInfo_ in order to subsequently have access to the currently logged-in user (e.g. for filtering).
 
 ```javascript
 {
@@ -136,8 +133,7 @@ Please note the besides the Token, we also add an attribute _authInfo_ in order 
 ```
 
 ### Field dependency
-When adding or editing an _Entry_, the _Categories_ depend on the selected _Section_.
-If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_.
+With _Entries_, the _Categories_ depend on the selected _Section_. If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_ due to the _watch_ method.
 
 ```javascript
 {
@@ -154,7 +150,7 @@ If you change the field _Section_, the options of field _Category_ are populated
     ],
     actions: {
         asyncProps: (req, connectors) => {
-            /* return the filtered categories */
+            /* return the filtered categories based on req.context.section */
         }
     },
 }
@@ -249,32 +245,39 @@ changeView.tabs = [
 ]
 ```
 
-### Custom fields
-With _Users_, we added a custom field _Name_ which is not part of the database or the API.
-The methods _normalize_ and _denormalize_ in order to manipulate the data stream.
+### Normalize/denormalize
+With _Users_, we added a custom field _full_name_ which is not part of the database or the API. We achieve this by using the methods _normalize_ and _denormalize_ in order to manipulate the data stream.
+
 ```
-normalize: (data, error) => {
-    data.full_name = data.last_name + ', ' + data.first_name
-    return data
-},
-denormalize: (data) => {
-    let index = data.full_name.indexOf(',')
-    if (index >= 0) {
-        data.last_name = data.full_name.slice(0, index)
-        data.first_name = data.full_name.slice(index+1)
-    } else {
-        data.last_name = ''
-        data.first_name = ''
+var changeView = {
+    /* manipulate data sent by the API */
+    normalize: (data, error) => {
+        data.full_name = data.last_name + ', ' + data.first_name
+        return data
+    },
+    /* manipulate data before sending to the API  */
+    denormalize: (data) => {
+        let index = data.full_name.indexOf(',')
+        if (index >= 0) {
+            data.last_name = data.full_name.slice(0, index)
+            data.first_name = data.full_name.slice(index+1)
+        }
+        return data
     }
-    return data
 }
 ```
 
 ### Custom components
 We have added a custom component _SplitDateTimeField.jsx_ (see admin/fields) in order to show how you're able to implement fields which are not part of the core package.
 
-### Superuser vs staff user
-All 3 _Users_ are able to login to crudl (because is_staff is True). But only superusers (patrick, axel) are allowed to edit all objects. The third user (vaclav) is only able to see and edit his own objects. Besides, only superusers are able to change a users password (user vaclav has no permission to edit his own password).
+```javascript
+import options from './admin/options'
+import descriptor from './admin/descriptor'
+import SplitDateTimeField from './admin/fields/SplitDateTimeField'
+
+Crudl.addField('SplitDateTime', SplitDateTimeField)
+Crudl.render(descriptor, options)
+```
 
 ### Initial values
 XXX
