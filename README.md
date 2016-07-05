@@ -90,7 +90,7 @@ Here is the basic structure of a REST connector:
 ```
 
 And here is a similar connector with GraphQL:
-```
+```javascript
 {
     id: 'entries',
     query: {
@@ -104,7 +104,7 @@ And here is a similar connector with GraphQL:
 ```
 
 With collections, you create the visual representation by defining the _listView_ and _changeView_ of each object:
-```
+```javascript
 var listView = {}
 listView.fields = []
 listView.filters = []
@@ -120,31 +120,31 @@ Authentication for GraphQL is done with a decorator wrapping the basic URL.
 
 Please note the besides the Token, we also add an attribute _authInfo_ in order to subsequently have access to the currently logged-in user (e.g. for filtering).
 
-```
+```javascript
 id: 'auth_token',
-url: '/rest-api/api-token-auth/',
+url: '/rest-api/login/',
 mapping: { read: 'post', },
 transform: {
     readResponseData: data => ({
-        requestHeaders: { "Authorization": `Token ${data.token}` },
+        requestHeaders: { 'Authorization': `Token ${data.token}` },
         authInfo: data,
     })
 }
 ```
 
-### Mutually dependent fields
-When adding or editing an _Entry_, the _Categories_ depend on the selected _User_.
-If you change the field _User_, the options of field _Category_ are populated based on the chosen _User_.
+### Field dependency
+When adding or editing an _Entry_, the _Categories_ depend on the selected _Section_.
+If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_.
 
-```
+```javascript
 name: 'category',
 field: 'Autocomplete',
 watch: [
     {
-        for: 'user',
-        setProps: user => ({
-            disabled: !user,
-            helpText: !user ? "In order to select a category, you have to select a user first" : "Select a category",
+        for: 'section',
+        setProps: section => ({
+            disabled: !section,
+            helpText: !section ? "In order to select a category, you have to select a section first" : "Select a category",
         }),
     }
 ],
