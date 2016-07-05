@@ -9,12 +9,12 @@ var listView = {
         },
     },
     normalize: (list) => list.map(item => {
-        if (!item.last_name) {
-            item.full_name = item.first_name
-        } else if (!item.first_name) {
-            item.full_name = `<b>${item.last_name}</b>`
+        if (!item.lastName) {
+            item.fullName = item.firstName
+        } else if (!item.firstName) {
+            item.fullName = `<b>${item.lastName}</b>`
         } else {
-            item.full_name = `<b>${item.last_name}</b>, ${item.first_name}`
+            item.fullName = `<b>${item.lastName}</b>, ${item.firstName}`
         }
         return item
     })
@@ -31,7 +31,7 @@ listView.fields = [
         main: true,
     },
     {
-        name: 'full_name',
+        name: 'fullName',
         label: 'Full name',
     },
     {
@@ -39,12 +39,12 @@ listView.fields = [
         label: 'Email address',
     },
     {
-        name: 'is_active',
+        name: 'isActive',
         label: 'Active',
         render: 'boolean',
     },
     {
-        name: 'is_staff',
+        name: 'isStaff',
         label: 'Staff member',
         render: 'boolean',
     },

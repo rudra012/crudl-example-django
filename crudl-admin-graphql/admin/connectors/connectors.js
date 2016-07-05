@@ -33,8 +33,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allUsers',
-                fields: 'id, originalId, username',
-                args: { first: 20, }
+                fields: 'id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined'
             }),
         },
         transform: {
@@ -49,7 +48,7 @@ module.exports = [
             read: listQuery({
                 name: 'allSections',
                 fields: 'id, originalId, name, slug, position, counterEntries',
-                args: { first: 20, }
+                args: { first: 20, orderBy: "name" }
             }),
         },
         transform: {
@@ -70,7 +69,7 @@ module.exports = [
     {
         id: 'categories',
         query: {
-            read: `{allCategories{edges{node{id,originalId,section{id,name},name,slug,position,counterEntries}}}}`,
+            read: `{allCategories(orderBy:\"name\"){edges{node{id,originalId,section{id,name},name,slug,position,counterEntries}}}}`,
         },
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node)
@@ -116,7 +115,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, originalId, title, date, section{id, name}, category{id, name}, owner{id, username}, counterLinks, counterTags',
+                fields: 'id, originalId, title, status, date, section{id, name}, category{id, name}, owner{id, username}, counterLinks, counterTags',
                 args: { first: 20, }
             }),
             create: `mutation ($input: CreateEntryInput!) {
