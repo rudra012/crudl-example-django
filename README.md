@@ -40,7 +40,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     $ python manage.py runserver
     ```
 
-Open your browser and go to ``http://localhost:8000/crudl-rest/`` and login with the user (demo/demo).
+Open your browser and go to ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ### Install crudl-admin (REST)
 In order to change the REST admin interface, you need to build a new bundle ...
@@ -74,8 +74,9 @@ If you want to use /admin/ you need to create a superuser first.
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
 ### Connectors and Descriptor
-In order for CRUDL to work, you need to define _connectors_ (defining the API) and a _descriptor_ (the visual representation). The _descriptor_ consists of _collections_ (XXX) and the _authentification_.
+In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ consists of _collections_ and the _authentification_.
 
+Here is the basic structure of a REST connector:
 ```
 {
     id: 'entries',
@@ -86,12 +87,23 @@ In order for CRUDL to work, you need to define _connectors_ (defining the API) a
         readResponseData: data => data.results,
     },
 },
-{
-    id: 'entry',
-    url: 'entries/:id/',
-}
 ```
 
+And here is a similar connector with GraphQL:
+```
+{
+    id: 'entries',
+    query: {
+        read: `{allEntries{id, title, status, date, section{id, name}, category{id, name}, owner{id, username}}}`,
+    },
+    pagination,
+    transform: {
+        readResponseData: data => data.data.allEntries.edges.map(e => e.node)
+    },
+},
+```
+
+With collections, you create the visual representation by defining the _listView_ and _changeView_ of each object:
 ```
 var listView = {}
 listView.fields = []
