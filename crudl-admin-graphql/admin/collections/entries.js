@@ -16,7 +16,7 @@ var listView = {
             //return entries
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
-                console.log(req.authInfo.user, item.owner)
+                // console.log(req.authInfo.user, item.owner)
                 item.is_owner = req.authInfo.user == item.owner.id
                 return item
             })
@@ -50,7 +50,6 @@ listView.fields = [
     },
     {
         name: 'status',
-        key: 'status_name',
         label: 'Status',
         sortable: true,
     },

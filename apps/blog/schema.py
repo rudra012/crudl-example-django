@@ -95,9 +95,15 @@ class TagNode(DjangoNode):
         return self.counter_entries()
 
 
+class StatusEnum(graphene.Enum):
+    Draft = "0"
+    Online = "1"
+
+
 class EntryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
+    status = graphene.Field(StatusEnum)
     counter_links = graphene.Int()
     counter_tags = graphene.Int()
 
@@ -114,7 +120,7 @@ class EntryNode(DjangoNode):
             'tags': ['exact'],
             'owner': ['exact'],
         }
-        filter_order_by = ['id', 'title', 'date', 'section', 'category', 'tags']
+        filter_order_by = ['id', 'title', 'status', 'date', 'section', 'category', 'tags']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -286,7 +292,7 @@ class DeleteSection(relay.ClientIDMutation):
         id = String(required=True)
 
     deleted = Boolean()
-    category = Field(CategoryNode)
+    category = Field(SectionNode)
 
     @classmethod
     def mutate_and_get_payload(cls, input, info):
