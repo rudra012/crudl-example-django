@@ -29,7 +29,6 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     * [Multiple sort with listView](#multiple-sort-with-listview)
     * [Filtering with listView](#filtering-with-listview)
 * [Development](#development)
-* [TODO](#todo)
 * [Credits & Links](#credits--links)
 
 ## Installation
@@ -386,24 +385,6 @@ Filtering is done by defining fields with _listView.filters_ (see entries.js). Y
 
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
-
-## TODO
-There is still a long list with open issues, but here are the some of the bigger ones:
-
-* Improve: connectors & descriptors
-* Improve: Authentication
-* Improve: Finish UI
-* Add: Permissions
-* Add: Documentation
-* Add: Tests
-* Add: Internationalization (i18n)
-* Add: Dashboard/Menus
-* Add: Custom and intermediary pages
-* Add: Custom bulk actions
-* Add: listView hierarchies
-* Add: Show relations with delete
-* Add: Reorder via drag & drop with RelationView and listView
-* Add: RTE
 
 ## Credits & Links
 crudl and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
