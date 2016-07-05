@@ -189,11 +189,9 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
                 }))
             }))
         },
-        /* return the value and a custom label when searching
-        for a category */
+        /* return the value and a custom label when searching for a category */
         search: (req, connectors) => {
-            return connectors.categories.read(req
-                .filter('name', req.data.query)
+            return connectors.categories.read(req.filter('name', req.data.query)
             .then(res => res.set('data', res.data.map(d => ({
                 value: d.id,
                 label: `<b>${d.name}</b> (${d.slug})`,
@@ -205,25 +203,9 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
     name: 'tags',
     label: 'Tags',
     field: 'AutocompleteMultiple',
-    actions: {
-        select: (req, connectors) => {
-            return Promise.all(req.data.selection.map(item => {
-                return connectors.tag(item.value).read(req)
-                .then(res => res.set('data', {
-                    value: res.data.id,
-                    label: res.data.name,
-                }))
-            }))
-        },
-        search: (req, connectors) => {
-            return connectors.tags_options.read(req.filter('name', req.data.query.toLowerCase()))
-            .then(res => res.set('data', res.data.options))
-        },
-    },
+    actions: {},
 }
 ```
-
-A more complex example is the field _Category_ with _Entries_. It is an autocomplete field with different actions for select and search.
 
 ### Relation with different endpoint
 The collection _Links_ is an example of related objects which are assigned through an intermediary table with additional fields.
