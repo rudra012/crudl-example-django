@@ -13,13 +13,13 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 
 ## TOC
 * [Installation](#installation)
-* Install crudl-admin-rest (REST)
-* Install crudl-admin-graphql (GraphQL)
-* URLs
-* Notes
-* Development
-* TODO
-* Credits & Links
+    * [Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
+    * [Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
+* [URLs](#urls)
+* [Notes](#notes)
+* [Development](#development)
+* [TODO](#todo)
+* [Credits & Links](#credits--links)
 
 ## Installation
 1. Create and activate a python **virtual environment**.
