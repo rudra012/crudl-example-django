@@ -77,7 +77,7 @@ While this example is simple, there's still a couple of more advanced features i
 In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ consists of _collections_ and the _authentification_.
 
 Here is the basic structure of a REST connector:
-```
+```javascript
 {
     id: 'entries',
     url: 'entries/',
@@ -94,7 +94,7 @@ And here is a similar connector with GraphQL:
 {
     id: 'entries',
     query: {
-        read: `{allEntries{id, title, status, date, section{id, name}, category{id, name}, owner{id, username}}}`,
+        read: `{allEntries{id, title, status, date}}`,
     },
     pagination,
     transform: {
