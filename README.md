@@ -248,7 +248,7 @@ changeView.tabs = [
 ### Normalize/denormalize
 With _Users_, we added a custom field _full_name_ which is not part of the database or the API. We achieve this by using the methods _normalize_ and _denormalize_ in order to manipulate the data stream.
 
-```
+```javascript
 var changeView = {
     /* manipulate data sent by the API */
     normalize: (data, error) => {
@@ -281,26 +281,78 @@ Crudl.render(descriptor, options)
 
 ### Initial values
 XXX
-```
-initialValue: () => {
-    let d = new Date()
-    return d.toJSON().slice(0, 10)
-}
-```
 
-XXX
-```
-initialValue: (context) => context.auth.user
+```javascript
+{
+    name: 'date',
+    label: 'Date',
+    field: 'Date',
+    initialValue: () => formatDate(new Date()),
+},
+{
+    name: 'user',
+    label: 'User',
+    field: 'hidden',
+    initialValue: (context) => context.auth.user
+},
 ```
 
 ### Validate fields and form
 XXX
-```
-validate: (value, allValues) => {
-    if (value != allValues.password) {
-        return 'The passwords do not match.'
+
+```javascript
+{
+    name: 'date_gt',
+    label: 'Published after',
+    field: 'Date',
+    /* simple date validation */
+    validate: (value, allValues) => {
+        const dateReg = /^\d{4}-\d{2}-\d{2}$/
+        if (value && !value.match(dateReg)) {
+            return 'Please enter a date (YYYY-MM-DD).'
+        }
     }
+},
+{
+    name: 'summary',
+    label: 'Summary',
+    field: 'Textarea',
+    validate: (value, allValues) => {
+        if (!value && allValues.status == '1') {
+            return 'The summary is required with status "Online".'
+        }
+    }
+},
+```
+
+### Custom column with ListView
+XXX
+
+```javascript
+var listView = {
+    path: 'entries',
+    title: 'Blog Entries',
+    actions: {
+        list: function (req, connectors) {
+            let entries = connectors.entries.read(req)
+            /* here we add a custom column based on the currently logged-in user */
+            let entriesWithCustomColumn = transform(entries, (item) => {
+                item.is_owner = req.authInfo.user == item.owner
+                return item
+            })
+            return entriesWithCustomColumn
+        }
+    },
 }
+
+listView.fields = [
+    { ... }
+    {
+        name: 'is_owner',
+        label: 'Owner',
+        render: 'boolean',
+    },
+]
 ```
 
 ### Multiple sort with ListView
