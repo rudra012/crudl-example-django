@@ -379,10 +379,10 @@ listView.fields = [
 ```
 
 ### Multiple sort with listView
-The listView supports ordering by multiple columns (see entries.js).
+The _listView_ supports ordering by multiple columns (see entries.js).
 
 ### Filtering with listView
-Filtering is done by defining fields with _listView.filters_ (see entries.js). You have all the options available with the changeView (e.g. initial values, field dependency, autocompletes, ...).
+Filtering is done by defining fields with _listView.filters_ (see entries.js). You have all the options available with the _changeView_ (e.g. initial values, field dependency, autocompletes, ...).
 
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
