@@ -287,7 +287,7 @@ XXX
     name: 'date',
     label: 'Date',
     field: 'Date',
-    initialValue: () => formatDate(new Date()),
+    initialValue: () => formatDate(new Date())
 },
 {
     name: 'user',
@@ -298,7 +298,7 @@ XXX
 ```
 
 ### Validate fields and form
-XXX
+Validation should usually be handled with the API. That said, it sometimes makes sense to use frontend validation as well.
 
 ```javascript
 {
@@ -326,7 +326,7 @@ XXX
 ```
 
 ### Custom column with ListView
-XXX
+With _Entries_, we added a custom column to the _listView_ based on the currently logged-in user.
 
 ```javascript
 var listView = {
@@ -357,27 +357,6 @@ listView.fields = [
 
 ### Multiple sort with ListView
 XXX
-
-### Filter from list result
-XXX
-If there exist an API call that can return such a list (e.g. /rest-api/users/?has_tag=true) then the implementation is straightforward (using asyncProps).
-
-Without such an API, one would have to make an unpaginated call to /rest-api/tags/ and filter the result in the asyncProps action.
-
-### Filter list
-With Users, we only show the currently logged-in user (although the API returns a list of all available users).
-
-```
-var listView = {
-    path: 'users',
-    title: 'Users',
-    actions: {
-        list: function (req, connectors) {
-            return connectors.users.read(req.filter('id', req.authInfo.user))
-        },
-    },
-}
-```
 
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
