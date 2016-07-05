@@ -50,9 +50,21 @@ module.exports = [
                 fields: 'id, originalId, name, slug, position, counterEntries',
                 args: { first: 20, orderBy: "name" }
             }),
+            create: `mutation ($input: CreateSectionInput!) {
+                createSection(input: $input) {
+                    errors
+                    section {id,name,slug,position}
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.allSections.edges.map(e => e.node)
+            readResponseData: data => data.data.allSections.edges.map(e => e.node),
+            createResponseData: data => {
+                if (data.data.createSection.errors) {
+                    throw data.data.createSection.errors
+                }
+                return data.data.createSection.section
+            },
         },
     },
     {
@@ -70,9 +82,22 @@ module.exports = [
         id: 'categories',
         query: {
             read: `{allCategories(orderBy:\"name\"){edges{node{id,originalId,section{id,name},name,slug,position,counterEntries}}}}`,
+            create: `mutation ($input: CreateCategoryInput!) {
+                createCategory(input: $input) {
+                    errors
+                    category {id,section{id,name},name,slug,position}
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.allCategories.edges.map(e => e.node)
+            readResponseData: data => data.data.allCategories.edges.map(e => e.node),
+            createResponseData: data => {
+                console.log(data)
+                if (data.data.createCategory.errors) {
+                    throw data.data.createCategory.errors
+                }
+                return data.data.createCategory.section
+            },
         },
     },
     {
