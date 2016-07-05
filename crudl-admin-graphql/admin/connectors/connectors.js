@@ -71,9 +71,27 @@ module.exports = [
         id: 'section',
         query: {
             read: `{section(id: "%id"){id,name,slug,position}}`,
+            update: `mutation ($input: ChangeSectionInput!) {
+                changeSection(input: $input) {
+                    errors
+                    section {id,name,slug,position}
+                }
+            }`,
+            delete: `mutation ($input: DeleteSectionInput!) {
+                deleteSection(input: $input) {
+                    deleted
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.section
+            readResponseData: data => data.data.section,
+            updateResponseData: data => {
+                if (data.data.changeSection.errors) {
+                    throw data.data.changeSection.errors
+                }
+                return data.data.changeSection.entry
+            },
+            deleteResponseData: data => data.data,
         }
     },
 
@@ -104,9 +122,21 @@ module.exports = [
         id: 'category',
         query: {
             read: `{category(id: "%id"){id,section{id,name},name,slug,position}}`,
+            update: `mutation ($input: ChangeCategoryInput!) {
+                changeCategory(input: $input) {
+                    errors
+                    category {id,section{id,name},name,slug,position}
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.category
+            readResponseData: data => data.data.category,
+            updateResponseData: data => {
+                if (data.data.changeCategory.errors) {
+                    throw data.data.changeCategory.errors
+                }
+                return data.data.changeCategory.entry
+            },
         }
     },
 
@@ -141,9 +171,21 @@ module.exports = [
         id: 'tag',
         query: {
             read: `{tag(id: "%id"){id,name,slug}}`,
+            update: `mutation ($input: ChangeTagInput!) {
+                changeTag(input: $input) {
+                    errors
+                    tag {id,name,slug}
+                }
+            }`,
         },
         transform: {
-            readResponseData: data => data.data.tag
+            readResponseData: data => data.data.tag,
+            updateResponseData: data => {
+                if (data.data.changeTag.errors) {
+                    throw data.data.changeTag.errors
+                }
+                return data.data.changeTag.entry
+            },
         }
     },
 
