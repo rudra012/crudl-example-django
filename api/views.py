@@ -112,7 +112,7 @@ class EntryViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
     filter_class = EntryFilter
     search_fields = ('title',)
-    ordering_fields = ('id', 'title', 'date', 'sticky', 'category', 'tags',)
+    ordering_fields = ('id', 'title', 'date', 'sticky', 'section', 'category', 'tags',)
 
     def get_queryset(self):
         return Entry.objects.all()
