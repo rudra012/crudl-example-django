@@ -97,6 +97,7 @@ class TagViewSet(viewsets.ModelViewSet):
 
 
 class EntryFilter(django_filters.FilterSet):
+    title = django_filters.CharFilter(name="title", lookup_type="icontains")
     date = django_filters.DateFilter(name="date", lookup_type="exact")
     date_lt = django_filters.DateFilter(name="date", lookup_type="lt")
     date_gt = django_filters.DateFilter(name="date", lookup_type="gt")
