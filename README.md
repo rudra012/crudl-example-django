@@ -2,7 +2,8 @@
 This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
 * crudl is still under development and the syntax might change (esp. with connectors and descriptors).
-* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/).
+* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are generally given when using crudl.
+* The descriptors are deliberately very explicit XXX in order to illustrate the possibilites with crudl.
 
 ## Requirements
 * Node.js
@@ -28,6 +29,8 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
     * [Custom column with listView](#custom-column-with-listview)
     * [Multiple sort with listView](#multiple-sort-with-listview)
     * [Filtering with listView](#filtering-with-listview)
+    * [Change password](#change-password)
+* [Limitations](#limitations)
 * [Development](#development)
 * [Credits & Links](#credits--links)
 
@@ -63,6 +66,8 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 Open your browser and go to ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ### Install crudl-admin-rest (REST)
+IMPORTANT: This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-rest/.
+
 Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
 
 ```
@@ -70,17 +75,15 @@ $ npm install
 $ npm run watchify
 ```
 
-This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-rest/.
-
 ### Install crudl-admin-graphql (GraphQL)
+IMPORTANT: This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-graphql/.
+
 Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
 
 ```
 $ npm install
 $ npm run watchify
 ```
-
-This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-graphql/.
 
 ## URLs
 ```
@@ -289,6 +292,8 @@ var changeView = {
 }
 ```
 
+Please note that it is probably better to add that field to the API. We just added this case in order to demonstrate the maniuplation of data.
+
 ### Custom components
 We have added a custom component _SplitDateTimeField.jsx_ (see admin/fields) in order to show how you're able to implement fields which are not part of the core package.
 
@@ -383,8 +388,14 @@ The _listView_ supports ordering by multiple columns (see entries.js).
 ### Filtering with listView
 Filtering is done by defining fields with _listView.filters_ (see entries.js). You have all the options available with the _changeView_ (e.g. initial values, field dependency, autocompletes, ...).
 
+### Change password
+You can only change the password of the currently logged-in _User_ (see collections/users.js)
+
 ## Development
 This example mainly shows how to use crudl. It is not intended for development on crudl itself.
+
+## Limitations
+* Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
 
 ## Credits & Links
 crudl and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
