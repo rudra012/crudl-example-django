@@ -3,7 +3,7 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 
 * crudl is still under development and the syntax might change (esp. with connectors and descriptors).
 * The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are generally given when using crudl.
-* The descriptors are deliberately very explicit XXX in order to illustrate the possibilites with crudl.
+* The descriptors are intentionally verbose in order to illustrate the possibilites with crudl.
 
 ## Requirements
 * Node.js
