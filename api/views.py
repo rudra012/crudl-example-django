@@ -102,6 +102,7 @@ class EntryFilter(django_filters.FilterSet):
     date_lt = django_filters.DateFilter(name="date", lookup_type="lt")
     date_gt = django_filters.DateFilter(name="date", lookup_type="gt")
     sticky = django_filters.TypedChoiceFilter(choices=BOOLEAN_CHOICES, coerce=strtobool)
+    search_summary = django_filters.CharFilter(name="summary", lookup_type="icontains")
 
     class Meta:
         model = Entry

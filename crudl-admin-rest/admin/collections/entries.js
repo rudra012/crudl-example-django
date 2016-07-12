@@ -157,13 +157,8 @@ listView.filters = {
             }
         },
         {
-            name: 'search',
-            label: 'Search',
-            field: 'Search',
-        },
-        {
-            name: 'title',
-            label: 'Search (Title)',
+            name: 'search_summary',
+            label: 'Search (Summary)',
             field: 'Search',
         },
     ]

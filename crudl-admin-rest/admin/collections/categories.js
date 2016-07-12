@@ -56,6 +56,8 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
+            /* we manually build the available options. please note that you could also
+            use a connector, making this a one-liner */
             actions: {
                 asyncProps: (req, connectors) => connectors.sections.read(req)
                 .then(res => res.set('data', {
@@ -68,6 +70,10 @@ listView.filters = {
             initialValue: '',
         },
     ]
+}
+
+listView.search = {
+    name: 'search',
 }
 
 //-------------------------------------------------------------------
