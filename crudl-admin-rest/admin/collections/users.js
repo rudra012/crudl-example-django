@@ -197,5 +197,5 @@ var addView = {
 module.exports = {
     listView,
     changeView,
-    addView,
+    // addView,
 }
