@@ -177,6 +177,11 @@ var changeView = {
         delete: function (req, connectors) { return connectors.entry(req.id).delete(req) },
         save: function (req, connectors) { return connectors.entry(req.id).update(req) },
     },
+    validate: function (values) {
+        if (!values.category && !values.tags || values.tags.length == 0) {
+            return { _error: 'Either `category` or `tags` is required.' }
+        }
+    }
 }
 
 changeView.fieldsets = [
@@ -411,6 +416,7 @@ var addView = {
     path: 'entries/new',
     title: 'New Blog Entry',
     fieldsets: changeView.fieldsets,
+    validate: changeView.validate,
     actions: {
         add: function (req, connectors) { return connectors.entries.create(req) },
     },

@@ -1,4 +1,4 @@
-import { pagination, urlQuery } from '../utils'
+import { pagination, urlQuery, transformErrors } from '../utils'
 
 module.exports = [
 
@@ -12,6 +12,7 @@ module.exports = [
     {
         id: 'user',
         url: 'users/:id/',
+        transformErrors,
     },
 
     // SECTIONS
@@ -25,6 +26,7 @@ module.exports = [
     {
         id: 'section',
         url: 'sections/:id/',
+        transformErrors,
     },
 
     // CATEGORIES
@@ -39,6 +41,7 @@ module.exports = [
     {
         id: 'category',
         url: 'categories/:id/',
+        transformErrors,
     },
     {
         id: 'allCategories',
@@ -56,6 +59,7 @@ module.exports = [
     {
         id: 'tag',
         url: 'tags/:id/',
+        transformErrors,
     },
 
     // ENTRIES
@@ -69,6 +73,7 @@ module.exports = [
     {
         id: 'entry',
         url: 'entries/:id/',
+        transformErrors,
     },
 
     // ENTRIELINKS
@@ -82,6 +87,7 @@ module.exports = [
     {
         id: 'link',
         url: 'entrylinks/:id/',
+        transformErrors,
     },
 
     // SPECIAL CONNECTORS
@@ -138,7 +144,8 @@ module.exports = [
                 requestHeaders: { "Authorization": `Token ${data.token}` },
                 authInfo: data,
             })
-        }
+        },
+        transformErrors,
     },
 
 ]

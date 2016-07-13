@@ -50,3 +50,8 @@ export function slugify(text) {
 export function formatDate(date) {
     return date.toJSON().slice(0, 10)
 }
+
+export function transformErrors(error) {
+    error._error = error.non_field_errors
+    return error
+}
