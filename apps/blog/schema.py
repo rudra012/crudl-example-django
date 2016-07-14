@@ -292,7 +292,7 @@ class DeleteSection(relay.ClientIDMutation):
         id = String(required=True)
 
     deleted = Boolean()
-    category = Field(SectionNode)
+    section = Field(SectionNode)
 
     @classmethod
     def mutate_and_get_payload(cls, input, info):

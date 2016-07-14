@@ -64,6 +64,10 @@ changeView.fields = [
             More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.`,
         }
     },
+    {
+        name: 'id',
+        field: 'hidden',
+    }
 ]
 
 //-------------------------------------------------------------------

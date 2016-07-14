@@ -89,8 +89,9 @@ module.exports = [
                 if (data.data.changeSection.errors) {
                     throw data.data.changeSection.errors
                 }
-                return data.data.changeSection.entry
+                return data.data.changeSection.section
             },
+            deleteRequestData: data => ({ id: data.id }),
             deleteResponseData: data => data.data,
         }
     },
@@ -114,7 +115,7 @@ module.exports = [
                 if (data.data.createCategory.errors) {
                     throw data.data.createCategory.errors
                 }
-                return data.data.createCategory.section
+                return data.data.createCategory.category
             },
         },
     },
@@ -135,7 +136,7 @@ module.exports = [
                 if (data.data.changeCategory.errors) {
                     throw data.data.changeCategory.errors
                 }
-                return data.data.changeCategory.entry
+                return data.data.changeCategory.category
             },
         }
     },
@@ -159,7 +160,6 @@ module.exports = [
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
-                console.log(data)
                 if (data.data.createTag.errors) {
                     throw data.data.createTag.errors
                 }
@@ -184,7 +184,7 @@ module.exports = [
                 if (data.data.changeTag.errors) {
                     throw data.data.changeTag.errors
                 }
-                return data.data.changeTag.entry
+                return data.data.changeTag.tag
             },
         }
     },
@@ -254,6 +254,7 @@ module.exports = [
                 }
                 return data.data.changeEntry.entry
             },
+            deleteRequestData: data => ({ id: data.id }),
             deleteResponseData: data => data.data,
         }
     },
