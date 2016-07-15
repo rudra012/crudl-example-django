@@ -52,6 +52,11 @@ listView.filters = {
             },
             initialValue: '',
         },
+        {
+            name: 'name_Icontains',
+            label: 'Name Contains',
+            field: 'String',
+        },
     ]
 }
 

@@ -15,7 +15,7 @@ function objectToArgs(object) {
 
 function listQuery(options) {
     return (req) => {
-        let args = objectToArgs(Object.assign({}, options.args, req.page))
+        let args = objectToArgs(Object.assign({}, options.args, req.page, req.filters))
         return `{
             ${options.name} ${args} {
                 pageInfo { hasNextPage, hasPreviousPage, startCursor, endCursor }
@@ -128,7 +128,11 @@ module.exports = [
     {
         id: 'categories',
         query: {
-            read: `{allCategories(orderBy:\"name\"){edges{node{id,originalId,section{id,name},name,slug,position,counterEntries}}}}`,
+            read: listQuery({
+                name: 'allCategories',
+                fields: 'id,originalId,section{id,name},name,slug,position,counterEntries',
+                args: { first: 20 }
+            }),
             create: `mutation ($input: CreateCategoryInput!) {
                 createCategory(input: $input) {
                     errors

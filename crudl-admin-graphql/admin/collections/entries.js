@@ -133,8 +133,8 @@ listView.filters = {
             },
         },
         {
-            name: 'date_gt',
-            label: 'Published after',
+            name: 'date',
+            label: 'Published on',
             field: 'Date',
             /* simple date validation (please note that this is just a showcase,
             we know that it does not check for real dates) */
@@ -145,25 +145,20 @@ listView.filters = {
                 }
             }
         },
+        // {
+        //     name: 'sticky',
+        //     label: 'Sticky',
+        //     field: 'Select',
+        //     props: {
+        //         options: [
+        //             {value: 'true', label: 'True'},
+        //             {value: 'false', label: 'False'}
+        //         ],
+        //         helpText: 'Note: We use Select in order to distinguish false and none.'
+        //     }
+        // },
         {
-            name: 'sticky',
-            label: 'Sticky',
-            field: 'Select',
-            props: {
-                options: [
-                    {value: 'true', label: 'True'},
-                    {value: 'false', label: 'False'}
-                ],
-                helpText: 'Note: We use Select in order to distinguish false and none.'
-            }
-        },
-        {
-            name: 'search',
-            label: 'Search',
-            field: 'Search',
-        },
-        {
-            name: 'title',
+            name: 'title_Icontains',
             label: 'Search (Title)',
             field: 'Search',
         },
@@ -171,7 +166,7 @@ listView.filters = {
 }
 
 listView.search = {
-    name: 'search',
+    name: 'title_Icontains',
 }
 
 //-------------------------------------------------------------------
