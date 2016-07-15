@@ -111,7 +111,6 @@ module.exports = [
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
-                console.log(data)
                 if (data.data.createCategory.errors) {
                     throw data.data.createCategory.errors
                 }
@@ -138,6 +137,8 @@ module.exports = [
                 }
                 return data.data.changeCategory.category
             },
+            deleteRequestData: data => ({ id: data.id }),
+            deleteResponseData: data => data.data,
         }
     },
 
@@ -186,6 +187,8 @@ module.exports = [
                 }
                 return data.data.changeTag.tag
             },
+            deleteRequestData: data => ({ id: data.id }),
+            deleteResponseData: data => data.data,
         }
     },
 
