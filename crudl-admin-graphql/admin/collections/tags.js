@@ -46,6 +46,10 @@ var changeView = {
 
 changeView.fields = [
     {
+        name: 'id',
+        field: 'hidden',
+    },
+    {
         name: 'name',
         label: 'Name',
         field: 'String',

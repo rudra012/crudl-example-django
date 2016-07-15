@@ -46,6 +46,10 @@ var changeView = {
 
 changeView.fields = [
     {
+        name: 'id',
+        field: 'hidden',
+    },
+    {
         name: 'name',
         label: 'Name',
         field: 'String',
@@ -63,10 +67,6 @@ changeView.fields = [
             helpText: `If left blank, the slug will be automatically generated.
             More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.`,
         }
-    },
-    {
-        name: 'id',
-        field: 'hidden',
     }
 ]
 

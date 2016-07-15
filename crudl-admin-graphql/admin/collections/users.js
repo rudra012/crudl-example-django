@@ -88,6 +88,10 @@ changeView.fieldsets = [
     {
         fields: [
             {
+                name: 'id',
+                field: 'hidden',
+            },
+            {
                 name: 'username',
                 label: 'Username',
                 field: 'String',
