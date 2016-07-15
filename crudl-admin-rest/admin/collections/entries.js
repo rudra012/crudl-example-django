@@ -98,9 +98,9 @@ listView.filters = {
             name: 'category',
             label: 'Category',
             field: 'Select',
-            watch: [
+            onChange: [
                 {
-                    for: 'section',
+                    in: 'section',
                     setValue: '',
                     setProps: section => ({
                         readOnly: !section,
@@ -244,9 +244,9 @@ changeView.fieldsets = [
                 },
                 /* this field depends on section (so we add a watch function in
                 order to react to any changes on the field section). */
-                watch: [
+                onChange: [
                     {
-                        for: 'section',
+                        in: 'section',
                         setValue: '',
                         setProps: section => ({
                             readOnly: !section,
