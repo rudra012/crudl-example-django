@@ -40,6 +40,34 @@ module.exports = [
             readResponseData: data => data.data.allUsers.edges.map(e => e.node)
         },
     },
+    {
+        id: 'user',
+        query: {
+            read: `{user(id: "%id"){id,username,firstName,lastName,email,isStaff,isActive,dateJoined}}`,
+            update: `mutation ($input: ChangeSectionInput!) {
+                changeSection(input: $input) {
+                    errors
+                    section {id,name,slug,position}
+                }
+            }`,
+            delete: `mutation ($input: DeleteSectionInput!) {
+                deleteSection(input: $input) {
+                    deleted
+                }
+            }`,
+        },
+        transform: {
+            readResponseData: data => data.data.user,
+            updateResponseData: data => {
+                if (data.data.changeUser.errors) {
+                    throw data.data.changeUser.errors
+                }
+                return data.data.changeUser.section
+            },
+            deleteRequestData: data => ({ id: data.id }),
+            deleteResponseData: data => data.data,
+        }
+    },
 
     // SECTIONS
     {

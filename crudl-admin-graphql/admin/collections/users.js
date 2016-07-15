@@ -5,7 +5,6 @@ var listView = {
     actions: {
         list: function (req, connectors) {
             return connectors.users.read(req)
-            // return connectors.users.read(req.filter('id', req.authInfo.user))
         },
     },
     normalize: (list) => list.map(item => {
@@ -60,25 +59,25 @@ var changeView = {
     },
     normalize: (data, error) => {
         if (error) {
-            if (error.first_name)
-                error.full_name = 'First name: ' + error.first_name
-            if (error.last_name)
-                error.full_name = 'Last name: ' + error.last_name
+            if (error.firstName)
+                error.fullName = 'First name: ' + error.firstName
+            if (error.lastName)
+                error.fullName = 'Last name: ' + error.lastName
             throw error
         }
         // full_name
-        data.full_name = data.last_name + ', ' + data.first_name
-        data.full_name = data.full_name.replace(/(^, )|(, $)/, '')
+        data.fullName = data.lastName + ', ' + data.firstName
+        data.fullName = data.fullName.replace(/(^, )|(, $)/, '')
         return data
     },
     denormalize: (data) => {
-        let index = data.full_name.indexOf(',')
+        let index = data.fullName.indexOf(',')
         if (index >= 0) {
-            data.last_name = data.full_name.slice(0, index)
-            data.first_name = data.full_name.slice(index+1)
+            data.lastName = data.fullName.slice(0, index)
+            data.firstName = data.fullName.slice(index+1)
         } else {
-            data.last_name = ''
-            data.first_name = ''
+            data.lastName = ''
+            data.firstName = ''
         }
         return data
     }
@@ -101,7 +100,7 @@ changeView.fieldsets = [
     {
         fields: [
             {
-                name: 'full_name',
+                name: 'fullName',
                 label: 'Name',
                 field: 'String',
                 validate: (value, allValues) => {
@@ -122,7 +121,7 @@ changeView.fieldsets = [
         expanded: true,
         fields: [
             {
-                name: 'is_active',
+                name: 'isActive',
                 label: 'Active',
                 field: 'Checkbox',
                 initialValue: true,
@@ -131,7 +130,7 @@ changeView.fieldsets = [
                 },
             },
             {
-                name: 'is_staff',
+                name: 'isStaff',
                 label: 'Staff member',
                 field: 'Checkbox',
                 props: {
@@ -146,7 +145,7 @@ changeView.fieldsets = [
         description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         fields: [
             {
-                name: 'date_joined',
+                name: 'dateJoined',
                 label: 'Date joined',
                 readOnly: true,
                 field: 'SplitDateTime',
