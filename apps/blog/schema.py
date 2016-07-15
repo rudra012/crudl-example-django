@@ -231,7 +231,7 @@ def get_entry_id(relayId, otherwise=None):
 class CreateSection(relay.ClientIDMutation):
 
     class Input:
-        name = String(required=True)
+        name = String(required=False)
         slug = String(required=False)
         position = Int(required=False)
 
@@ -269,12 +269,9 @@ class ChangeSection(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         section = get_section(input.get('id'))
-        if input.get('name'):
-            section.name = input.get('name')
-        if input.get('slug'):
-            section.slug = input.get('slug')
-        if input.get('position'):
-            section.position = input.get('position')
+        section.name = input.get('name')
+        section.slug = input.get('slug')
+        section.position = input.get('position')
         try:
             section.full_clean()
             section.save()
@@ -318,7 +315,6 @@ class CreateCategory(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         try:
-            print "XXX", input, input.get('section'), get_section_id(input.get('section'))
             category = Category()
             category.section_id = get_section_id(input.get('section'))
             category.name = input.get('name')
@@ -328,7 +324,6 @@ class CreateCategory(relay.ClientIDMutation):
             category.save()
             return CreateCategory(category=category)
         except ValidationError as e:
-            print "YYY"
             fields = e.message_dict.keys()
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
@@ -350,14 +345,10 @@ class ChangeCategory(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         category = get_category(input.get('id'))
-        if input.get('section'):
-            category.section_id = get_section_id(input.get('section'))
-        if input.get('name'):
-            category.name = input.get('name')
-        if input.get('slug'):
-            category.slug = input.get('slug')
-        if input.get('position'):
-            category.position = input.get('position')
+        category.section_id = get_section_id(input.get('section'))
+        category.name = input.get('name')
+        category.slug = input.get('slug')
+        category.position = input.get('position')
         try:
             category.full_clean()
             category.save()
@@ -414,7 +405,7 @@ class ChangeTag(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        name = String(required=False)
+        name = String(required=True)
 
     tag = Field(TagNode)
     errors = String().List
@@ -422,8 +413,7 @@ class ChangeTag(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         tag = get_tag(input.get('id'))
-        if input.get('name'):
-            tag.name = input.get('name')
+        tag.name = input.get('name')
         try:
             tag.full_clean()
             tag.save()
@@ -457,14 +447,13 @@ class CreateEntry(relay.ClientIDMutation):
 
     class Input:
         title = String(required=True)
-        date = String(required=True)
-        date_from = String(required=False)
-        date_until = String(required=False)
-        sticky = Boolean(required=False)
         status = String(required=False)
+        date = String(required=True)
+        sticky = Boolean(required=False)
         section = ID(required=True)
         category = ID(required=False)
         tags = List(ID())
+        summary = String(required=False)
         body = String(required=False)
 
     entry = Field(EntryNode)
@@ -475,13 +464,12 @@ class CreateEntry(relay.ClientIDMutation):
         try:
             entry = Entry()
             entry.title = input.get('title')
-            entry.date = input.get('date')
-            entry.date_from = input.get('date_from')
-            entry.date_until = input.get('date_until')
-            entry.sticky = input.get('sticky')
             entry.status = input.get('status')
+            entry.date = input.get('date')
+            entry.sticky = input.get('sticky')
             entry.section_id = get_section_id(input.get('section'))
             entry.category_id = get_category_id(input.get('category'))
+            entry.summary = input.get('body')
             entry.body = input.get('body')
             entry.full_clean()
             entry.save()
@@ -498,15 +486,14 @@ class ChangeEntry(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        title = String(required=False)
-        date = String(required=False)
-        date_from = String(required=False)
-        date_until = String(required=False)
-        sticky = Boolean(required=False)
+        title = String(required=True)
         status = String(required=False)
-        section = ID(required=False)
+        date = String(required=True)
+        sticky = Boolean(required=False)
+        section = ID(required=True)
         category = ID(required=False)
         tags = List(ID())
+        summary = String(required=False)
         body = String(required=False)
 
     entry = Field(EntryNode)
@@ -515,26 +502,15 @@ class ChangeEntry(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entry = get_entry(input.get('id'))
-        if input.get('title'):
-            entry.title = input.get('title')
-        if input.get('date'):
-            entry.date = input.get('date')
-        if input.get('date_from'):
-            entry.date_from = input.get('date_from')
-        if input.get('date_until'):
-            entry.date_until = input.get('date_until')
-        if input.get('sticky'):
-            entry.sticky = input.get('sticky')
-        if input.get('status'):
-            entry.status = input.get('status')
-        if input.get('section'):
-            entry.section_id = get_section_id(input.get('section'))
-        if input.get('category'):
-            entry.category_id = get_category_id(input.get('category'))
-        if input.get('body'):
-            entry.body = input.get('body')
-        if input.get('tags'):
-            entry.tags = get_tags_ids(input.get('tags'))
+        entry.title = input.get('title')
+        entry.status = input.get('status')
+        entry.date = input.get('date')
+        entry.sticky = input.get('sticky')
+        entry.section_id = get_section_id(input.get('section'))
+        entry.category_id = get_category_id(input.get('category'))
+        entry.body = input.get('summary')
+        entry.body = input.get('body')
+        entry.tags = get_tags_ids(input.get('tags'))
         try:
             entry.full_clean()
             entry.save()
@@ -611,16 +587,11 @@ class ChangeEntryLink(relay.ClientIDMutation):
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entrylink = get_entrylink(input.get('id'))
-        if input.get('entry'):
-            entrylink.entry_id = get_entry_id(input.get('entry'))
-        if input.get('url'):
-            entrylink.url = input.get('url')
-        if input.get('title'):
-            entrylink.title = input.get('title')
-        if input.get('description'):
-            entrylink.description = input.get('description')
-        if input.get('position'):
-            entrylink.position = input.get('position')
+        entrylink.entry_id = get_entry_id(input.get('entry'))
+        entrylink.url = input.get('url')
+        entrylink.title = input.get('title')
+        entrylink.description = input.get('description')
+        entrylink.position = input.get('position')
         try:
             entrylink.full_clean()
             entrylink.save()
