@@ -104,6 +104,7 @@ class EntryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
     status = graphene.Field(StatusEnum)
+    tags = graphene.List(TagNode)
     # sticky = graphene.Boolean()
     counter_links = graphene.Int()
     counter_tags = graphene.Int()
@@ -127,6 +128,9 @@ class EntryNode(DjangoNode):
 
     def resolve_original_id(self, args, info):
         return self.id
+
+    def resolve_tags(self, args, info):
+        return self.tags.all()
 
     def resolve_counter_links(self, args, info):
         return self.counter_links()

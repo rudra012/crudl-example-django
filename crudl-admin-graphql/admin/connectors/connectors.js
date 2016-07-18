@@ -269,11 +269,11 @@ module.exports = [
     {
         id: 'entry',
         query: {
-            read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, tags{edges{node{id}}}, summary, body, owner{id, username}, createdate, updatedate}}`,
+            read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, tags{id, name}, summary, body, owner{id, username}, createdate, updatedate}}`,
             update: `mutation ($input: ChangeEntryInput!) {
                 changeEntry(input: $input) {
                     errors
-                    entry {id, title, status, date, sticky, section{id, name}, category{id, name}, summary, body, owner{id, username}, createdate, updatedate}
+                    entry {id, title, status, date, sticky, section{id, name}, category{id, name}, tags{id, name}, summary, body, owner{id, username}, createdate, updatedate}
                 }
             }`,
             delete: `mutation ($input: DeleteEntryInput!) {
