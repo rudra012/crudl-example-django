@@ -45,11 +45,11 @@ module.exports = [
     {
         id: 'user',
         query: {
-            read: `{user(id: "%id"){id,username,firstName,lastName,email,isStaff,isActive,dateJoined}}`,
+            read: `{user(id: "%id"){id, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
             update: `mutation ($input: ChangeSectionInput!) {
                 changeSection(input: $input) {
                     errors
-                    section {id,name,slug,position}
+                    section {id, name, slug, position}
                 }
             }`,
             delete: `mutation ($input: DeleteSectionInput!) {
@@ -83,7 +83,7 @@ module.exports = [
             create: `mutation ($input: CreateSectionInput!) {
                 createSection(input: $input) {
                     errors
-                    section {id,name,slug,position}
+                    section {id, name, slug, position}
                 }
             }`,
         },
@@ -101,11 +101,11 @@ module.exports = [
     {
         id: 'section',
         query: {
-            read: `{section(id: "%id"){id,name,slug,position}}`,
+            read: `{section(id: "%id"){id, name, slug, position}}`,
             update: `mutation ($input: ChangeSectionInput!) {
                 changeSection(input: $input) {
                     errors
-                    section {id,name,slug,position}
+                    section {id, name, slug, position}
                 }
             }`,
             delete: `mutation ($input: DeleteSectionInput!) {
@@ -133,13 +133,13 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allCategories',
-                fields: 'id,originalId,section{id,name},name,slug,position,counterEntries',
+                fields: 'id, originalId, section{id,name}, name, slug, position, counterEntries',
                 args: { first: 20, orderBy: "name" }
             }),
             create: `mutation ($input: CreateCategoryInput!) {
                 createCategory(input: $input) {
                     errors
-                    category {id,section{id,name},name,slug,position}
+                    category {id, section{id,name}, name, slug, position}
                 }
             }`,
         },
@@ -157,11 +157,11 @@ module.exports = [
     {
         id: 'category',
         query: {
-            read: `{category(id: "%id"){id,section{id,name},name,slug,position}}`,
+            read: `{category(id: "%id"){id, section{id,name}, name, slug, position}}`,
             update: `mutation ($input: ChangeCategoryInput!) {
                 changeCategory(input: $input) {
                     errors
-                    category {id,section{id,name},name,slug,position}
+                    category {id, section{id,name}, name, slug, position}
                 }
             }`,
             delete: `mutation ($input: DeleteCategoryInput!) {
@@ -195,7 +195,7 @@ module.exports = [
             create: `mutation ($input: CreateTagInput!) {
                 createTag(input: $input) {
                     errors
-                    tag {id,name,slug}
+                    tag {id, name, slug}
                 }
             }`,
         },
@@ -213,11 +213,11 @@ module.exports = [
     {
         id: 'tag',
         query: {
-            read: `{tag(id: "%id"){id,name,slug}}`,
+            read: `{tag(id: "%id"){id, name, slug}}`,
             update: `mutation ($input: ChangeTagInput!) {
                 changeTag(input: $input) {
                     errors
-                    tag {id,name,slug}
+                    tag {id, name, slug}
                 }
             }`,
             delete: `mutation ($input: DeleteTagInput!) {
@@ -251,13 +251,7 @@ module.exports = [
             create: `mutation ($input: CreateEntryInput!) {
                 createEntry(input: $input) {
                     errors
-                    entry {
-                        id,
-                        title,
-                        section{id, name},
-                        category{id, name},
-                        date,
-                    }
+                    entry {id, title, date}
                 }
             }`,
         },
@@ -275,24 +269,16 @@ module.exports = [
     {
         id: 'entry',
         query: {
-            read: `{entry(id: "%id"){id,title,date,section{id,name}},category{id,name}}}`,
+            read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, summary, body, owner{id, username}, createdate, updatedate}}`,
             update: `mutation ($input: ChangeEntryInput!) {
                 changeEntry(input: $input) {
                     errors
-                    entry {
-                        id,
-                        title,
-                        category { id, name }
-                        date,
-                    }
+                    entry {id, title, date}
                 }
             }`,
             delete: `mutation ($input: DeleteEntryInput!) {
                 deleteEntry(input: $input) {
                     deleted
-                    entry {
-                        title
-                    }
                 }
             }`,
         },
@@ -318,7 +304,7 @@ module.exports = [
     {
         id: 'sections_options',
         query: {
-            read: `{allSections{edges{node{id,name}}}}`,
+            read: `{allSections{edges{node{id, name}}}}`,
         },
         transform: {
             readResponseData: data => ({
@@ -334,7 +320,7 @@ module.exports = [
     {
         id: 'categories_options',
         query: {
-            read: `{allCategories{edges{node{id,name}}}}`,
+            read: `{allCategories{edges{node{id, name}}}}`,
         },
         transform: {
             readResponseData: data => ({
@@ -350,7 +336,7 @@ module.exports = [
     {
         id: 'tags_options',
         query: {
-            read: `{allTags{edges{node{id,name}}}}`,
+            read: `{allTags{edges{node{id, name}}}}`,
         },
         transform: {
             readResponseData: data => ({

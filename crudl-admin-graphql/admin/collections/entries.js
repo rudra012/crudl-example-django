@@ -169,6 +169,11 @@ var changeView = {
         delete: function (req, connectors) { return connectors.entry(req.id).delete(req) },
         save: function (req, connectors) { return connectors.entry(req.id).update(req) },
     },
+    validate: function (values) {
+        if ((!values.category || values.category == "") && (!values.tags || values.tags.length == 0)) {
+            return { _error: 'Either `Category` or `Tags` is required.' }
+        }
+    }
 }
 
 changeView.fieldsets = [
@@ -200,6 +205,7 @@ changeView.fieldsets = [
             },
             {
                 name: 'section',
+                key: 'section.id',
                 label: 'Section',
                 field: 'Select',
                 /* we set required to false, although this field is actually
@@ -222,6 +228,7 @@ changeView.fieldsets = [
             },
             {
                 name: 'category',
+                key: 'category.id',
                 label: 'Category',
                 field: 'Autocomplete',
                 required: false,
@@ -352,7 +359,7 @@ changeView.fieldsets = [
             },
             {
                 name: 'owner',
-                key: 'owner_username',
+                key: 'owner.username',
                 label: 'Owner',
                 field: 'String',
                 readOnly: true
@@ -361,42 +368,42 @@ changeView.fieldsets = [
     }
 ]
 
-changeView.tabs = [
-    {
-        title: 'Links',
-        actions: {
-            list: (req, connectors) => connectors.links.read(req.filter('entry', req.id)),
-            add: (req, connectors) => connectors.links.create(req),
-            save: (req, connectors) => connectors.link(req.data.id).update(req),
-            delete: (req, connectors) => connectors.link(req.data.id).delete(req)
-        },
-        itemTitle: '{url}',
-        fields: [
-            {
-                name: 'url',
-                label: 'URL',
-                field: 'URL',
-                props: {
-                    link: true,
-                },
-            },
-            {
-                name: 'title',
-                label: 'Title',
-                field: 'String',
-            },
-            {
-                name: 'id',
-                field: 'hidden',
-            },
-            {
-                name: 'entry',
-                field: 'hidden',
-                initialValue: (context) => context.data.id,
-            },
-        ],
-    },
-]
+// changeView.tabs = [
+//     {
+//         title: 'Links',
+//         actions: {
+//             list: (req, connectors) => connectors.links.read(req.filter('entry', req.id)),
+//             add: (req, connectors) => connectors.links.create(req),
+//             save: (req, connectors) => connectors.link(req.data.id).update(req),
+//             delete: (req, connectors) => connectors.link(req.data.id).delete(req)
+//         },
+//         itemTitle: '{url}',
+//         fields: [
+//             {
+//                 name: 'url',
+//                 label: 'URL',
+//                 field: 'URL',
+//                 props: {
+//                     link: true,
+//                 },
+//             },
+//             {
+//                 name: 'title',
+//                 label: 'Title',
+//                 field: 'String',
+//             },
+//             {
+//                 name: 'id',
+//                 field: 'hidden',
+//             },
+//             {
+//                 name: 'entry',
+//                 field: 'hidden',
+//                 initialValue: (context) => context.data.id,
+//             },
+//         ],
+//     },
+// ]
 
 //-------------------------------------------------------------------
 var addView = {
