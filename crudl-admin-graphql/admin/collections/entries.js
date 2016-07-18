@@ -415,6 +415,7 @@ var addView = {
     path: 'entries/new',
     title: 'New Blog Entry',
     fieldsets: changeView.fieldsets,
+    validate: changeView.validate,
     actions: {
         add: function (req, connectors) { return connectors.entries.create(req) },
     },
