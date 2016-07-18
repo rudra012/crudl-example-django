@@ -131,7 +131,7 @@ module.exports = [
             read: listQuery({
                 name: 'allCategories',
                 fields: 'id,originalId,section{id,name},name,slug,position,counterEntries',
-                args: { first: 20 }
+                args: { first: 20, orderBy: "name" }
             }),
             create: `mutation ($input: CreateCategoryInput!) {
                 createCategory(input: $input) {
@@ -181,7 +181,7 @@ module.exports = [
             read: listQuery({
                 name: 'allTags',
                 fields: 'id, originalId, name, slug, counterEntries',
-                args: { first: 20, }
+                args: { first: 20, orderBy: "name" }
             }),
             create: `mutation ($input: CreateTagInput!) {
                 createTag(input: $input) {
@@ -231,7 +231,7 @@ module.exports = [
             read: listQuery({
                 name: 'allEntries',
                 fields: 'id, originalId, title, status, date, section{id, name}, category{id, name}, owner{id, username}, counterLinks, counterTags',
-                args: { first: 20, }
+                args: { first: 20, orderBy: "title" }
             }),
             create: `mutation ($input: CreateEntryInput!) {
                 createEntry(input: $input) {

@@ -31,7 +31,7 @@ class UserNode(DjangoNode):
             'is_staff': ['exact'],
             'is_active': ['exact']
         }
-        filter_order_by = ['id', 'username', 'is_staff', 'is_active', 'date_joined']
+        filter_order_by = ['id', '-id', 'username', '-username', 'is_staff', '-is_staff', 'is_active', '-is_active' 'date_joined', '-date_joined']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -47,7 +47,7 @@ class SectionNode(DjangoNode):
         filter_fields = {
             'name': ['icontains'],
         }
-        filter_order_by = ['id', 'name', 'slug', 'position']
+        filter_order_by = ['id', '-id', 'name', '-name', 'slug', '-slug', 'position', '-position']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -67,7 +67,7 @@ class CategoryNode(DjangoNode):
             'section': ['exact'],
             'name': ['icontains'],
         }
-        filter_order_by = ['id', 'section', 'name', 'slug', 'position']
+        filter_order_by = ['id', '-id', 'section', '-section', 'name', '-name', 'slug', '-slug', 'position', '-position']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -86,7 +86,7 @@ class TagNode(DjangoNode):
         filter_fields = {
             'name': ['icontains'],
         }
-        filter_order_by = ['id', 'name', 'slug']
+        filter_order_by = ['id', '-id', 'name', '-name', 'slug', '-slug']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -120,7 +120,7 @@ class EntryNode(DjangoNode):
             'tags': ['exact'],
             'owner': ['exact'],
         }
-        filter_order_by = ['id', 'title', 'status', 'date', 'section', 'category', 'tags']
+        filter_order_by = ['id', '-id', 'title', '-title', 'status', '-status', 'date', '-date', 'section', '-section', 'category', '-category']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -624,22 +624,22 @@ class DeleteEntryLink(relay.ClientIDMutation):
 class Query(ObjectType):
     # user
     user = relay.NodeField(UserNode)
-    all_users = DjangoFilterConnectionField(UserNode)
+    all_users = DjangoFilterConnectionField(UserNode, s=graphene.String())
     # category
     section = relay.NodeField(SectionNode)
-    all_sections = DjangoFilterConnectionField(SectionNode)
+    all_sections = DjangoFilterConnectionField(SectionNode, s=graphene.String())
     # category
     category = relay.NodeField(CategoryNode)
-    all_categories = DjangoFilterConnectionField(CategoryNode)
+    all_categories = DjangoFilterConnectionField(CategoryNode, s=graphene.String())
     # tag
     tag = relay.NodeField(TagNode)
-    all_tags = DjangoFilterConnectionField(TagNode)
+    all_tags = DjangoFilterConnectionField(TagNode, s=graphene.String())
     # entry
     entry = relay.NodeField(EntryNode)
-    all_entries = DjangoFilterConnectionField(EntryNode)
+    all_entries = DjangoFilterConnectionField(EntryNode, s=graphene.String())
     # entrylink
     link = relay.NodeField(EntryLinkNode)
-    all_links = DjangoFilterConnectionField(EntryLinkNode)
+    all_links = DjangoFilterConnectionField(EntryLinkNode, s=graphene.String())
 
     class Meta:
         abstract = True

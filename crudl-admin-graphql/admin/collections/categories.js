@@ -18,9 +18,6 @@ listView.fields = [
         name: 'section',
         key: 'section.name',  // see actions for listView
         label: 'Section',
-        sortable: true,
-        sorted: 'ascending',
-        sortpriority: '1',
     },
     {
         name: 'name',
@@ -28,12 +25,11 @@ listView.fields = [
         main: true,
         sortable: true,
         sorted: 'ascending',
-        sortpriority: '2',
+        sortpriority: '1',
     },
     {
         name: 'slug',
         label: 'Slug',
-        sortable: true,
     },
     {
         name: 'counterEntries',
@@ -53,7 +49,7 @@ listView.filters = {
             initialValue: '',
         },
         {
-            name: 'name_Icontains',
+            name: 'name_Icontains',  // Graphene required syntax
             label: 'Name Contains',
             field: 'String',
         },
