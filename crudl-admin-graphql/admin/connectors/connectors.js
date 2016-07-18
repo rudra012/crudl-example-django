@@ -1,7 +1,8 @@
 function pagination(res) {
-    let hasNext = res.data.data.allEntries.pageInfo.hasNextPage
+    let key = Object.keys(res.data.data)[0]
+    let hasNext = res.data.data[key].pageInfo.hasNextPage
     let next = hasNext && {
-        after: res.data.data.allEntries.pageInfo.endCursor
+        after: res.data.data[key].pageInfo.endCursor
     }
     return { next }
 }
@@ -36,6 +37,7 @@ module.exports = [
                 fields: 'id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined'
             }),
         },
+        pagination,
         transform: {
             readResponseData: data => data.data.allUsers.edges.map(e => e.node)
         },
@@ -85,6 +87,7 @@ module.exports = [
                 }
             }`,
         },
+        pagination,
         transform: {
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
@@ -140,6 +143,7 @@ module.exports = [
                 }
             }`,
         },
+        pagination,
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
@@ -195,6 +199,7 @@ module.exports = [
                 }
             }`,
         },
+        pagination,
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
