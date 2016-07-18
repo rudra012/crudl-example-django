@@ -104,6 +104,7 @@ class EntryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
     status = graphene.Field(StatusEnum)
+    # sticky = graphene.Boolean()
     counter_links = graphene.Int()
     counter_tags = graphene.Int()
 
@@ -114,11 +115,13 @@ class EntryNode(DjangoNode):
         filter_fields = {
             'title': ['icontains'],
             'date': ['exact'],
+            'sticky': ['exact'],
             'status': ['exact'],
             'section': ['exact'],
             'category': ['exact'],
             'tags': ['exact'],
             'owner': ['exact'],
+            'summary': ['icontains'],
         }
         filter_order_by = ['id', '-id', 'title', '-title', 'status', '-status', 'date', '-date', 'section', '-section', 'category', '-category']
 

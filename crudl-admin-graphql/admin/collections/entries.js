@@ -136,21 +136,21 @@ listView.filters = {
                 }
             }
         },
-        // {
-        //     name: 'sticky',
-        //     label: 'Sticky',
-        //     field: 'Select',
-        //     props: {
-        //         options: [
-        //             {value: 'true', label: 'True'},
-        //             {value: 'false', label: 'False'}
-        //         ],
-        //         helpText: 'Note: We use Select in order to distinguish false and none.'
-        //     }
-        // },
         {
-            name: 'title_Icontains',
-            label: 'Search (Title)',
+            name: 'sticky',
+            label: 'Sticky',
+            field: 'Select',
+            props: {
+                options: [
+                    {value: 'true', label: 'True'},
+                    {value: 'false', label: 'False'}
+                ],
+                helpText: 'Note: We use Select in order to distinguish false and none.'
+            }
+        },
+        {
+            name: 'summary_Icontains',
+            label: 'Search (Summary)',
             field: 'Search',
         },
     ]
