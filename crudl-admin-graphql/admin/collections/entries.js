@@ -15,7 +15,11 @@ var listView = {
             let entries = connectors.entries.read(req)
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
-                item.is_owner = req.authInfo.user == item.owner.originalId
+                if (item.owner) {
+                    item.is_owner = req.authInfo.user == item.owner.originalId
+                } else {
+                    item.is_owner = false
+                }
                 return item
             })
             return entriesWithCustomColumn
@@ -198,8 +202,8 @@ changeView.fieldsets = [
                 /* set options manually */
                 props: {
                     options: [
-                        {value: '0', label: 'Draft'},
-                        {value: '1', label: 'Online'}
+                        {value: 'Draft', label: 'Draft'},
+                        {value: 'Online', label: 'Online'}
                     ]
                 },
             },
@@ -299,7 +303,7 @@ changeView.fieldsets = [
                 label: 'Summary',
                 field: 'Textarea',
                 validate: (value, allValues) => {
-                    if (!value && allValues.status == '1') {
+                    if (!value && allValues.status == 'Online') {
                         return 'The summary is required with status "Online".'
                     }
                 }
@@ -309,7 +313,7 @@ changeView.fieldsets = [
                 label: 'Body',
                 field: 'Textarea',
                 validate: (value, allValues) => {
-                    if (!value && allValues.status == '1') {
+                    if (!value && allValues.status == 'Online') {
                         return 'The summary is required with status "Online".'
                     }
                 }
@@ -341,69 +345,69 @@ changeView.fieldsets = [
             }
         ]
     },
-    {
-        title: 'Internal',
-        expanded: false,
-        fields: [
-            {
-                name: 'createdate',
-                label: 'Date (Create)',
-                field: 'Datetime',
-                readOnly: true
-            },
-            {
-                name: 'updatedate',
-                label: 'Date (Update)',
-                field: 'Datetime',
-                readOnly: true
-            },
-            {
-                name: 'owner',
-                key: 'owner.username',
-                label: 'Owner',
-                field: 'String',
-                readOnly: true
-            },
-        ]
-    }
+    // {
+    //     title: 'Internal',
+    //     expanded: false,
+    //     fields: [
+    //         {
+    //             name: 'createdate',
+    //             label: 'Date (Create)',
+    //             field: 'Datetime',
+    //             readOnly: true
+    //         },
+    //         {
+    //             name: 'updatedate',
+    //             label: 'Date (Update)',
+    //             field: 'Datetime',
+    //             readOnly: true
+    //         },
+    //         {
+    //             name: 'owner',
+    //             key: 'owner.username',
+    //             label: 'Owner',
+    //             field: 'String',
+    //             readOnly: true
+    //         },
+    //     ]
+    // }
 ]
 
-// changeView.tabs = [
-//     {
-//         title: 'Links',
-//         actions: {
-//             list: (req, connectors) => connectors.links.read(req.filter('entry', req.id)),
-//             add: (req, connectors) => connectors.links.create(req),
-//             save: (req, connectors) => connectors.link(req.data.id).update(req),
-//             delete: (req, connectors) => connectors.link(req.data.id).delete(req)
-//         },
-//         itemTitle: '{url}',
-//         fields: [
-//             {
-//                 name: 'url',
-//                 label: 'URL',
-//                 field: 'URL',
-//                 props: {
-//                     link: true,
-//                 },
-//             },
-//             {
-//                 name: 'title',
-//                 label: 'Title',
-//                 field: 'String',
-//             },
-//             {
-//                 name: 'id',
-//                 field: 'hidden',
-//             },
-//             {
-//                 name: 'entry',
-//                 field: 'hidden',
-//                 initialValue: (context) => context.data.id,
-//             },
-//         ],
-//     },
-// ]
+changeView.tabs = [
+    {
+        title: 'Links',
+        actions: {
+            list: (req, connectors) => connectors.links.read(req.filter('entry', req.id)),
+            add: (req, connectors) => connectors.links.create(req),
+            save: (req, connectors) => connectors.link(req.data.id).update(req),
+            delete: (req, connectors) => connectors.link(req.data.id).delete(req)
+        },
+        itemTitle: '{url}',
+        fields: [
+            {
+                name: 'url',
+                label: 'URL',
+                field: 'URL',
+                props: {
+                    link: true,
+                },
+            },
+            {
+                name: 'title',
+                label: 'Title',
+                field: 'String',
+            },
+            {
+                name: 'id',
+                field: 'hidden',
+            },
+            {
+                name: 'entry',
+                field: 'hidden',
+                initialValue: (context) => context.data.id,
+            },
+        ],
+    },
+]
 
 //-------------------------------------------------------------------
 var addView = {

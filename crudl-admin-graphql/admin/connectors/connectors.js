@@ -251,7 +251,7 @@ module.exports = [
             create: `mutation ($input: CreateEntryInput!) {
                 createEntry(input: $input) {
                     errors
-                    entry {id, title, date}
+                    entry {id, title, status, date, sticky, section{id, name}, category{id, name}, summary, body, owner{id, username}, createdate, updatedate}
                 }
             }`,
         },
@@ -269,11 +269,11 @@ module.exports = [
     {
         id: 'entry',
         query: {
-            read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, summary, body, owner{id, username}, createdate, updatedate}}`,
+            read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, tags{edges{node{id}}}, summary, body, owner{id, username}, createdate, updatedate}}`,
             update: `mutation ($input: ChangeEntryInput!) {
                 changeEntry(input: $input) {
                     errors
-                    entry {id, title, date}
+                    entry {id, title, status, date, sticky, section{id, name}, category{id, name}, summary, body, owner{id, username}, createdate, updatedate}
                 }
             }`,
             delete: `mutation ($input: DeleteEntryInput!) {
@@ -296,6 +296,58 @@ module.exports = [
     },
 
     // ENTRYLINKS
+    {
+        id: 'links',
+        query: {
+            read: listQuery({
+                name: 'allLinks',
+                fields: 'id, entry{id}, url, title, description, position',
+            }),
+            create: `mutation ($input: CreateLinkInput!) {
+                createLink(input: $input) {
+                    errors
+                    link {id, entry{id}, url, title, description, position}
+                }
+            }`,
+        },
+        transform: {
+            readResponseData: data => data.data.allLinks.edges.map(e => e.node),
+            createResponseData: data => {
+                if (data.data.createLink.errors) {
+                    throw data.data.createLink.errors
+                }
+                return data.data.createLink.link
+            },
+        },
+    },
+    {
+        id: 'link',
+        query: {
+            read: `{link(id: "%id"){id, entry{id}, url, title, description, position}}`,
+            update: `mutation ($input: ChangeLinkInput!) {
+                changeLink(input: $input) {
+                    errors
+                    link {id, entry{id}, url, title, description, position}
+                }
+            }`,
+            delete: `mutation ($input: DeleteLinkInput!) {
+                deleteLink(input: $input) {
+                    deleted
+                }
+            }`,
+        },
+        transform: {
+            readResponseData: data => data.data.link,
+            updateResponseData: data => {
+                if (data.data.changeLink.errors) {
+                    throw data.data.changeLink.errors
+                }
+                return data.data.changeLink.link
+            },
+            deleteRequestData: data => ({ id: data.id }),
+            deleteResponseData: data => data.data,
+        }
+    },
 
     // SPECIAL CONNECTORS
 

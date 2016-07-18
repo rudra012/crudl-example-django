@@ -452,7 +452,7 @@ class CreateEntry(relay.ClientIDMutation):
 
     class Input:
         title = String(required=False)
-        status = String(required=False)
+        status = StatusEnum(required=False)
         date = String(required=False)
         sticky = Boolean(required=False)
         section = ID(required=False)
@@ -474,8 +474,8 @@ class CreateEntry(relay.ClientIDMutation):
             entry.sticky = input.get('sticky')
             entry.section_id = get_section_id(input.get('section'))
             entry.category_id = get_category_id(input.get('category'))
-            entry.summary = input.get('body')
-            entry.body = input.get('body')
+            entry.summary = input.get('summary', '')
+            entry.body = input.get('body', '')
             entry.full_clean()
             entry.save()
             entry.tags = get_tags_ids(input.get('tags'))
@@ -485,6 +485,8 @@ class CreateEntry(relay.ClientIDMutation):
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return CreateEntry(entry=None, errors=errors)
+        except Exception as e:
+            print '%s (%s)' % (e.message, type(e))
 
 
 class ChangeEntry(relay.ClientIDMutation):
@@ -492,7 +494,7 @@ class ChangeEntry(relay.ClientIDMutation):
     class Input:
         id = String(required=True)
         title = String(required=False)
-        status = String(required=False)
+        status = StatusEnum(required=False)
         date = String(required=False)
         sticky = Boolean(required=False)
         section = ID(required=False)
@@ -513,18 +515,21 @@ class ChangeEntry(relay.ClientIDMutation):
         entry.sticky = input.get('sticky')
         entry.section_id = get_section_id(input.get('section'))
         entry.category_id = get_category_id(input.get('category'))
-        entry.body = input.get('summary')
-        entry.body = input.get('body')
+        entry.summary = input.get('summary', '')
+        entry.body = input.get('body', '')
         entry.tags = get_tags_ids(input.get('tags'))
         try:
             entry.full_clean()
             entry.save()
             return ChangeEntry(entry=entry)
         except ValidationError as e:
+            print '%s (%s)' % (e.message, type(e))
             fields = e.message_dict.keys()
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
             return ChangeEntry(entry=entry, errors=errors)
+        except Exception as e:
+            print '%s (%s)' % (e.message, type(e))
 
 
 class DeleteEntry(relay.ClientIDMutation):
