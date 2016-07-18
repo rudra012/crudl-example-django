@@ -460,6 +460,7 @@ class CreateEntry(relay.ClientIDMutation):
         tags = List(ID())
         summary = String(required=False)
         body = String(required=False)
+        owner = ID(required=False)
 
     entry = Field(EntryNode)
     errors = String().List
@@ -471,11 +472,12 @@ class CreateEntry(relay.ClientIDMutation):
             entry.title = input.get('title')
             entry.status = input.get('status')
             entry.date = input.get('date')
-            entry.sticky = input.get('sticky')
+            entry.sticky = input.get('sticky', False)
             entry.section_id = get_section_id(input.get('section'))
             entry.category_id = get_category_id(input.get('category'))
             entry.summary = input.get('summary', '')
             entry.body = input.get('body', '')
+            # entry.owner_id = get_user_id(input.get('owner'))
             entry.full_clean()
             entry.save()
             entry.tags = get_tags_ids(input.get('tags'))

@@ -198,7 +198,7 @@ changeView.fieldsets = [
                 label: 'Status',
                 field: 'Select',
                 required: true,
-                initialValue: '0',
+                initialValue: 'Draft',
                 /* set options manually */
                 props: {
                     options: [
@@ -345,31 +345,32 @@ changeView.fieldsets = [
             }
         ]
     },
-    // {
-    //     title: 'Internal',
-    //     expanded: false,
-    //     fields: [
-    //         {
-    //             name: 'createdate',
-    //             label: 'Date (Create)',
-    //             field: 'Datetime',
-    //             readOnly: true
-    //         },
-    //         {
-    //             name: 'updatedate',
-    //             label: 'Date (Update)',
-    //             field: 'Datetime',
-    //             readOnly: true
-    //         },
-    //         {
-    //             name: 'owner',
-    //             key: 'owner.username',
-    //             label: 'Owner',
-    //             field: 'String',
-    //             readOnly: true
-    //         },
-    //     ]
-    // }
+    {
+        title: 'Internal',
+        expanded: false,
+        fields: [
+            {
+                name: 'createdate',
+                label: 'Date (Create)',
+                field: 'Datetime',
+                readOnly: true
+            },
+            {
+                name: 'updatedate',
+                label: 'Date (Update)',
+                field: 'Datetime',
+                readOnly: true
+            },
+            {
+                name: 'owner',
+                key: 'owner.username',
+                defaultValue: '',
+                label: 'Owner',
+                field: 'String',
+                readOnly: true
+            },
+        ]
+    }
 ]
 
 changeView.tabs = [
