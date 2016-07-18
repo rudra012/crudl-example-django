@@ -13,11 +13,9 @@ var listView = {
     actions: {
         list: function (req, connectors) {
             let entries = connectors.entries.read(req)
-            //return entries
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
-                // console.log(req.authInfo.user, item.owner)
-                item.is_owner = req.authInfo.user == item.owner.id
+                item.is_owner = req.authInfo.user == item.owner.originalId
                 return item
             })
             return entriesWithCustomColumn
