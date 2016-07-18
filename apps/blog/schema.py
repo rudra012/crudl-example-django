@@ -135,7 +135,7 @@ class EntryNode(DjangoNode):
         return self.counter_tags()
 
 
-class EntryLinkNode(DjangoNode):
+class EntrylinkNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
 
@@ -550,7 +550,7 @@ class DeleteEntry(relay.ClientIDMutation):
             return DeleteEntry(deleted=False, entry=None)
 
 
-class CreateEntryLink(relay.ClientIDMutation):
+class CreateEntrylink(relay.ClientIDMutation):
 
     class Input:
         entry = ID(required=False)
@@ -559,7 +559,7 @@ class CreateEntryLink(relay.ClientIDMutation):
         description = String(required=False)
         position = Int(required=False)
 
-    entrylink = Field(EntryLinkNode)
+    entrylink = Field(EntrylinkNode)
     errors = String().List
 
     @classmethod
@@ -567,21 +567,23 @@ class CreateEntryLink(relay.ClientIDMutation):
         try:
             entrylink = EntryLink()
             entrylink.entry_id = get_entry_id(input.get('entry'))
-            entrylink.url = input.get('url')
-            entrylink.title = input.get('title')
-            entrylink.description = input.get('description', '')
-            entrylink.position = input.get('position')
+            entrylink.url = input.get('url', '')
+            entrylink.title = input.get('title', '')
             entrylink.full_clean()
             entrylink.save()
-            return CreateEntryLink(entrylink=entrylink)
+            return CreateEntrylink(entrylink=entrylink)
         except ValidationError as e:
+            print '%s (%s)' % (e.message, type(e))
             fields = e.message_dict.keys()
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateEntryLink(entrylink=None, errors=errors)
+            print errors
+            return CreateEntrylink(entrylink=None, errors=errors)
+        except Exception as e:
+            print '%s (%s)' % (e.message, type(e))
 
 
-class ChangeEntryLink(relay.ClientIDMutation):
+class ChangeEntrylink(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
@@ -591,44 +593,42 @@ class ChangeEntryLink(relay.ClientIDMutation):
         description = String(required=False)
         position = Int(required=False)
 
-    entrylink = Field(EntryLinkNode)
+    entrylink = Field(EntrylinkNode)
     errors = String().List
 
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         entrylink = get_entrylink(input.get('id'))
         entrylink.entry_id = get_entry_id(input.get('entry'))
-        entrylink.url = input.get('url')
-        entrylink.title = input.get('title')
-        entrylink.description = input.get('description')
-        entrylink.position = input.get('position')
+        entrylink.url = input.get('url', '')
+        entrylink.title = input.get('title', '')
         try:
             entrylink.full_clean()
             entrylink.save()
-            return ChangeEntryLink(entrylink=entrylink)
+            return ChangeEntrylink(entrylink=entrylink)
         except ValidationError as e:
             fields = e.message_dict.keys()
             messages = ['; '.join(m) for m in e.message_dict.values()]
             errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeEntryLink(entrylink=entrylink, errors=errors)
+            return ChangeEntrylink(entrylink=entrylink, errors=errors)
 
 
-class DeleteEntryLink(relay.ClientIDMutation):
+class DeleteEntrylink(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
 
     deleted = Boolean()
-    entrylink = Field(EntryLinkNode)
+    entrylink = Field(EntrylinkNode)
 
     @classmethod
     def mutate_and_get_payload(cls, input, info):
         try:
             entrylink = get_entrylink(input.get('id'))
             entrylink.delete()
-            return DeleteEntryLink(deleted=True, entrylink=entrylink)
+            return DeleteEntrylink(deleted=True, entrylink=entrylink)
         except:
-            return DeleteEntryLink(deleted=False, entrylink=None)
+            return DeleteEntrylink(deleted=False, entrylink=None)
 
 
 class Query(ObjectType):
@@ -648,8 +648,8 @@ class Query(ObjectType):
     entry = relay.NodeField(EntryNode)
     all_entries = DjangoFilterConnectionField(EntryNode, s=graphene.String())
     # entrylink
-    link = relay.NodeField(EntryLinkNode)
-    all_links = DjangoFilterConnectionField(EntryLinkNode, s=graphene.String())
+    link = relay.NodeField(EntrylinkNode)
+    all_links = DjangoFilterConnectionField(EntrylinkNode, s=graphene.String())
 
     class Meta:
         abstract = True
@@ -674,6 +674,6 @@ class Mutation(ObjectType):
     change_entry = Field(ChangeEntry)
     delete_entry = Field(DeleteEntry)
     # entrylink
-    create_entrylink = Field(CreateEntryLink)
-    change_entrylink = Field(ChangeEntryLink)
-    delete_entrylink = Field(DeleteEntryLink)
+    create_entrylink = Field(CreateEntrylink)
+    change_entrylink = Field(ChangeEntrylink)
+    delete_entrylink = Field(DeleteEntrylink)

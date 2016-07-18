@@ -303,20 +303,20 @@ module.exports = [
                 name: 'allLinks',
                 fields: 'id, entry{id}, url, title, description, position',
             }),
-            create: `mutation ($input: CreateLinkInput!) {
-                createLink(input: $input) {
+            create: `mutation ($input: CreateEntrylinkInput!) {
+                createEntrylink(input: $input) {
                     errors
-                    link {id, entry{id}, url, title, description, position}
+                    entrylink {id, entry{id}, url, title, description, position}
                 }
             }`,
         },
         transform: {
             readResponseData: data => data.data.allLinks.edges.map(e => e.node),
             createResponseData: data => {
-                if (data.data.createLink.errors) {
-                    throw data.data.createLink.errors
+                if (data.data.createEntrylink.errors) {
+                    throw data.data.createEntrylink.errors
                 }
-                return data.data.createLink.link
+                return data.data.createEntrylink.entrylink
             },
         },
     },
@@ -324,25 +324,25 @@ module.exports = [
         id: 'link',
         query: {
             read: `{link(id: "%id"){id, entry{id}, url, title, description, position}}`,
-            update: `mutation ($input: ChangeLinkInput!) {
-                changeLink(input: $input) {
+            update: `mutation ($input: ChangeEntrylinkInput!) {
+                changeEntrylink(input: $input) {
                     errors
-                    link {id, entry{id}, url, title, description, position}
+                    entrylink {id, entry{id}, url, title, description, position}
                 }
             }`,
-            delete: `mutation ($input: DeleteLinkInput!) {
-                deleteLink(input: $input) {
+            delete: `mutation ($input: DeleteEntrylinkInput!) {
+                deleteEntrylink(input: $input) {
                     deleted
                 }
             }`,
         },
         transform: {
-            readResponseData: data => data.data.link,
+            readResponseData: data => data.data.entrylink,
             updateResponseData: data => {
-                if (data.data.changeLink.errors) {
-                    throw data.data.changeLink.errors
+                if (data.data.changeEntrylink.errors) {
+                    throw data.data.changeEntrylink.errors
                 }
-                return data.data.changeLink.link
+                return data.data.changeEntrylink.entrylink
             },
             deleteRequestData: data => ({ id: data.id }),
             deleteResponseData: data => data.data,
