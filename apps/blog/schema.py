@@ -381,7 +381,8 @@ class DeleteCategory(relay.ClientIDMutation):
 class CreateTag(relay.ClientIDMutation):
 
     class Input:
-        name = String(required=True)
+        name = String(required=False)
+        slug = String(required=False)
 
     tag = Field(TagNode)
     errors = String().List
@@ -405,7 +406,8 @@ class ChangeTag(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        name = String(required=True)
+        name = String(required=False)
+        slug = String(required=False)
 
     tag = Field(TagNode)
     errors = String().List
@@ -446,11 +448,11 @@ class DeleteTag(relay.ClientIDMutation):
 class CreateEntry(relay.ClientIDMutation):
 
     class Input:
-        title = String(required=True)
+        title = String(required=False)
         status = String(required=False)
-        date = String(required=True)
+        date = String(required=False)
         sticky = Boolean(required=False)
-        section = ID(required=True)
+        section = ID(required=False)
         category = ID(required=False)
         tags = List(ID())
         summary = String(required=False)
@@ -486,11 +488,11 @@ class ChangeEntry(relay.ClientIDMutation):
 
     class Input:
         id = String(required=True)
-        title = String(required=True)
+        title = String(required=False)
         status = String(required=False)
-        date = String(required=True)
+        date = String(required=False)
         sticky = Boolean(required=False)
-        section = ID(required=True)
+        section = ID(required=False)
         category = ID(required=False)
         tags = List(ID())
         summary = String(required=False)
@@ -543,9 +545,9 @@ class DeleteEntry(relay.ClientIDMutation):
 class CreateEntryLink(relay.ClientIDMutation):
 
     class Input:
-        entry = ID(required=True)
-        url = String(required=True)
-        title = String(required=True)
+        entry = ID(required=False)
+        url = String(required=False)
+        title = String(required=False)
         description = String(required=False)
         position = Int(required=False)
 
