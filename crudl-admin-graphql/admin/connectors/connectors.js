@@ -160,6 +160,11 @@ module.exports = [
                     category {id,section{id,name},name,slug,position}
                 }
             }`,
+            delete: `mutation ($input: DeleteCategoryInput!) {
+                deleteCategory(input: $input) {
+                    deleted
+                }
+            }`,
         },
         transform: {
             readResponseData: data => data.data.category,
@@ -210,6 +215,11 @@ module.exports = [
                     tag {id,name,slug}
                 }
             }`,
+            delete: `mutation ($input: DeleteTagInput!) {
+                deleteTag(input: $input) {
+                    deleted
+                }
+            }`,
         },
         transform: {
             readResponseData: data => data.data.tag,
@@ -230,7 +240,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, originalId, title, status, date, section{id, name}, category{id, name}, owner{id, username}, counterLinks, counterTags',
+                fields: 'id, originalId, title, status, date, section{id, name}, category{id, name}, owner{id, originalId, username}, counterLinks, counterTags',
                 args: { first: 20, orderBy: "title" }
             }),
             create: `mutation ($input: CreateEntryInput!) {
