@@ -245,7 +245,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allEntries',
-                fields: 'id, originalId, title, status, date, section{id, name}, category{id, name}, owner{id, originalId, username}, counterLinks, counterTags',
+                fields: 'id, originalId, title, status, date, sticky, section{id, name}, category{id, name}, owner{id, originalId, username}, counterLinks, counterTags',
                 args: { first: 20, orderBy: "title" }
             }),
             create: `mutation ($input: CreateEntryInput!) {
