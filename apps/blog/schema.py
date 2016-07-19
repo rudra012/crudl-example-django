@@ -481,7 +481,7 @@ class CreateEntry(relay.ClientIDMutation):
             entry.category_id = get_category_id(input.get('category'))
             entry.summary = input.get('summary', '')
             entry.body = input.get('body', '')
-            # entry.owner_id = get_user_id(input.get('owner'))
+            entry.owner_id = get_user_id(input.get('owner'), otherwise=input.get('owner'))
             entry.full_clean()
             entry.save()
             entry.tags = get_tags_ids(input.get('tags'))

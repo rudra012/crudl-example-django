@@ -368,7 +368,8 @@ changeView.fieldsets = [
                 key: 'owner_username',
                 label: 'Owner',
                 field: 'String',
-                readOnly: true
+                readOnly: true,
+                initialValue: () => Crudl.authInfo.user,
             },
         ]
     }
