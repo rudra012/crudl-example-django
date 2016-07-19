@@ -14,9 +14,26 @@ function objectToArgs(object) {
     return args ? `(${args})` : ''
 }
 
+function sorting(req) {
+    if (req.sorting && req.sorting.length > 0) {
+        return {
+            orderBy: req.sorting.map(field => {
+                let prefix = field.sorted == 'ascending' ? '' : '-'
+                return prefix + field.name
+            }).join(',')
+        }
+    }
+    return {}
+}
+
 function listQuery(options) {
     return (req) => {
-        let args = objectToArgs(Object.assign({}, options.args, req.page, req.filters))
+        let args = objectToArgs(Object.assign({},
+            options.args,
+            req.page,
+            req.filters,
+            sorting(req)
+        ))
         return `{
             ${options.name} ${args} {
                 pageInfo { hasNextPage, hasPreviousPage, startCursor, endCursor }
@@ -78,7 +95,7 @@ module.exports = [
             read: listQuery({
                 name: 'allSections',
                 fields: 'id, originalId, name, slug, position, counterEntries',
-                args: { first: 20, orderBy: "name" }
+                args: { first: 20 }
             }),
             create: `mutation ($input: CreateSectionInput!) {
                 createSection(input: $input) {
@@ -134,7 +151,7 @@ module.exports = [
             read: listQuery({
                 name: 'allCategories',
                 fields: 'id, originalId, section{id,name}, name, slug, position, counterEntries',
-                args: { first: 20, orderBy: "name" }
+                args: { first: 20 }
             }),
             create: `mutation ($input: CreateCategoryInput!) {
                 createCategory(input: $input) {
@@ -190,7 +207,7 @@ module.exports = [
             read: listQuery({
                 name: 'allTags',
                 fields: 'id, originalId, name, slug, counterEntries',
-                args: { first: 20, orderBy: "name" }
+                args: { first: 20 }
             }),
             create: `mutation ($input: CreateTagInput!) {
                 createTag(input: $input) {
@@ -246,7 +263,7 @@ module.exports = [
             read: listQuery({
                 name: 'allEntries',
                 fields: 'id, originalId, title, status, date, sticky, section{id, name}, category{id, name}, owner{id, originalId, username}, counterLinks, counterTags',
-                args: { first: 20, orderBy: "title" }
+                args: { first: 20 }
             }),
             create: `mutation ($input: CreateEntryInput!) {
                 createEntry(input: $input) {
