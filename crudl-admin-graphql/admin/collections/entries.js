@@ -81,6 +81,14 @@ listView.fields = [
 ]
 
 listView.filters = {
+    denormalize: (data) => {
+        // Convert sticky to boolean
+        if (data.sticky) {
+            data.sticky = data.sticky == 'true'
+        }
+        return data
+    },
+
     fields: [
         {
             name: 'section',
