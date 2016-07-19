@@ -134,6 +134,20 @@ module.exports = [
         },
     },
 
+    // users_options
+    // a helper for retrieving the users used with select fields
+    {
+        id: 'users_options',
+        url: 'users/',
+        transform: {
+            readResponseData: data => ({
+                options: data.results.map(function(item) {
+                    return { value: item.id, label: item.username }
+                }),
+            })
+        },
+    },
+
     // AUTHENTICATION
     {
         id: 'login',

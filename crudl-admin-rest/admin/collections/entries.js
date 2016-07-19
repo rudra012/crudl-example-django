@@ -365,11 +365,14 @@ changeView.fieldsets = [
             },
             {
                 name: 'owner',
-                key: 'owner_username',
+                key: 'owner',
                 label: 'Owner',
-                field: 'String',
+                field: 'Select',
                 readOnly: true,
                 initialValue: () => Crudl.authInfo.user,
+                actions: {
+                    asyncProps: (req, connectors) => connectors.users_options.read(req)
+                }
             },
         ]
     }
