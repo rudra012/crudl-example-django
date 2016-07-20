@@ -192,7 +192,13 @@ var changeView = {
         if ((!values.category || values.category == "") && (!values.tags || values.tags.length == 0)) {
             return { _error: 'Either `Category` or `Tags` is required.' }
         }
-    }
+    },
+    denormalize: function (data) {
+        delete(data.updatedate)
+        delete(data.owner)
+        delete(data.createdate)
+        return data
+    },
 }
 
 changeView.fieldsets = [
@@ -342,7 +348,7 @@ changeView.fieldsets = [
                 },
                 actions: {
                     search: (req, connectors) => {
-                        return connectors.tags_options.read(req.filter('name', req.data.query.toLowerCase()))
+                        return connectors.tags_options.read(req.filter('name_Icontains', req.data.query.toLowerCase()))
                         .then(res => res.set('data', res.data.options))
                     },
                     select: (req, connectors) => {
