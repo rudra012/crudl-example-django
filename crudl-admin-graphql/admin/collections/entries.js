@@ -339,6 +339,7 @@ changeView.fieldsets = [
             },
             {
                 name: 'tags',
+                key: 'tags[*].id',
                 label: 'Tags',
                 field: 'AutocompleteMultiple',
                 required: false,
