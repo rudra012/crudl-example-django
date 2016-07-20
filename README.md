@@ -173,11 +173,9 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
             }),
         }
     ],
-    actions: {
-        asyncProps: (req, connectors) => {
-            /* return the filtered categories based on req.context.section */
-        }
-    },
+    props: (req, connectors) => {
+        /* return the filtered categories based on req.context.section */
+    }
 }
 ```
 
@@ -191,9 +189,7 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
     name: 'section',
     label: 'Section',
     field: 'Select',
-    actions: {
-        asyncProps: (req, connectors) => connectors.sections_options.read(req),
-    },
+    props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data),
 },
 {
     name: 'category',

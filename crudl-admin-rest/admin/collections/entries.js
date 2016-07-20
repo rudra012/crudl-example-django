@@ -90,9 +90,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            actions: {
-                asyncProps: (req, connectors) => connectors.sections_options.read(req),
-            },
+            props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data),
         },
         {
             name: 'category',
@@ -101,24 +99,24 @@ listView.filters = {
             onChange: [
                 {
                     in: 'section',
-                    setValue: '',
+                    // setValue: '',
+                    // setProps: (section) => {
+                    //     return new Promise((resolve, reject) => {
+                    //         window.setTimeout(() => {
+                    //             resolve({
+                    //                 readOnly: !section,
+                    //                 helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
+                    //             })
+                    //         }, 2000)
+                    //     })
+                    // }
                     setProps: section => ({
                         readOnly: !section,
                         helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
                     }),
                 }
             ],
-            actions: {
-                asyncProps: (req, connectors) => {
-                    return connectors.categories_options.read(req)
-                    // console.log(req.context)
-                    // if (!req.context.section) {
-                    //     return Promise.resolve({data: []})
-                    // } else {
-                    //     return connectors.categories_options.read(req)
-                    // }
-                }
-            },
+            props: (req, connectors) => connectors.categories_options.read(req).then(res => res.data)
         },
         {
             name: 'status',
@@ -218,20 +216,15 @@ changeView.fieldsets = [
                 /* we set required to false, although this field is actually
                 required with the API. */
                 required: false,
-                props: {
-                    helpText: 'Select a section'
-                },
                 /* get options via an API call: instead we could use
                 connectors.sections_options (see listView.filters) */
-                actions: {
-                    asyncProps: (req, connectors) => connectors.sections.read(req)
-                    .then(res => res.set('data', {
-                        options: res.data.map(section => ({
-                            value: section.id,
-                            label: section.name,
-                        }))
+                props: (req, connectors) => connectors.sections.read(req).then(res => ({
+                    helpText: 'Select a section',
+                    options: res.data.map(section => ({
+                        value: section.id,
+                        label: section.name,
                     }))
-                },
+                }))
             },
             {
                 name: 'category',
@@ -370,9 +363,7 @@ changeView.fieldsets = [
                 field: 'Select',
                 readOnly: true,
                 initialValue: () => Crudl.authInfo.user,
-                actions: {
-                    asyncProps: (req, connectors) => connectors.users_options.read(req)
-                }
+                props: (req, connectors) => connectors.users_options.read(req).then(res => res.data)
             },
         ]
     }

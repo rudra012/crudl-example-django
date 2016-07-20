@@ -94,9 +94,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            actions: {
-                asyncProps: (req, connectors) => connectors.sections_options.read(req),
-            },
+            props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data),
         },
         {
             name: 'category',
@@ -112,17 +110,7 @@ listView.filters = {
                     }),
                 }
             ],
-            actions: {
-                asyncProps: (req, connectors) => {
-                    return connectors.categories_options.read(req)
-                    // console.log(req.context)
-                    // if (!req.context.section) {
-                    //     return Promise.resolve({data: []})
-                    // } else {
-                    //     return connectors.categories_options.read(req)
-                    // }
-                }
-            },
+            props: (req, connectors) => connectors.categories_options.read(req).then(res => res.data),
         },
         {
             name: 'status',
@@ -224,19 +212,17 @@ changeView.fieldsets = [
                 required with the API. */
                 required: false,
                 props: {
-                    helpText: 'Select a section'
+
                 },
                 /* get options via an API call: instead we could use
                 connectors.sections_options (see listView.filters) */
-                actions: {
-                    asyncProps: (req, connectors) => connectors.sections.read(req)
-                    .then(res => res.set('data', {
-                        options: res.data.map(section => ({
-                            value: section.id,
-                            label: section.name,
-                        }))
+                props: (req, connectors) => connectors.sections.read(req).then(res => ({
+                    helpText: 'Select a section',
+                    options: res.data.map(section => ({
+                        value: section.id,
+                        label: section.name,
                     }))
-                },
+                }))
             },
             {
                 name: 'category',

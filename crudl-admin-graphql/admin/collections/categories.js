@@ -43,9 +43,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            actions: {
-                asyncProps: (req, connectors) => connectors.sections_options.read(req)
-            },
+            props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data),
             initialValue: '',
         },
         {
@@ -78,9 +76,7 @@ changeView.fields = [
         label: 'Section',
         field: 'Select',
         required: true,
-        actions: {
-            asyncProps: (req, connectors) => connectors.sections_options.read(req)
-        }
+        props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data)
     },
     {
         name: 'name',

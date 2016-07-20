@@ -61,7 +61,7 @@ urlpatterns = [
     url(r'^rest-api/login/', login_view),
     url(r"^rest-api/", include(router.urls)),
     # GRAPHQL
-    url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
+    url(r'^graphql-api', csrf_exempt((GraphQLView.as_view(schema=schema)))),
     url(r'^graphiql', include('django_graphiql.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
