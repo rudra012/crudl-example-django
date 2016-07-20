@@ -27,6 +27,9 @@ function sorting(req) {
 }
 
 function listQuery(options) {
+    if (Object.prototype.toString.call(options.fields) === '[object Array]') {
+        options.fields = options.fields.join(', ')
+    }
     return (req) => {
         let args = objectToArgs(Object.assign({},
             options.args,
@@ -389,7 +392,10 @@ module.exports = [
     {
         id: 'categories_options',
         query: {
-            read: `{allCategories{edges{node{id, name}}}}`,
+            read: listQuery({
+                name: 'allCategories',
+                fields: ['id', 'name']
+            }),
         },
         transform: {
             readResponseData: data => ({
@@ -405,7 +411,10 @@ module.exports = [
     {
         id: 'tags_options',
         query: {
-            read: `{allTags{edges{node{id, name}}}}`,
+            read: listQuery({
+                name: 'allTags',
+                fields: ['id', 'name']
+            }),
         },
         transform: {
             readResponseData: data => ({

@@ -99,21 +99,31 @@ listView.filters = {
             onChange: [
                 {
                     in: 'section',
-                    // setValue: '',
-                    // setProps: (section) => {
-                    //     return new Promise((resolve, reject) => {
-                    //         window.setTimeout(() => {
-                    //             resolve({
-                    //                 readOnly: !section,
-                    //                 helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
-                    //             })
-                    //         }, 2000)
-                    //     })
-                    // }
-                    setProps: section => ({
-                        readOnly: !section,
-                        helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
-                    }),
+                    setValue: '',
+                    setProps: (section, req, connectors) => {
+                        if (!section) {
+                            return {
+                                readOnly: !section,
+                                helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
+                            }
+                        }
+                        // Get the catogories options filtered by section
+                        return connectors.categories_options.read(req.filter('section', section))
+                        .then(res => {
+                            if (res.data.options.length > 0) {
+                                return {
+                                    readOnly: false,
+                                    helpText: 'Select a category',
+                                    ...res.data,
+                                }
+                            } else {
+                                return {
+                                    readOnly: true,
+                                    helpText: 'There exist no category for the selected section.'
+                                }
+                            }
+                        })
+                    }
                 }
             ],
             props: (req, connectors) => connectors.categories_options.read(req).then(res => res.data)
