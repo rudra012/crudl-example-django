@@ -8,6 +8,7 @@ var connectors = require('./connectors/connectors')
 var auth = require('./auth')
 
 var descriptor = {
+    title: 'crudl.io CMS Django REST Example',
     connectors,
     collections: [],
     auth,
