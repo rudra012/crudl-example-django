@@ -158,7 +158,7 @@ Both the REST and GraphQL API is only accessible for logged-in users based on To
 ```
 
 ### Field dependency
-With _Entries_, the _Categories_ depend on the selected _Section_. If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_ due to the _watch_ method.
+With _Entries_, the _Categories_ depend on the selected _Section_. If you change the field _Section_, the options of field _Category_ are populated based on the chosen _Section_ due to the _onChange_ method.
 
 ```javascript
 {
@@ -168,8 +168,8 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
         {
             in: 'section',
             setProps: section => ({
-                disabled: !section,
-                helpText: !section ? "In order to select a category, you have to select a section first" : "Select a category",
+                disabled: !section.value,
+                helpText: !section.value ? "In order to select a category, you have to select a section first" : "Select a category",
             }),
         }
     ],
