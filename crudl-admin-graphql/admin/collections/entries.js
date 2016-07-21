@@ -100,6 +100,8 @@ listView.filters = {
             name: 'category',
             label: 'Category',
             field: 'Select',
+            /* this field depends on section (so we add a watch function in
+            order to react to any changes on the field section). */
             onChange: [
                 {
                     in: 'section',
@@ -259,8 +261,6 @@ changeView.fieldsets = [
                     showAll: true,
                     helpText: 'Select a category',
                 },
-                /* this field depends on section (so we add a watch function in
-                order to react to any changes on the field section). */
                 onChange: listView.filters.fields[1].onChange,
                 actions: {
                     select: (req, connectors) => {
