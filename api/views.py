@@ -158,6 +158,6 @@ class LoginView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        return Response({'token': user.token, 'user': user.id})
+        return Response({'token': user.token, 'user': user.id, 'username': user.username})
 
 login_view = LoginView.as_view()
