@@ -261,36 +261,7 @@ changeView.fieldsets = [
                 },
                 /* this field depends on section (so we add a watch function in
                 order to react to any changes on the field section). */
-                onChange: [
-                    {
-                        in: 'section',
-                        setValue: '',
-                        setProps: (section, req, connectors) => {
-                            if (!section) {
-                                return {
-                                    readOnly: !section,
-                                    helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
-                                }
-                            }
-                            // Get the catogories options filtered by section
-                            return connectors.categories_options.read(req.filter('section', section))
-                            .then(res => {
-                                if (res.data.options.length > 0) {
-                                    return {
-                                        readOnly: false,
-                                        helpText: 'Select a category',
-                                        ...res.data,
-                                    }
-                                } else {
-                                    return {
-                                        readOnly: true,
-                                        helpText: 'No categories available for the selected section.'
-                                    }
-                                }
-                            })
-                        }
-                    }
-                ],
+                onChange: listView.filters.fields[1].onChange,
                 actions: {
                     select: (req, connectors) => {
                         return Promise.all(req.data.selection.map(item => {
