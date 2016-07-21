@@ -129,7 +129,7 @@ class EntrySerializer(serializers.ModelSerializer):
             "createdate",
             "updatedate"
         )
-        read_only_fields = ("owner", "createdate", "updatedate",)
+        read_only_fields = ("createdate", "updatedate",)
 
     def get_status_name(self, obj):
         return obj.get_status_display()

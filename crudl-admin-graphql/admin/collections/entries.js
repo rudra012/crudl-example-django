@@ -381,15 +381,6 @@ changeView.fieldsets = [
                 field: 'Datetime',
                 readOnly: true
             },
-            {
-                name: 'owner',
-                key: 'owner.username',
-                defaultValue: '',
-                label: 'Owner',
-                field: 'String',
-                readOnly: true,
-                initialValue: () => Crudl.authInfo.user,
-            },
         ]
     }
 ]
@@ -440,6 +431,11 @@ var addView = {
     actions: {
         add: function (req, connectors) { return connectors.entries.create(req) },
     },
+    denormalize: (data) => {
+        /* set owner on add */
+        if (Crudl.authInfo.user) data.owner = Crudl.authInfo.user
+        return data
+    }
 }
 
 //-------------------------------------------------------------------
