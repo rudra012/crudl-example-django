@@ -7,8 +7,11 @@ var entries = require('./collections/entries')
 var connectors = require('./connectors/connectors')
 var auth = require('./auth')
 
+import dashboard from './dashboard'
+
 var descriptor = {
     title: 'crudl.io CMS Django REST Example',
+    dashboard,
     connectors,
     collections: [],
     auth,
