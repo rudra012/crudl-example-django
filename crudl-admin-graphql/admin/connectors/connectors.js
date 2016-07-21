@@ -394,7 +394,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allCategories',
-                fields: ['id', 'name']
+                fields: 'id, name, slug'
             }),
         },
         transform: {
@@ -413,7 +413,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allTags',
-                fields: ['id', 'name']
+                fields: 'id, name'
             }),
         },
         transform: {

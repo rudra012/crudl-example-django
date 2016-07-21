@@ -123,7 +123,7 @@ listView.filters = {
                             } else {
                                 return {
                                     readOnly: true,
-                                    helpText: 'There exist no category for the selected section.'
+                                    helpText: 'No categories available for the selected section.'
                                 }
                             }
                         })
@@ -255,10 +255,30 @@ changeView.fieldsets = [
                     {
                         in: 'section',
                         setValue: '',
-                        setProps: section => ({
-                            readOnly: !section,
-                            helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
-                        }),
+                        setProps: (section, req, connectors) => {
+                            if (!section) {
+                                return {
+                                    readOnly: !section,
+                                    helpText: !section ? 'In order to select a category, you have to select a section first' : 'Select a category',
+                                }
+                            }
+                            // Get the catogories options filtered by section
+                            return connectors.categories_options.read(req.filter('section', section))
+                            .then(res => {
+                                if (res.data.options.length > 0) {
+                                    return {
+                                        readOnly: false,
+                                        helpText: 'Select a category',
+                                        ...res.data,
+                                    }
+                                } else {
+                                    return {
+                                        readOnly: true,
+                                        helpText: 'No categories available for the selected section.'
+                                    }
+                                }
+                            })
+                        }
                     }
                 ],
                 actions: {
