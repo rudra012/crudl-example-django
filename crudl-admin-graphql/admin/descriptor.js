@@ -10,7 +10,7 @@ var auth = require('./auth')
 import dashboard from './dashboard'
 
 var descriptor = {
-    title: 'crudl.io CMS Django GraphQL Example',
+    title: 'crudl.io Django GraphQL Example',
     dashboard,
     connectors,
     collections: [],

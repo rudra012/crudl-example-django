@@ -10,7 +10,7 @@ var auth = require('./auth')
 import dashboard from './dashboard'
 
 var descriptor = {
-    title: 'crudl.io CMS Django REST Example',
+    title: 'crudl.io Django REST Example',
     dashboard,
     connectors,
     collections: [],
