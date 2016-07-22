@@ -259,12 +259,12 @@ changeView.fieldsets = [
                         }))
                     },
                     search: (req, connectors) => {
-                        if (!req.context.section) {
+                        if (!req.context.section.value) {
                             return Promise.resolve({data: []})
                         } else {
                             return connectors.categories.read(req
                                 .filter('name', req.data.query)
-                                .filter('section', req.context.section))
+                                .filter('section', req.context.section.value))
                             .then(res => res.set('data', res.data.map(d => ({
                                 value: d.id,
                                 label: `<b>${d.name}</b> (${d.slug})`,

@@ -174,7 +174,7 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
         }
     ],
     props: (req, connectors) => {
-        /* return the filtered categories based on req.context.section */
+        /* return the filtered categories based on req.context.section.value */
     }
 }
 ```
