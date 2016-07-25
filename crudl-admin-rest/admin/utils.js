@@ -1,15 +1,57 @@
+function url2page(url) {
+    let match = /page=(\d+)/.exec(url)
+    return match ? parseInt(match[1]) : 1
+}
 
-export function pagination(res) {
-    function url2page(url) {
-        let match = /page=(\d+)/.exec(url)
-        return match ? parseInt(match[1]) : 1
-    }
+export function continuousPagination(res) {
+
     let nextPage = res.data.next && url2page(res.data.next)
     // Return the pagination descriptor
     return {
+        type: 'continuous',
         next: nextPage ? { page: nextPage } : undefined,
     }
 }
+
+export function numberedPagination(res) {
+
+    // total number of results
+    let resultsTotal = res.data.count
+    // next page as number
+    let nextPage = res.data.next && url2page(res.data.next)
+    // previous page as number
+    let previousPage = res.data.previous && url2page(res.data.previous)
+    // the page size
+    let pageSize = res.data.results.length
+
+    // compute the currentPage number and the total number of pages
+    let currentPage, pagesTotal
+    if (nextPage) { // We're not on the last page
+        currentPage = nextPage - 1
+        pagesTotal = resultsTotal / pageSize
+    } else { // We're on the last page
+        currentPage = previousPage ? previousPage + 1 : 1
+        pagesTotal = currentPage
+    }
+
+    // Compute all page cursors
+    let allPages = []
+    for (let i = 0; i < pagesTotal; i++) {
+        allPages[i] = {
+            page: i + 1,
+            toString: () => `${i+1}`,
+            fromString: (str) => ({ page: parseInt(str)})
+        }
+    }
+
+    return {
+        type: 'numbered',
+        allPages,
+        currentPage,
+        resultsTotal
+    }
+}
+
 
 export function urlQuery(req) {
     return Object.assign({},

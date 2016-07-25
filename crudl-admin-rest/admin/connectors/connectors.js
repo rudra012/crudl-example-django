@@ -1,4 +1,4 @@
-import { pagination, urlQuery, transformErrors } from '../utils'
+import { continuousPagination, numberedPagination, urlQuery, transformErrors } from '../utils'
 
 module.exports = [
 
@@ -6,7 +6,7 @@ module.exports = [
     {
         id: 'users',
         url: 'users/',
-        pagination,
+        pagination: numberedPagination,
         transform: { readResponseData: data => data.results },
     },
     {
@@ -20,7 +20,7 @@ module.exports = [
         id: 'sections',
         url: 'sections/',
         urlQuery,
-        pagination,
+        pagination: numberedPagination,
         transform: { readResponseData: data => data.results },
     },
     {
@@ -34,7 +34,7 @@ module.exports = [
         id: 'categories',
         url: 'categories/',
         urlQuery,
-        pagination,
+        pagination: numberedPagination,
         enableDepagination: true,
         transform: { readResponseData: data => data.results },
     },
@@ -53,7 +53,7 @@ module.exports = [
         id: 'tags',
         url: 'tags/',
         urlQuery,
-        pagination,
+        pagination: numberedPagination,
         transform: { readResponseData: data => data.results },
     },
     {
@@ -67,7 +67,7 @@ module.exports = [
         id: 'entries',
         url: 'entries/',
         urlQuery,
-        pagination,
+        pagination: numberedPagination,
         transform: { readResponseData: data => data.results },
     },
     {
@@ -80,7 +80,7 @@ module.exports = [
     {
         id: 'links',
         url: 'entrylinks/',
-        pagination,
+        pagination: numberedPagination,
         enableDepagination: true,
         transform: { readResponseData: data => data.results },
     },

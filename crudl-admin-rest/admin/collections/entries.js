@@ -1,4 +1,5 @@
 import { formatDate } from '../utils'
+import React from 'react'
 
 function transform(p, func) {
     return p.then(response => {

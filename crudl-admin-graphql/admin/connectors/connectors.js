@@ -4,7 +4,7 @@ function pagination(res) {
     let next = hasNext && {
         after: res.data.data[key].pageInfo.endCursor
     }
-    return { next }
+    return { type: 'continuous', next }
 }
 
 function objectToArgs(object) {
