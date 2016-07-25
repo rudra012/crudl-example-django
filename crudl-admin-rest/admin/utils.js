@@ -9,7 +9,7 @@ export function continuousPagination(res) {
     // Return the pagination descriptor
     return {
         type: 'continuous',
-        next: nextPage ? { page: nextPage } : undefined,
+        next: nextPage,
     }
 }
 
@@ -37,11 +37,7 @@ export function numberedPagination(res) {
     // Compute all page cursors
     let allPages = []
     for (let i = 0; i < pagesTotal; i++) {
-        allPages[i] = {
-            page: i + 1,
-            toString: () => `${i+1}`,
-            fromString: (str) => ({ page: parseInt(str)})
-        }
+        allPages[i] = `${(i+1)}` // We return string, so that the page will be preserved in the path query
     }
 
     return {
@@ -56,7 +52,7 @@ export function numberedPagination(res) {
 export function urlQuery(req) {
     return Object.assign({},
         req.filters,
-        req.page,
+        req.page && { page: req.page },
         {
             ordering: req.sorting.map(field => {
                 let prefix = field.sorted == 'ascending' ? '' : '-'
