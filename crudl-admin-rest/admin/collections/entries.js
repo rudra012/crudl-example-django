@@ -279,11 +279,6 @@ changeView.fieldsets = [
     {
         title: 'Content',
         expanded: true,
-        hidden: true, // Will be set to false, when the title and section are set. See onChange below
-        onChange: {
-            in: ['title', 'section'],
-            setProps: (title, section) => ({ hidden: !(title.value && section.value) })
-        },
         fields: [
             {
                 name: 'date',
