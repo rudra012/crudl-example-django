@@ -260,7 +260,7 @@ changeView.tabs = [
             {
                 name: 'entry',
                 field: 'hidden',
-                initialValue: (context) => context.data.id,
+                initialValue: () => crudl.context.data.id,
             },
         ],
     },
@@ -317,7 +317,7 @@ You can set initial values with every field (based on context, if needed).
     name: 'user',
     label: 'User',
     field: 'hidden',
-    initialValue: (context) => context.auth.user
+    initialValue: () => crudl.auth.user
 },
 ```
 
