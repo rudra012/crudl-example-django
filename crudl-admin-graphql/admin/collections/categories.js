@@ -5,7 +5,7 @@ var listView = {
     path: 'categories',
     title: 'Categories',
     actions: {
-        list: function (req, connectors) { return connectors.categories.read(req) }
+        list: function (req) { return crudl.connectors.categories.read(req) }
     }
 }
 
@@ -43,7 +43,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data),
+            props: (req) => crudl.connectors.sections_options.read(req).then(res => res.data),
             initialValue: '',
         },
         {
@@ -59,9 +59,9 @@ var changeView = {
     path: 'categories/:id',
     title: 'Category',
     actions: {
-        get: function (req, connectors) { return connectors.category(req.id).read(req) },
-        delete: function (req, connectors) { return connectors.category(req.id).delete(req) },
-        save: function (req, connectors) { return connectors.category(req.id).update(req) },
+        get: function (req) { return crudl.connectors.category(req.id).read(req) },
+        delete: function (req) { return crudl.connectors.category(req.id).delete(req) },
+        save: function (req) { return crudl.connectors.category(req.id).update(req) },
     },
 }
 
@@ -76,7 +76,7 @@ changeView.fields = [
         label: 'Section',
         field: 'Select',
         required: true,
-        props: (req, connectors) => connectors.sections_options.read(req).then(res => res.data)
+        props: (req) => crudl.connectors.sections_options.read(req).then(res => res.data)
     },
     {
         name: 'name',
@@ -105,7 +105,7 @@ var addView = {
     title: 'New Category',
     fields: changeView.fields,
     actions: {
-        add: function (req, connectors) { return connectors.categories.create(req) },
+        add: function (req) { return crudl.connectors.categories.create(req) },
     },
 }
 

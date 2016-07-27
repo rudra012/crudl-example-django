@@ -10,9 +10,9 @@ var listView = {
         Instead, we could also add the section object (or name) to the list of
         categories within the API. In that case, no join is required (see entries.js
         for the alternative solution) */
-        list: function (req, connectors) {
-            let categories = connectors.categories.read(req)
-            let sections = connectors.sections.read(req)
+        list: function (req) {
+            let categories = crudl.connectors.categories.read(req)
+            let sections = crudl.connectors.sections.read(req)
             return join(categories, sections, 'section', 'id')
         },
     }
@@ -58,7 +58,7 @@ listView.filters = {
             field: 'Select',
             /* we manually build the available options. please note that you could also
             use a connector, making this a one-liner */
-            props: (req, connectors) => connectors.sections.read(req).then(res => ({
+            props: (req) => crudl.connectors.sections.read(req).then(res => ({
                 options: res.data.map(section => ({
                     value: section.id,
                     label: section.name,
@@ -78,9 +78,9 @@ var changeView = {
     path: 'categories/:id',
     title: 'Category',
     actions: {
-        get: function (req, connectors) { return connectors.category(req.id).read(req) },
-        delete: function (req, connectors) { return connectors.category(req.id).delete(req) },
-        save: function (req, connectors) { return connectors.category(req.id).update(req) },
+        get: function (req) { return crudl.connectors.category(req.id).read(req) },
+        delete: function (req) { return crudl.connectors.category(req.id).delete(req) },
+        save: function (req) { return crudl.connectors.category(req.id).update(req) },
     },
 }
 
@@ -91,7 +91,7 @@ changeView.fields = [
         field: 'Select',
         required: true,
         /* Here we build the list of possible options with an extra API call */
-        props: (req, connectors) => connectors.sections.read(req).then(res => ({
+        props: (req) => crudl.connectors.sections.read(req).then(res => ({
             options: res.data.map(section => ({
                 value: section.id,
                 label: section.name,
@@ -125,7 +125,7 @@ var addView = {
     title: 'New Category',
     fields: changeView.fields,
     actions: {
-        add: function (req, connectors) { return connectors.categories.create(req) },
+        add: function (req) { return crudl.connectors.categories.create(req) },
     },
 }
 

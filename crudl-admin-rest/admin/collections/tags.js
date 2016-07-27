@@ -5,7 +5,7 @@ var listView = {
     path: 'tags',
     title: 'Tags',
     actions: {
-        list: function (req, connectors) { return connectors.tags.read(req) }
+        list: function (req) { return crudl.connectors.tags.read(req) }
     }
 }
 
@@ -42,9 +42,9 @@ var changeView = {
     path: 'tags/:id',
     title: 'Tag',
     actions: {
-        get: function (req, connectors) { return connectors.tag(req.id).read(req) },
-        delete: function (req, connectors) { return connectors.tag(req.id).delete(req) },
-        save: function (req, connectors) { return connectors.tag(req.id).update(req) },
+        get: function (req) { return crudl.connectors.tag(req.id).read(req) },
+        delete: function (req) { return crudl.connectors.tag(req.id).delete(req) },
+        save: function (req) { return crudl.connectors.tag(req.id).update(req) },
     },
 }
 
@@ -75,7 +75,7 @@ var addView = {
     title: 'New Tag',
     fields: changeView.fields,
     actions: {
-        add: function (req, connectors) { return connectors.tags.create(req) },
+        add: function (req) { return crudl.connectors.tags.create(req) },
     },
 }
 
