@@ -16,7 +16,7 @@ var listView = {
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
                 if (item.owner) {
-                    item.is_owner = req.authInfo.user == item.owner.originalId
+                    item.is_owner = crudl.auth.user == item.owner.originalId
                 } else {
                     item.is_owner = false
                 }
@@ -416,7 +416,7 @@ var addView = {
     },
     denormalize: (data) => {
         /* set owner on add */
-        if (crudl.authInfo.user) data.owner = crudl.authInfo.user
+        if (crudl.auth.user) data.owner = crudl.auth.user
         return data
     }
 }
