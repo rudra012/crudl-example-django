@@ -42,9 +42,9 @@ var changeView = {
     path: 'tags/:id',
     title: 'Tag',
     actions: {
-        get: function (req) { return crudl.connectors.tag(req.id).read(req) },
-        delete: function (req) { return crudl.connectors.tag(req.id).delete(req) },
-        save: function (req) { return crudl.connectors.tag(req.id).update(req) },
+        get: function (req) { return crudl.connectors.tag(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.tag(crudl.path.id).delete(req) },
+        save: function (req) { return crudl.connectors.tag(crudl.path.id).update(req) },
     },
 }
 
