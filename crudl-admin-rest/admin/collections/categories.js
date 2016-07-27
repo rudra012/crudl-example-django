@@ -58,7 +58,7 @@ listView.filters = {
             field: 'Select',
             /* we manually build the available options. please note that you could also
             use a connector, making this a one-liner */
-            props: (req) => crudl.connectors.sections.read(req).then(res => ({
+            props: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
                 options: res.data.map(section => ({
                     value: section.id,
                     label: section.name,
@@ -91,7 +91,7 @@ changeView.fields = [
         field: 'Select',
         required: true,
         /* Here we build the list of possible options with an extra API call */
-        props: (req) => crudl.connectors.sections.read(req).then(res => ({
+        props: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
             options: res.data.map(section => ({
                 value: section.id,
                 label: section.name,

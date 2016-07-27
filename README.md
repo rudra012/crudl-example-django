@@ -173,7 +173,7 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
             }),
         }
     ],
-    props: (req) => {
+    props: () => {
         /* return the filtered categories based on crudl.context.data.section */
     }
 }
@@ -189,7 +189,7 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
     name: 'section',
     label: 'Section',
     field: 'Select',
-    props: (req) => crudl.connectors.sections_options.read(req).then(res => res.data),
+    props: () => crudl.connectors.sections_options.read(crudl.req()).then(res => res.data),
 },
 {
     name: 'category',
