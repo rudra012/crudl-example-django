@@ -115,7 +115,7 @@ class EntryNode(DjangoNode):
         only_fields = ('id', 'title', 'status', 'date', 'sticky', 'section', 'category', 'tags', 'summary', 'body', 'owner', 'locked', 'createdate', 'updatedate', 'counter_links', 'counter_tags',)
         filter_fields = {
             'title': ['icontains'],
-            'date': ['exact'],
+            'date': ['gt'],
             'sticky': ['exact'],
             'status': ['exact'],
             'section': ['exact'],

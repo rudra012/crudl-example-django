@@ -145,8 +145,8 @@ listView.filters = {
             },
         },
         {
-            name: 'date',
-            label: 'Published on',
+            name: 'date_Gt',
+            label: 'Published after',
             field: 'Date',
             /* simple date validation (please note that this is just a showcase,
             we know that it does not check for real dates) */
