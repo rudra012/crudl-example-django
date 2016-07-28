@@ -29,6 +29,9 @@ listView.fields = [
         name: 'username',
         label: 'Username',
         main: true,
+        // When avatars are part of API response then do e.g.:
+        // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
+        render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
     },
     {
         name: 'full_name',
