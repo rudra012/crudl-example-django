@@ -16,11 +16,8 @@ var listView = {
             let entries = crudl.connectors.entries.read(req)
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
-                if (item.owner) {
-                    item.is_owner = crudl.auth.user == item.owner
-                } else {
-                    item.is_owner = false
-                }
+                item.is_owner = false
+                if (item.owner) item.is_owner = crudl.auth.user == item.owner
                 return item
             })
             return entriesWithCustomColumn
