@@ -68,7 +68,15 @@ module.exports = [
         url: 'entries/',
         urlQuery,
         pagination: numberedPagination,
-        transform: { readResponseData: data => data.results },
+        transform: {
+            readResponseData: data => data.results,
+            /* set owner on add. alternatively, we could use denormalize with
+            the descriptor, see collections/entries.js */
+            createRequestData: data => {
+                if (crudl.auth.user) data.owner = crudl.auth.user
+                return data
+            }
+        },
     },
     {
         id: 'entry',
