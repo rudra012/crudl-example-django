@@ -33,9 +33,16 @@ listView.fields = [
     },
 ]
 
-listView.search = {
-    name: 'search',
+listView.filters = {
+    fields: [
+        {
+            name: 'name',
+            label: 'Search',
+            field: 'Search',
+        }
+    ]
 }
+
 
 //-------------------------------------------------------------------
 var changeView = {

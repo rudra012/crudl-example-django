@@ -53,6 +53,11 @@ listView.fields = [
 listView.filters = {
     fields: [
         {
+            name: 'name',
+            label: 'Search',
+            field: 'Search'
+        },
+        {
             name: 'section',
             label: 'Section',
             field: 'Select',
@@ -67,10 +72,6 @@ listView.filters = {
             initialValue: '',
         },
     ]
-}
-
-listView.search = {
-    name: 'search',
 }
 
 //-------------------------------------------------------------------
