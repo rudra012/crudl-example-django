@@ -88,6 +88,11 @@ listView.filters = {
 
     fields: [
         {
+            name: 'title_Icontains',
+            label: 'Search',
+            field: 'Search',
+        },
+        {
             name: 'section',
             label: 'Section',
             field: 'Select',
@@ -174,10 +179,6 @@ listView.filters = {
     ]
 }
 
-listView.search = {
-    name: 'title_Icontains',
-}
-
 //-------------------------------------------------------------------
 var changeView = {
     path: 'entries/:id',
@@ -250,7 +251,7 @@ changeView.fieldsets = [
                     showAll: true,
                     helpText: 'Select a category',
                 },
-                onChange: listView.filters.fields[1].onChange,
+                onChange: listView.filters.fields[2].onChange,
                 actions: {
                     select: (req) => {
                         return Promise.all(req.data.selection.map(item => {
