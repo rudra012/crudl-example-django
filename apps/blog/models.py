@@ -109,7 +109,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = u"Category"
         verbose_name_plural = u"Categories"
-        ordering = ("section", "name",)
+        ordering = ("name",)
 
     def __unicode__(self):
         return u"%s" % (self.name)
