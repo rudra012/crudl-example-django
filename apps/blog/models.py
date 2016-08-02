@@ -36,7 +36,7 @@ class User(models.Model):
     class Meta:
         verbose_name = u"User"
         verbose_name_plural = u"Users"
-        ordering = ("id",)
+        ordering = ("username",)
 
     def __unicode__(self):
         return u"%s" % (self.username)
@@ -109,7 +109,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = u"Category"
         verbose_name_plural = u"Categories"
-        ordering = ("name",)
+        ordering = ("section", "name",)
 
     def __unicode__(self):
         return u"%s" % (self.name)
@@ -210,7 +210,7 @@ class EntryLink(models.Model):
     class Meta:
         verbose_name = u"Link"
         verbose_name_plural = u"Links"
-        ordering = ("position",)
+        ordering = ("entry", "title",)
 
     def __unicode__(self):
         return u"%s" % (self.title)
