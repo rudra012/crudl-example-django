@@ -382,7 +382,7 @@ module.exports = [
     {
         id: 'sections_options',
         query: {
-            read: `{allSections{edges{node{id, name}}}}`,
+            read: `{allSections(orderBy:\"slug\"){edges{node{id, name}}}}`,
         },
         transform: {
             readResponseData: data => ({
@@ -400,6 +400,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allCategories',
+                args: { orderBy: 'slug' },
                 fields: 'id, name, slug'
             }),
         },
@@ -419,6 +420,7 @@ module.exports = [
         query: {
             read: listQuery({
                 name: 'allTags',
+                args: { orderBy: 'slug' },
                 fields: 'id, name'
             }),
         },

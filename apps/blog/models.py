@@ -74,7 +74,7 @@ class Section(models.Model):
     class Meta:
         verbose_name = u"Section"
         verbose_name_plural = u"Sections"
-        ordering = ("name",)
+        ordering = ("slug",)
 
     def __unicode__(self):
         return u"%s" % (self.name)
@@ -109,7 +109,7 @@ class Category(models.Model):
     class Meta:
         verbose_name = u"Category"
         verbose_name_plural = u"Categories"
-        ordering = ("name",)
+        ordering = ("slug",)
 
     def __unicode__(self):
         return u"%s" % (self.name)
@@ -141,7 +141,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = u"Tag"
         verbose_name_plural = u"Tags"
-        ordering = ("name",)
+        ordering = ("slug",)
 
     def __unicode__(self):
         return u"%s" % (self.name)
