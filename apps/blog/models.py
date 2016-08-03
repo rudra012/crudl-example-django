@@ -85,6 +85,8 @@ class Section(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.name)
+        else:
+            self.slug = self.slug.lower()
         super(Section, self).save(*args, **kwargs)
 
     @staticmethod
@@ -120,6 +122,8 @@ class Category(models.Model):
         """
         if not self.slug:
             self.slug = slugify(self.name)
+        else:
+            self.slug = self.slug.lower()
         super(Category, self).save(*args, **kwargs)
 
     @staticmethod
