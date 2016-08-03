@@ -120,6 +120,7 @@ listView.filters = {
                         // Get the catogories options filtered by section
                         return crudl.connectors.categories_options.read(crudl.req().filter('section', section.value))
                         .then(res => {
+                            console.log('Response:', res);
                             if (res.data.options.length > 0) {
                                 return {
                                     readOnly: false,
@@ -136,7 +137,7 @@ listView.filters = {
                     }
                 }
             ],
-            props: () => crudl.connectors.categories_options.read(crudl.req()).then(res => res.data)
+            // props: () => crudl.connectors.categories_options.read(crudl.req()).then(res => res.data)
         },
         {
             name: 'status',
