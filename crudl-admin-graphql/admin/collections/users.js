@@ -57,6 +57,7 @@ var changeView = {
     title: 'User',
     actions: {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.user(crudl.path.id).delete(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
     },
     normalize: (data, error) => {
@@ -81,6 +82,9 @@ var changeView = {
             data.lastName = ''
             data.firstName = ''
         }
+        delete data["fullName"]
+        delete data["dateJoined"]
+        delete data["password_confirm"]
         return data
     }
 }
@@ -193,6 +197,7 @@ var addView = {
     path: 'users/new',
     title: 'New User',
     fieldsets: changeView.fieldsets,
+    denormalize: changeView.denormalize,
     actions: {
         add: function (req) { return crudl.connectors.users.create(req) },
     },

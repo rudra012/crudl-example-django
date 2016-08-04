@@ -5,7 +5,6 @@ var listView = {
     actions: {
         list: function (req) {
             return crudl.connectors.users.read(req)
-            // return crudl.connectors.users.read(req.filter('id', crudl.auth.user))
         },
     },
     normalize: (list) => list.map(item => {
@@ -33,7 +32,7 @@ listView.fields = [
         sorted: 'ascending',
         // When avatars are part of API response then do e.g.:
         // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
-        render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
+        // render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
     },
     {
         name: 'full_name',
@@ -61,6 +60,7 @@ var changeView = {
     title: 'User',
     actions: {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.user(crudl.path.id).delete(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
     },
     normalize: (data, error) => {
@@ -193,6 +193,7 @@ var addView = {
     path: 'users/new',
     title: 'New User',
     fieldsets: changeView.fieldsets,
+    denormalize: changeView.denormalize,
     actions: {
         add: function (req) { return crudl.connectors.users.create(req) },
     },
@@ -202,5 +203,5 @@ var addView = {
 module.exports = {
     listView,
     changeView,
-    // addView,
+    addView,
 }

@@ -56,24 +56,36 @@ module.exports = [
                 name: 'allUsers',
                 fields: 'id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined'
             }),
+            create: `mutation ($input: CreateUserInput!) {
+                createUser(input: $input) {
+                    errors
+                    user {id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined}
+                }
+            }`,
         },
         pagination,
         transform: {
-            readResponseData: data => data.data.allUsers.edges.map(e => e.node)
+            readResponseData: data => data.data.allUsers.edges.map(e => e.node),
+            createResponseData: data => {
+                if (data.data.createSection.errors) {
+                    throw data.data.createSection.errors
+                }
+                return data.data.createSection.section
+            },
         },
     },
     {
         id: 'user',
         query: {
             read: `{user(id: "%id"){id, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
-            update: `mutation ($input: ChangeSectionInput!) {
-                changeSection(input: $input) {
+            update: `mutation ($input: ChangeUserInput!) {
+                changeUser(input: $input) {
                     errors
-                    section {id, name, slug, position}
+                    user {id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined}
                 }
             }`,
-            delete: `mutation ($input: DeleteSectionInput!) {
-                deleteSection(input: $input) {
+            delete: `mutation ($input: DeleteUserInput!) {
+                deleteUser(input: $input) {
                     deleted
                 }
             }`,
@@ -84,7 +96,7 @@ module.exports = [
                 if (data.data.changeUser.errors) {
                     throw data.data.changeUser.errors
                 }
-                return data.data.changeUser.section
+                return data.data.changeUser.user
             },
             deleteRequestData: data => ({ id: data.id }),
             deleteResponseData: data => data.data,
