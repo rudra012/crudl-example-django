@@ -29,6 +29,9 @@ listView.fields = [
         name: 'username',
         label: 'Username',
         main: true,
+        sortable: false,
+        sorted: 'ascending',
+        sortpriority: 1,
         // When avatars are part of API response then do e.g.:
         // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
         render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
@@ -64,9 +67,9 @@ var changeView = {
     normalize: (data, error) => {
         if (error) {
             if (error.first_name)
-                error.full_name = 'First name: ' + error.first_name
+            error.full_name = 'First name: ' + error.first_name
             if (error.last_name)
-                error.full_name = 'Last name: ' + error.last_name
+            error.full_name = 'Last name: ' + error.last_name
             throw error
         }
         // full_name
