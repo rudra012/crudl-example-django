@@ -31,7 +31,6 @@ listView.fields = [
         main: true,
         sortable: false,
         sorted: 'ascending',
-        sortpriority: 1,
         // When avatars are part of API response then do e.g.:
         // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
         render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
