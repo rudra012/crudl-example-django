@@ -195,6 +195,7 @@ var changeView = {
         }
     },
     denormalize: function (data) {
+        /* prevent unknown field ... with query */
         delete(data.updatedate)
         delete(data.owner)
         delete(data.createdate)

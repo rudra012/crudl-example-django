@@ -61,8 +61,9 @@ var changeView = {
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
     },
     denormalize: (data) => {
-        delete data["dateJoined"]
-        delete data["password_confirm"]
+        /* prevent unknown field ... with query */
+        delete(data.dateJoined)
+        delete(data.password_confirm)
         return data
     }
 }
