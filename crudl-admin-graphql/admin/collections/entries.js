@@ -356,13 +356,13 @@ changeView.fieldsets = [
                 name: 'createdate',
                 label: 'Date (Create)',
                 field: 'Datetime',
-                readOnly: true
+                props: { disabled: true },
             },
             {
                 name: 'updatedate',
                 label: 'Date (Update)',
                 field: 'Datetime',
-                readOnly: true
+                props: { disabled: true },
             },
         ]
     }
