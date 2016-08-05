@@ -1,3 +1,5 @@
+import { transformErrors } from '../utils'
+
 function pagination(res) {
     let key = Object.keys(res.data.data)[0]
     let hasNext = res.data.data[key].pageInfo.hasNextPage
@@ -450,6 +452,7 @@ module.exports = [
         id: 'login',
         url: '/rest-api/login/',
         mapping: { read: 'post', },
+        transformErrors,
         transform: {
             readResponseData: data => ({
                 requestHeaders: { "Authorization": `Token ${data.token}` },
