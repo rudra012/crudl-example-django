@@ -56,6 +56,13 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This password is too short. It must contain at least 4 characters.")
         return value
 
+    def validate(self, data):
+        is_staff = data.get("is_staff", None)
+        is_active = data.get("is_active", None)
+        if is_staff is True and is_active is False:
+            raise serializers.ValidationError("Staff member requires active user.")
+        return data
+
 
 class SectionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)

@@ -41,6 +41,11 @@ class User(models.Model):
     def __unicode__(self):
         return u"%s" % (self.username)
 
+    def clean(self):
+        from django.core.exceptions import ValidationError
+        if self.is_staff is True and self.is_active is False:
+            raise ValidationError("Staff member requires active user.")
+
     def save(self, *args, **kwargs):
         """
         Set token with is_staff/is_active
