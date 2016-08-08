@@ -1,50 +1,5 @@
-function pagination(res) {
-    let key = Object.keys(res.data.data)[0]
-    let hasNext = res.data.data[key].pageInfo.hasNextPage
-    let next = hasNext && {
-        after: res.data.data[key].pageInfo.endCursor
-    }
-    return { type: 'continuous', next }
-}
+import { continuousPagination, listQuery, transformErrors } from '../utils'
 
-function objectToArgs(object) {
-    let args = Object.getOwnPropertyNames(object).map(name => {
-        return `${name}: ${JSON.stringify(object[name])}`
-    }).join(', ')
-    return args ? `(${args})` : ''
-}
-
-function sorting(req) {
-    if (req.sorting && req.sorting.length > 0) {
-        return {
-            orderBy: req.sorting.map(field => {
-                let prefix = field.sorted == 'ascending' ? '' : '-'
-                return prefix + field.sortKey
-            }).join(',')
-        }
-    }
-    return {}
-}
-
-function listQuery(options) {
-    if (Object.prototype.toString.call(options.fields) === '[object Array]') {
-        options.fields = options.fields.join(', ')
-    }
-    return (req) => {
-        let args = objectToArgs(Object.assign({},
-            options.args,
-            req.page,
-            req.filters,
-            sorting(req)
-        ))
-        return `{
-            ${options.name} ${args} {
-                pageInfo { hasNextPage, hasPreviousPage, startCursor, endCursor }
-                edges { node { ${options.fields} }}
-            }
-        }`
-    }
-}
 
 module.exports = [
 
@@ -56,24 +11,36 @@ module.exports = [
                 name: 'allUsers',
                 fields: 'id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined'
             }),
+            create: `mutation ($input: CreateUserInput!) {
+                createUser(input: $input) {
+                    errors
+                    user {id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined}
+                }
+            }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
-            readResponseData: data => data.data.allUsers.edges.map(e => e.node)
+            readResponseData: data => data.data.allUsers.edges.map(e => e.node),
+            createResponseData: data => {
+                if (data.data.createSection.errors) {
+                    throw data.data.createSection.errors
+                }
+                return data.data.createSection.section
+            },
         },
     },
     {
         id: 'user',
         query: {
             read: `{user(id: "%id"){id, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
-            update: `mutation ($input: ChangeSectionInput!) {
-                changeSection(input: $input) {
+            update: `mutation ($input: ChangeUserInput!) {
+                changeUser(input: $input) {
                     errors
-                    section {id, name, slug, position}
+                    user {id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined}
                 }
             }`,
-            delete: `mutation ($input: DeleteSectionInput!) {
-                deleteSection(input: $input) {
+            delete: `mutation ($input: DeleteUserInput!) {
+                deleteUser(input: $input) {
                     deleted
                 }
             }`,
@@ -84,7 +51,7 @@ module.exports = [
                 if (data.data.changeUser.errors) {
                     throw data.data.changeUser.errors
                 }
-                return data.data.changeUser.section
+                return data.data.changeUser.user
             },
             deleteRequestData: data => ({ id: data.id }),
             deleteResponseData: data => data.data,
@@ -107,7 +74,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
@@ -163,7 +130,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
@@ -219,7 +186,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
@@ -275,7 +242,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allEntries.edges.map(e => e.node),
             /* set owner on add. alternatively, we could use denormalize with
@@ -438,6 +405,7 @@ module.exports = [
         id: 'login',
         url: '/rest-api/login/',
         mapping: { read: 'post', },
+        transformErrors,
         transform: {
             readResponseData: data => ({
                 requestHeaders: { "Authorization": `Token ${data.token}` },

@@ -5,7 +5,6 @@ var listView = {
     actions: {
         list: function (req) {
             return crudl.connectors.users.read(req)
-            // return crudl.connectors.users.read(req.filter('id', crudl.auth.user))
         },
     },
     normalize: (list) => list.map(item => {
@@ -33,7 +32,7 @@ listView.fields = [
         sorted: 'ascending',
         // When avatars are part of API response then do e.g.:
         // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
-        render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
+        // render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
     },
     {
         name: 'full_name',
@@ -61,36 +60,13 @@ var changeView = {
     title: 'User',
     actions: {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.user(crudl.path.id).delete(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
-    },
-    normalize: (data, error) => {
-        if (error) {
-            if (error.first_name)
-            error.full_name = 'First name: ' + error.first_name
-            if (error.last_name)
-            error.full_name = 'Last name: ' + error.last_name
-            throw error
-        }
-        // full_name
-        data.full_name = data.last_name + ', ' + data.first_name
-        data.full_name = data.full_name.replace(/(^, )|(, $)/, '')
-        return data
-    },
-    denormalize: (data) => {
-        let index = data.full_name.indexOf(',')
-        if (index >= 0) {
-            data.last_name = data.full_name.slice(0, index)
-            data.first_name = data.full_name.slice(index+1)
-        } else {
-            data.last_name = ''
-            data.first_name = ''
-        }
-        return data
     }
 }
 
 changeView.fieldsets = () => {
-    
+
     let fieldsets = [
         {
             fields: [
@@ -210,5 +186,5 @@ var addView = {
 module.exports = {
     listView,
     changeView,
-    // addView,
+    addView,
 }

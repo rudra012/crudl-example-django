@@ -57,30 +57,13 @@ var changeView = {
     title: 'User',
     actions: {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.user(crudl.path.id).delete(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
     },
-    normalize: (data, error) => {
-        if (error) {
-            if (error.firstName)
-                error.fullName = 'First name: ' + error.firstName
-            if (error.lastName)
-                error.fullName = 'Last name: ' + error.lastName
-            throw error
-        }
-        // full_name
-        data.fullName = data.lastName + ', ' + data.firstName
-        data.fullName = data.fullName.replace(/(^, )|(, $)/, '')
-        return data
-    },
     denormalize: (data) => {
-        let index = data.fullName.indexOf(',')
-        if (index >= 0) {
-            data.lastName = data.fullName.slice(0, index)
-            data.firstName = data.fullName.slice(index+1)
-        } else {
-            data.lastName = ''
-            data.firstName = ''
-        }
+        /* prevent unknown field ... with query */
+        delete(data.dateJoined)
+        delete(data.password_confirm)
         return data
     }
 }
@@ -202,6 +185,7 @@ var addView = {
     path: 'users/new',
     title: 'New User',
     fieldsets: changeView.fieldsets,
+    denormalize: changeView.denormalize,
     actions: {
         add: function (req) { return crudl.connectors.users.create(req) },
     },

@@ -46,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.is_staff = validated_data.get('is_staff', instance.is_staff)
         instance.is_active = validated_data.get('is_active', instance.is_active)
         # only allow user to set her own password
-        if password is not None and user == user:
+        if password is not None and user == instance:
             instance.set_password(password)
         instance.save()
         return instance
@@ -177,6 +177,8 @@ class LoginSerializer(serializers.Serializer):
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
+                if not user.is_staff:
+                    raise serializers.ValidationError('User has no access to crudl.')
             else:
                 raise serializers.ValidationError('Unable to log in with provided credentials.')
         else:

@@ -2,6 +2,7 @@
 
 # GENERAL DJANGO IMPORTS
 from django.core.exceptions import ValidationError
+from rest_framework.authentication import get_authorization_header
 
 # GRAPHENE IMPORTS
 import graphene
@@ -233,6 +234,112 @@ def get_entry_id(relayId, otherwise=None):
         return from_global_id(relayId)[1]
     except:
         return otherwise
+
+
+class CreateUser(relay.ClientIDMutation):
+
+    class Input:
+        username = String(required=False)
+        first_name = String(required=False)
+        last_name = String(required=False)
+        email = String(required=False)
+        is_staff = Boolean(required=False)
+        is_active = Boolean(required=False)
+        password = String(required=False)
+
+    user = Field(UserNode)
+    errors = String().List
+
+    @classmethod
+    def mutate_and_get_payload(cls, input, info):
+        try:
+            user = User()
+            user.username = input.get('username')
+            user.first_name = input.get('first_name')
+            user.last_name = input.get('last_name')
+            user.email = input.get('email')
+            user.is_staff = input.get('is_staff')
+            user.is_active = input.get('is_active')
+            if input.get('password'):
+                user.set_password(input.get('password'))
+            user.full_clean()
+            user.save()
+            return CreateUser(user=user)
+        except ValidationError as e:
+            fields = e.message_dict.keys()
+            messages = ['; '.join(m) for m in e.message_dict.values()]
+            errors = [i for pair in zip(fields, messages) for i in pair]
+            return CreateUser(user=None, errors=errors)
+
+
+class ChangeUser(relay.ClientIDMutation):
+
+    class Input:
+        id = String(required=True)
+        username = String(required=False)
+        first_name = String(required=False)
+        last_name = String(required=False)
+        email = String(required=False)
+        is_staff = Boolean(required=False)
+        is_active = Boolean(required=False)
+        password = String(required=False)
+
+    user = Field(UserNode)
+    errors = String().List
+
+    @classmethod
+    @graphene.with_context
+    def mutate_and_get_payload(cls, input, context, info):
+        try:
+            auth = get_authorization_header(context).split()
+        except:
+            auth = None
+        user = get_user(input.get('id'))
+        user.username = input.get('username')
+        user.first_name = input.get('first_name')
+        user.last_name = input.get('last_name')
+        user.email = input.get('email')
+        user.is_staff = input.get('is_staff')
+        user.is_active = input.get('is_active')
+        # only allow user to set her own password
+        password = input.get('password', None)
+        if auth is not None and password is not None and user.token == auth[1]:
+            user.set_password(password)
+        try:
+            user.full_clean()
+            user.save()
+            return ChangeUser(user=user)
+        except ValidationError as e:
+            fields = e.message_dict.keys()
+            messages = ['; '.join(m) for m in e.message_dict.values()]
+            errors = [i for pair in zip(fields, messages) for i in pair]
+            return ChangeUser(user=user, errors=errors)
+
+
+class DeleteUser(relay.ClientIDMutation):
+
+    class Input:
+        id = String(required=True)
+
+    deleted = Boolean()
+    user = Field(UserNode)
+
+    @classmethod
+    @graphene.with_context
+    def mutate_and_get_payload(cls, input, context, info):
+        try:
+            auth = get_authorization_header(context).split()
+        except:
+            auth = None
+        try:
+            user = get_user(input.get('id'))
+            if auth is not None and user.token == auth[1]:
+                # FIXME: make sure a user cannot delete herself
+                pass
+            user.delete()
+            return DeleteUser(deleted=True, user=user)
+        except:
+            return DeleteUser(deleted=False, user=None)
 
 
 class CreateSection(relay.ClientIDMutation):
@@ -663,6 +770,9 @@ class Query(ObjectType):
 
 class Mutation(ObjectType):
     # user
+    create_user = Field(CreateUser)
+    change_user = Field(ChangeUser)
+    delete_user = Field(DeleteUser)
     # section
     create_section = Field(CreateSection)
     change_section = Field(ChangeSection)
