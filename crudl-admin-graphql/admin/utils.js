@@ -1,6 +1,6 @@
 
 //-------------------------------------------------------------------
-function pagination(res) {
+export function continuousPagination(res) {
     let key = Object.keys(res.data.data)[0]
     let hasNext = res.data.data[key].pageInfo.hasNextPage
     let next = hasNext && {
@@ -29,7 +29,7 @@ function sorting(req) {
     return {}
 }
 
-function listQuery(options) {
+export function listQuery(options) {
     if (Object.prototype.toString.call(options.fields) === '[object Array]') {
         options.fields = options.fields.join(', ')
     }

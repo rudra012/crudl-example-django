@@ -1,4 +1,4 @@
-import { pagination, listQuery, transformErrors } from '../utils'
+import { continuousPagination, listQuery, transformErrors } from '../utils'
 
 
 module.exports = [
@@ -18,7 +18,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allUsers.edges.map(e => e.node),
             createResponseData: data => {
@@ -74,7 +74,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
@@ -130,7 +130,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
@@ -186,7 +186,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
@@ -242,7 +242,7 @@ module.exports = [
                 }
             }`,
         },
-        pagination,
+        pagination: continuousPagination,
         transform: {
             readResponseData: data => data.data.allEntries.edges.map(e => e.node),
             /* set owner on add. alternatively, we could use denormalize with
