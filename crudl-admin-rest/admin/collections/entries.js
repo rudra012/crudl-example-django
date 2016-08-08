@@ -109,7 +109,12 @@ listView.filters = {
                 {
                     in: 'section',
                     // set the value to '' if the user changed the section or the section is not set
-                    setValue: (section) => section.dirty || !section.value ? '' : undefined,
+                    setValue: (section) => {
+                        console.log('Cleaning category:', section.dirty || !section.value);
+                        console.log(section);
+
+                        return section.dirty || !section.value ? '' : undefined
+                    },
                     setProps: (section) => {
                         if (!section.value) {
                             return {
@@ -409,7 +414,9 @@ var addView = {
     denormalize: (data) => {
         /* set owner on add. alternatively, we could manipulate the data
         with the connector by using createRequestData (see connectors.js) */
-        if (crudl.auth.user) data.owner = crudl.auth.user
+        if (crudl.auth.user) {
+            data.owner = crudl.auth.user
+        }
         return data
     }
 }
