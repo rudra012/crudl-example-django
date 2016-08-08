@@ -25,7 +25,7 @@ module.exports = [
                 if (data.data.createUser.errors) {
                     throw data.data.createUser.errors
                 }
-                return data.data.createUser.section
+                return data.data.createUser.user
             },
         },
     },
