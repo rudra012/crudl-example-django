@@ -1,52 +1,5 @@
-import { transformErrors } from '../utils'
+import { pagination, listQuery, transformErrors } from '../utils'
 
-function pagination(res) {
-    let key = Object.keys(res.data.data)[0]
-    let hasNext = res.data.data[key].pageInfo.hasNextPage
-    let next = hasNext && {
-        after: res.data.data[key].pageInfo.endCursor
-    }
-    return { type: 'continuous', next }
-}
-
-function objectToArgs(object) {
-    let args = Object.getOwnPropertyNames(object).map(name => {
-        return `${name}: ${JSON.stringify(object[name])}`
-    }).join(', ')
-    return args ? `(${args})` : ''
-}
-
-function sorting(req) {
-    if (req.sorting && req.sorting.length > 0) {
-        return {
-            orderBy: req.sorting.map(field => {
-                let prefix = field.sorted == 'ascending' ? '' : '-'
-                return prefix + field.sortKey
-            }).join(',')
-        }
-    }
-    return {}
-}
-
-function listQuery(options) {
-    if (Object.prototype.toString.call(options.fields) === '[object Array]') {
-        options.fields = options.fields.join(', ')
-    }
-    return (req) => {
-        let args = objectToArgs(Object.assign({},
-            options.args,
-            req.page,
-            req.filters,
-            sorting(req)
-        ))
-        return `{
-            ${options.name} ${args} {
-                pageInfo { hasNextPage, hasPreviousPage, startCursor, endCursor }
-                edges { node { ${options.fields} }}
-            }
-        }`
-    }
-}
 
 module.exports = [
 

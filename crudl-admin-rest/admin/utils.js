@@ -1,3 +1,4 @@
+
 function url2page(url) {
     let match = /page=(\d+)/.exec(url)
     return match ? parseInt(match[1]) : 1
