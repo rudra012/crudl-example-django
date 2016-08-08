@@ -90,7 +90,8 @@ export function formatDate(date) {
     return date.toJSON().slice(0, 10)
 }
 
+// transform django non_field_errors to redux _error
 export function transformErrors(error) {
-    error._error = error.non_field_errors
+    if (error !== null && typeof error === 'object') error._error = error.non_field_errors
     return error
 }
