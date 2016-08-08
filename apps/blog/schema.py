@@ -15,6 +15,16 @@ from graphql_relay.node.node import from_global_id
 from apps.blog.models import User, Section, Category, Tag, Entry, EntryLink
 
 
+def getErrors(e):
+    # transform django errors to redux errors
+    # django: {"key1": [value1], {"key2": [value2]}}
+    # redux: ["key1", "value1", "key2", "value2"]
+    fields = e.message_dict.keys()
+    messages = ['; '.join(m) for m in e.message_dict.values()]
+    errors = [i for pair in zip(fields, messages) for i in pair]
+    return errors
+
+
 class Connection(DjangoConnection):
     total_count = graphene.Int()
 
@@ -266,10 +276,7 @@ class CreateUser(relay.ClientIDMutation):
             user.save()
             return CreateUser(user=user)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateUser(user=None, errors=errors)
+            return CreateUser(user=None, errors=getErrors(e))
 
 
 class ChangeUser(relay.ClientIDMutation):
@@ -310,10 +317,7 @@ class ChangeUser(relay.ClientIDMutation):
             user.save()
             return ChangeUser(user=user)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeUser(user=user, errors=errors)
+            return ChangeUser(user=user, errors=getErrors(e))
 
 
 class DeleteUser(relay.ClientIDMutation):
@@ -363,10 +367,7 @@ class CreateSection(relay.ClientIDMutation):
             section.save()
             return CreateSection(section=section)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateSection(section=None, errors=errors)
+            return CreateSection(section=None, errors=getErrors(e))
 
 
 class ChangeSection(relay.ClientIDMutation):
@@ -391,10 +392,7 @@ class ChangeSection(relay.ClientIDMutation):
             section.save()
             return ChangeSection(section=section)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeSection(section=section, errors=errors)
+            return ChangeSection(section=section, errors=getErrors(e))
 
 
 class DeleteSection(relay.ClientIDMutation):
@@ -438,10 +436,7 @@ class CreateCategory(relay.ClientIDMutation):
             category.save()
             return CreateCategory(category=category)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateCategory(category=None, errors=errors)
+            return CreateCategory(category=None, errors=getErrors(e))
 
 
 class ChangeCategory(relay.ClientIDMutation):
@@ -468,10 +463,7 @@ class ChangeCategory(relay.ClientIDMutation):
             category.save()
             return ChangeCategory(category=category)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeCategory(category=category, errors=errors)
+            return ChangeCategory(category=category, errors=getErrors(e))
 
 
 class DeleteCategory(relay.ClientIDMutation):
@@ -510,10 +502,7 @@ class CreateTag(relay.ClientIDMutation):
             tag.save()
             return CreateTag(tag=tag)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateTag(tag=None, errors=errors)
+            return CreateTag(tag=None, errors=getErrors(e))
 
 
 class ChangeTag(relay.ClientIDMutation):
@@ -535,10 +524,7 @@ class ChangeTag(relay.ClientIDMutation):
             tag.save()
             return ChangeTag(tag=tag)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeTag(tag=tag, errors=errors)
+            return ChangeTag(tag=tag, errors=getErrors(e))
 
 
 class DeleteTag(relay.ClientIDMutation):
@@ -594,10 +580,7 @@ class CreateEntry(relay.ClientIDMutation):
             entry.tags = get_tags_ids(input.get('tags'))
             return CreateEntry(entry=entry)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return CreateEntry(entry=None, errors=errors)
+            return CreateEntry(entry=None, errors=getErrors(e))
         except Exception as e:
             print '%s (%s)' % (e.message, type(e))
 
@@ -636,11 +619,7 @@ class ChangeEntry(relay.ClientIDMutation):
             entry.save()
             return ChangeEntry(entry=entry)
         except ValidationError as e:
-            print '%s (%s)' % (e.message, type(e))
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeEntry(entry=entry, errors=errors)
+            return ChangeEntry(entry=entry, errors=getErrors(e))
         except Exception as e:
             print '%s (%s)' % (e.message, type(e))
 
@@ -686,12 +665,7 @@ class CreateEntrylink(relay.ClientIDMutation):
             entrylink.save()
             return CreateEntrylink(entrylink=entrylink)
         except ValidationError as e:
-            print '%s (%s)' % (e.message, type(e))
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            print errors
-            return CreateEntrylink(entrylink=None, errors=errors)
+            return CreateEntrylink(entrylink=None, errors=getErrors(e))
         except Exception as e:
             print '%s (%s)' % (e.message, type(e))
 
@@ -720,10 +694,7 @@ class ChangeEntrylink(relay.ClientIDMutation):
             entrylink.save()
             return ChangeEntrylink(entrylink=entrylink)
         except ValidationError as e:
-            fields = e.message_dict.keys()
-            messages = ['; '.join(m) for m in e.message_dict.values()]
-            errors = [i for pair in zip(fields, messages) for i in pair]
-            return ChangeEntrylink(entrylink=entrylink, errors=errors)
+            return ChangeEntrylink(entrylink=entrylink, errors=getErrors(e))
 
 
 class DeleteEntrylink(relay.ClientIDMutation):
