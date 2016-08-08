@@ -22,10 +22,10 @@ module.exports = [
         transform: {
             readResponseData: data => data.data.allUsers.edges.map(e => e.node),
             createResponseData: data => {
-                if (data.data.createSection.errors) {
-                    throw data.data.createSection.errors
+                if (data.data.createUser.errors) {
+                    throw data.data.createUser.errors
                 }
-                return data.data.createSection.section
+                return data.data.createUser.section
             },
         },
     },
