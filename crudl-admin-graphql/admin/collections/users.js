@@ -64,6 +64,7 @@ var changeView = {
         /* prevent unknown field ... with query */
         delete(data.dateJoined)
         delete(data.password_confirm)
+        delete(data.originalId)
         return data
     }
 }
@@ -89,14 +90,14 @@ changeView.fieldsets = [
     {
         fields: [
             {
-                name: 'fullName',
-                label: 'Name',
+                name: 'firstName',
+                label: 'First Name',
                 field: 'String',
-                validate: (value, allValues) => {
-                    if (value && value.indexOf(',') < 0) {
-                        return 'The required format is: LastName, FirstName'
-                    }
-                },
+            },
+            {
+                name: 'lastName',
+                label: 'Last Name',
+                field: 'String',
             },
             {
                 name: 'email',
@@ -153,7 +154,7 @@ changeView.fieldsets = [
     },
     {
         title: 'Password',
-        hidden: () => crudl.auth.username !== crudl.context('username'),
+        hidden: () => crudl.auth.user !== crudl.context('originalId'),
         expanded: false,
         description: "Raw passwords are not stored, so there is no way to see this user's password, but you can set a new password.",
         fields: [

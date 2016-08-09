@@ -62,7 +62,7 @@ var changeView = {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
         delete: function (req) { return crudl.connectors.user(crudl.path.id).delete(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
-    }
+    },
 }
 
 changeView.fieldsets = [
@@ -78,14 +78,14 @@ changeView.fieldsets = [
     {
         fields: [
             {
-                name: 'full_name',
+                name: 'first_name',
                 label: 'Name',
                 field: 'String',
-                validate: (value, allValues) => {
-                    if (value && value.indexOf(',') < 0) {
-                        return 'The required format is: LastName, FirstName'
-                    }
-                },
+            },
+            {
+                name: 'last_name',
+                label: 'Last Name',
+                field: 'String',
             },
             {
                 name: 'email',

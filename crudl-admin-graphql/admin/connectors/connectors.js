@@ -32,7 +32,7 @@ module.exports = [
     {
         id: 'user',
         query: {
-            read: `{user(id: "%id"){id, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
+            read: `{user(id: "%id"){id, originalId, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
             update: `mutation ($input: ChangeUserInput!) {
                 changeUser(input: $input) {
                     errors
