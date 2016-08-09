@@ -110,9 +110,6 @@ listView.filters = {
                     in: 'section',
                     // set the value to '' if the user changed the section or the section is not set
                     setValue: (section) => {
-                        console.log('Cleaning category:', section.dirty || !section.value);
-                        console.log(section);
-
                         return section.dirty || !section.value ? '' : undefined
                     },
                     setProps: (section) => {
