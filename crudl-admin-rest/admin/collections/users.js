@@ -91,6 +91,7 @@ changeView.fieldsets = [
                 name: 'email',
                 label: 'Email address',
                 field: 'String',
+                readOnly: () => crudl.auth.username !== crudl.context('username'),
             }
         ],
     },
