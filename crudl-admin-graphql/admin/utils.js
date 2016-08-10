@@ -77,11 +77,23 @@ export function formatDate(date) {
     return date.toJSON().slice(0, 10)
 }
 
-// transform graphene non_field_errors to redux _error
-export function transformErrors(errors) {
-    var index = errors.indexOf("__all__");
+/* transform graphene error to redux-form (array) error
+graphene:
+[
+    "__all__": "message",
+    "key": "message"
+]
+redux-form:
+[
+    "_error": "message",
+    "key": "message"
+]
+*/
+export function transformErrors(error) {
+    console.log("GRAPHQL transformErrors", error)
+    var index = error.indexOf("__all__");
     if (index !== -1) {
-        errors[index] = "_error";
+        error[index] = "_error";
     }
-    return errors
+    return error
 }

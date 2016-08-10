@@ -90,8 +90,22 @@ export function formatDate(date) {
     return date.toJSON().slice(0, 10)
 }
 
-// transform django non_field_errors to redux _error
+/* transform django error to redux-form (object) error
+django:
+{
+    "non_field_errors": ["message"],
+    "key": ["message"]
+}
+redux-form:
+{
+    "_error": ["message"],
+    "key": ["message"]
+}
+*/
 export function transformErrors(error) {
-    if (error !== null && typeof error === 'object') error._error = error.non_field_errors
+    console.log("REST transformErrors", error)
+    if (error !== null && typeof error === 'object') {
+        error._error = error.non_field_errors
+    }
     return error
 }

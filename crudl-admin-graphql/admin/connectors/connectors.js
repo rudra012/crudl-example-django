@@ -19,11 +19,12 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allUsers.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createUser.errors) {
-                    throw transformErrors(data.data.createUser.errors)
+                    throw data.data.createUser.errors
                 }
                 return data.data.createUser.user
             },
@@ -45,12 +46,13 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.user,
             updateResponseData: data => {
                 console.log("updateResponseData", data)
                 if (data.data.changeUser.errors) {
-                    throw transformErrors(data.data.changeUser.errors)
+                    throw data.data.changeUser.errors
                 }
                 return data.data.changeUser.user
             },
@@ -76,11 +78,12 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createSection.errors) {
-                    throw transformErrors(data.data.createSection.errors)
+                    throw data.data.createSection.errors
                 }
                 return data.data.createSection.section
             },
@@ -102,11 +105,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.section,
             updateResponseData: data => {
                 if (data.data.changeSection.errors) {
-                    throw transformErrors(data.data.changeSection.errors)
+                    throw data.data.changeSection.errors
                 }
                 return data.data.changeSection.section
             },
@@ -132,11 +136,12 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createCategory.errors) {
-                    throw transformErrors(data.data.createCategory.errors)
+                    throw data.data.createCategory.errors
                 }
                 return data.data.createCategory.category
             },
@@ -158,11 +163,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.category,
             updateResponseData: data => {
                 if (data.data.changeCategory.errors) {
-                    throw transformErrors(data.data.changeCategory.errors)
+                    throw data.data.changeCategory.errors
                 }
                 return data.data.changeCategory.category
             },
@@ -188,11 +194,12 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createTag.errors) {
-                    throw transformErrors(data.data.createTag.errors)
+                    throw data.data.createTag.errors
                 }
                 return data.data.createTag.tag
             },
@@ -214,11 +221,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.tag,
             updateResponseData: data => {
                 if (data.data.changeTag.errors) {
-                    throw transformErrors(data.data.changeTag.errors)
+                    throw data.data.changeTag.errors
                 }
                 return data.data.changeTag.tag
             },
@@ -244,6 +252,7 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allEntries.edges.map(e => e.node),
             /* set owner on add. alternatively, we could use denormalize with
@@ -254,7 +263,7 @@ module.exports = [
             },
             createResponseData: data => {
                 if (data.data.createEntry.errors) {
-                    throw transformErrors(data.data.createEntry.errors)
+                    throw data.data.createEntry.errors
                 }
                 return data.data.createEntry.entry
             },
@@ -276,11 +285,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.entry,
             updateResponseData: data => {
                 if (data.data.changeEntry.errors) {
-                    throw transformErrors(data.data.changeEntry.errors)
+                    throw data.data.changeEntry.errors
                 }
                 return data.data.changeEntry.entry
             },
@@ -304,11 +314,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.allLinks.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createEntrylink.errors) {
-                    throw transformErrors(data.data.createEntrylink.errors)
+                    throw data.data.createEntrylink.errors
                 }
                 return data.data.createEntrylink.entrylink
             },
@@ -330,11 +341,12 @@ module.exports = [
                 }
             }`,
         },
+        transformErrors,
         transform: {
             readResponseData: data => data.data.entrylink,
             updateResponseData: data => {
                 if (data.data.changeEntrylink.errors) {
-                    throw transformErrors(data.data.changeEntrylink.errors)
+                    throw data.data.changeEntrylink.errors
                 }
                 return data.data.changeEntrylink.entrylink
             },
