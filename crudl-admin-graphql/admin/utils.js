@@ -77,7 +77,11 @@ export function formatDate(date) {
     return date.toJSON().slice(0, 10)
 }
 
-export function transformErrors(error) {
-    error._error = error.non_field_errors
-    return error
+// transform graphene non_field_errors to redux _error
+export function transformErrors(errors) {
+    var index = errors.indexOf("__all__");
+    if (index !== -1) {
+        errors[index] = "_error";
+    }
+    return errors
 }
