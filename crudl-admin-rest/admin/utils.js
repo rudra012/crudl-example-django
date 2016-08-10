@@ -11,13 +11,18 @@ export function continuousPagination(res) {
     return {
         type: 'continuous',
         next: nextPage,
+        resultsTotal: res.data.total,
+        filteredTotal: res.data.count,
     }
 }
 
 export function numberedPagination(res) {
 
     // total number of results
-    let resultsTotal = res.data.count
+    let resultsTotal = res.data.total
+    // total number of filtered results
+    let filteredTotal = res.data.count
+
     // next page as number
     let nextPage = res.data.next && url2page(res.data.next)
     // previous page as number
@@ -45,7 +50,8 @@ export function numberedPagination(res) {
         type: 'numbered',
         allPages,
         currentPage,
-        resultsTotal
+        resultsTotal,
+        filteredTotal,
     }
 }
 

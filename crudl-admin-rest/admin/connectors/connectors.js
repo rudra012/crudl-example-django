@@ -53,7 +53,7 @@ module.exports = [
         id: 'tags',
         url: 'tags/',
         urlQuery,
-        pagination: numberedPagination,
+        pagination: continuousPagination,
         transform: { readResponseData: data => data.results },
     },
     {
