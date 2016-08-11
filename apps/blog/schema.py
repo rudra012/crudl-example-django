@@ -416,8 +416,8 @@ class DeleteSection(relay.ClientIDMutation):
 class CreateCategory(relay.ClientIDMutation):
 
     class Input:
-        section = ID(required=True)
-        name = String(required=True)
+        section = ID(required=False)
+        name = String(required=False)
         slug = String(required=False)
         position = Int(required=False)
 
