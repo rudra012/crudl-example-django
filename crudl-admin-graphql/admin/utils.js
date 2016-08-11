@@ -91,9 +91,11 @@ redux-form:
 */
 export function transformErrors(error) {
     console.log("GRAPHQL transformErrors", error)
-    var index = error.indexOf("__all__");
-    if (index !== -1) {
-        error[index] = "_error";
+    if (error !== null && Array === error.constructor) {
+        var index = error.indexOf("__all__");
+        if (index !== -1) {
+            error[index] = "_error";
+        }
     }
     return error
 }
