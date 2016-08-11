@@ -265,11 +265,11 @@ class CreateUser(relay.ClientIDMutation):
         try:
             user = User()
             user.username = input.get('username')
-            user.first_name = input.get('first_name')
-            user.last_name = input.get('last_name')
-            user.email = input.get('email')
-            user.is_staff = input.get('is_staff')
-            user.is_active = input.get('is_active')
+            user.first_name = input.get('first_name', '')
+            user.last_name = input.get('last_name', '')
+            user.email = input.get('email', '')
+            user.is_staff = input.get('is_staff', False)
+            user.is_active = input.get('is_active', False)
             if input.get('password'):
                 user.set_password(input.get('password'))
             user.full_clean()
