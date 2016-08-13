@@ -102,32 +102,7 @@ listView.filters = {
         {
             name: 'category',
             label: 'Category',
-            field: 'Autocomplete',
-            props: {
-                showAll: true,
-                helpText: 'Select a category',
-            },
-            actions: {
-                select: (req) => {
-                    console.log('Selecting:', req);
-                    return Promise.all(req.data.selection.map(item => {
-                        console.log(item);
-                        return crudl.connectors.category(item.value).read(req)
-                        .then(res => res.set('data', {
-                            value: res.data.id,
-                            label: res.data.name,
-                        }))
-                    }))
-                },
-                search: (req) => {
-                    return crudl.connectors.categories.read(req
-                        .filter('name', req.data.query))
-                    .then(res => res.set('data', res.data.map(d => ({
-                        value: d.id,
-                        label: `<b>${d.name}</b> (${d.slug})`,
-                    }))))
-                },
-            },
+            field: 'Select',
             /* this field depends on section (so we add a watch function in
             order to react to any changes on the field section). */
             onChange: [
@@ -163,6 +138,7 @@ listView.filters = {
                     }
                 }
             ],
+            // props: () => crudl.connectors.categories_options.read(crudl.req()).then(res => res.data)
         },
         {
             name: 'status',
