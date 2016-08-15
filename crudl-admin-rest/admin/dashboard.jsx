@@ -6,8 +6,23 @@ export default (
             <div className="box">
                 <h3>About</h3>
                 <p>
-                    This is a <a href="http://crudl.io/">crudl</a> example with <a href="https://www.djangoproject.com/">Django</a> and <a href="http://www.django-rest-framework.org/">DRF</a> for the REST-API as well as <a href="http://graphene-python.org/">Graphene</a> for GraphQL.
+                    This is a <a href="http://crudl.io/" target="_blank">crudl</a> example with <a href="https://www.djangoproject.com/" target="_blank">Django</a> and <a href="http://www.django-rest-framework.org/" target="_blank">DRF</a> for the REST-API as well as <a href="http://graphene-python.org/" target="_blank">Graphene</a> for GraphQL.
                 </p>
+                <p>
+                    crudl is a backend agnostic React application in order to rapidly build a beautiful administration interface based on your API (REST or GraphQL).
+                </p>
+                <p>
+                    Please note that crudl is still under development and not production ready.
+                </p>
+                <p>
+                    A temporary documentation — outlining the basics and most important features — is available on <a href="https://github.com/crudlio/crudl-example-django/blob/master/README.md" target="_blank">GitHub</a>.
+                </p>
+                <h3>Credits & Links</h3>
+                <ul>
+                    <li><a href="http://crudl.io" target="_blank">crudl.io</a></li>
+                    <li><a href="https://twitter.com/crudlio" target="_blank">Twitter</a></li>
+                    <li><a href="https://github.com/crudlio" target="_blank">GitHub</a></li>
+                </ul>
             </div>
         </div>
     </div>
