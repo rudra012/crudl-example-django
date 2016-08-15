@@ -200,7 +200,7 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
         select: (req) => {
             return Promise.all(req.data.selection.map(item => {
                 return crudl.connectors.category(item.value).read(req)
-                .then(res => res.set('data', {
+                .then(res => res.setData({
                     value: res.data.id,
                     label: res.data.name,
                 }))
@@ -209,7 +209,7 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
         /* return the value and a custom label when searching for a category */
         search: (req) => {
             return crudl.connectors.categories.read(req.filter('name', req.data.query)
-            .then(res => res.set('data', res.data.map(d => ({
+            .then(res => res.setData(res.data.map(d => ({
                 value: d.id,
                 label: `<b>${d.name}</b> (${d.slug})`,
             }))))

@@ -260,7 +260,7 @@ changeView.fieldsets = [
                     select: (req) => {
                         return Promise.all(req.data.selection.map(item => {
                             return crudl.connectors.category(item.value).read(req)
-                            .then(res => res.set('data', {
+                            .then(res => res.setData({
                                 value: res.data.id,
                                 label: res.data.name,
                             }))
@@ -273,7 +273,7 @@ changeView.fieldsets = [
                             return crudl.connectors.categories.read(req
                                 .filter('name_Icontains', req.data.query)
                                 .filter('section', crudl.context.data.section))
-                            .then(res => res.set('data', res.data.map(d => ({
+                            .then(res => res.setData(res.data.map(d => ({
                                 value: d.id,
                                 label: `<b>${d.name}</b> (${d.slug})`,
                             }))))
@@ -335,12 +335,12 @@ changeView.fieldsets = [
                 actions: {
                     search: (req) => {
                         return crudl.connectors.tags_options.read(req.filter('name_Icontains', req.data.query.toLowerCase()))
-                        .then(res => res.set('data', res.data.options))
+                        .then(res => res.setData(res.data.options))
                     },
                     select: (req) => {
                         return Promise.all(req.data.selection.map(item => {
                             return crudl.connectors.tag(item.value).read(req)
-                            .then(res => res.set('data', {
+                            .then(res => res.setData({
                                 value: res.data.id,
                                 label: res.data.name,
                             }))
