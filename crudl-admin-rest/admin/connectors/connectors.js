@@ -1,5 +1,29 @@
 import { continuousPagination, numberedPagination, urlQuery, transformErrors } from '../utils'
 
+/**
+* Transform helper. Takes care of errors and allows a quick definition of the
+* data transformation for the read operation.
+*/
+function transform(readResponseData, other) {
+
+    function transformResponse(res) {
+        if (res.status >= 400) {
+            console.warn('HERE');
+            throw (res.data ? transformErrors(res.data) : res)
+        }
+        return res
+    }
+
+    return {
+        readResponse: transformResponse,
+        createResponse: transformResponse,
+        updateResponse: transformResponse,
+        deleteResponse: transformResponse,
+        readResponseData: readResponseData || (data => data),
+        ...other,
+    }
+}
+
 module.exports = [
 
     // USERS
@@ -7,12 +31,12 @@ module.exports = [
         id: 'users',
         url: 'users/',
         pagination: numberedPagination,
-        transform: { readResponseData: data => data.results },
+        transform: transform(data => data.results),
     },
     {
         id: 'user',
         url: 'users/:id/',
-        transformErrors,
+        transform: transform(),
     },
 
     // SECTIONS
@@ -21,12 +45,12 @@ module.exports = [
         url: 'sections/',
         urlQuery,
         pagination: numberedPagination,
-        transform: { readResponseData: data => data.results },
+        transform: transform(data => data.results),
     },
     {
         id: 'section',
         url: 'sections/:id/',
-        transformErrors,
+        transform: transform(),
     },
 
     // CATEGORIES
@@ -36,12 +60,12 @@ module.exports = [
         urlQuery,
         pagination: numberedPagination,
         enableDepagination: true,
-        transform: { readResponseData: data => data.results },
+        transform: transform(data => data.results),
     },
     {
         id: 'category',
         url: 'categories/:id/',
-        transformErrors,
+        transform: transform(),
     },
     {
         id: 'allCategories',
@@ -54,12 +78,12 @@ module.exports = [
         url: 'tags/',
         urlQuery,
         pagination: continuousPagination,
-        transform: { readResponseData: data => data.results },
+        transform: transform(data => data.results),
     },
     {
         id: 'tag',
         url: 'tags/:id/',
-        transformErrors,
+        transform: transform(),
     },
 
     // ENTRIES
@@ -68,20 +92,17 @@ module.exports = [
         url: 'entries/',
         urlQuery,
         pagination: numberedPagination,
-        transform: {
-            readResponseData: data => data.results,
-            /* set owner on add. alternatively, we could use denormalize with
-            the descriptor, see collections/entries.js */
+        transform: transform(data => data.results, {
             createRequestData: data => {
                 if (crudl.auth.user) data.owner = crudl.auth.user
                 return data
             }
-        },
+        }),
     },
     {
         id: 'entry',
         url: 'entries/:id/',
-        transformErrors,
+        transform: transform(),
     },
 
     // ENTRIELINKS
@@ -90,12 +111,12 @@ module.exports = [
         url: 'entrylinks/',
         pagination: numberedPagination,
         enableDepagination: true,
-        transform: { readResponseData: data => data.results },
+        transform: transform(data => data.results),
     },
     {
         id: 'link',
         url: 'entrylinks/:id/',
-        transformErrors,
+        transform: transform(),
     },
 
     // SPECIAL CONNECTORS
@@ -105,13 +126,11 @@ module.exports = [
     {
         id: 'sections_options',
         url: 'sections/',
-        transform: {
-            readResponseData: data => ({
-                options: data.results.map(function(item) {
-                    return { value: item.id, label: item.name }
-                }),
-            })
-        },
+        transform: transform(data => ({
+            options: data.results.map(function(item) {
+                return { value: item.id, label: item.name }
+            }),
+        })),
     },
 
     // category_options
@@ -119,13 +138,11 @@ module.exports = [
     {
         id: 'categories_options',
         url: 'categories/',
-        transform: {
-            readResponseData: data => ({
-                options: data.results.map(function(item) {
-                    return { value: item.id, label: item.name }
-                }),
-            })
-        },
+        transform: transform(data => ({
+            options: data.results.map(function(item) {
+                return { value: item.id, label: item.name }
+            }),
+        })),
     },
 
     // tags_options
@@ -133,13 +150,11 @@ module.exports = [
     {
         id: 'tags_options',
         url: 'tags/',
-        transform: {
-            readResponseData: data => ({
-                options: data.results.map(function(item) {
-                    return { value: item.id, label: item.name }
-                }),
-            })
-        },
+        transform: transform(data => ({
+            options: data.results.map(function(item) {
+                return { value: item.id, label: item.name }
+            }),
+        })),
     },
 
     // users_options
@@ -147,13 +162,11 @@ module.exports = [
     {
         id: 'users_options',
         url: 'users/',
-        transform: {
-            readResponseData: data => ({
-                options: data.results.map(function(item) {
-                    return { value: item.id, label: item.username }
-                }),
-            })
-        },
+        transform: transform(data => ({
+            options: data.results.map(function(item) {
+                return { value: item.id, label: item.username }
+            }),
+        })),
     },
 
     // AUTHENTICATION
@@ -161,13 +174,10 @@ module.exports = [
         id: 'login',
         url: '/rest-api/login/',
         mapping: { read: 'post', },
-        transform: {
-            readResponseData: data => ({
-                requestHeaders: { "Authorization": `Token ${data.token}` },
-                info: data,
-            })
-        },
-        transformErrors,
+        transform: transform(data => ({
+            requestHeaders: { "Authorization": `Token ${data.token}` },
+            info: data,
+        })),
     },
 
 ]
