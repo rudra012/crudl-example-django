@@ -7,10 +7,11 @@ from distutils.util import strtobool
 import django_filters
 
 # REST IMPORTS
-from rest_framework import viewsets, filters, response, parsers, renderers
+from rest_framework import viewsets, filters, response, parsers, renderers, status
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.authentication import get_authorization_header
 
 # PROJECT IMPORTS
 from apps.blog.models import *  # NOQA
@@ -39,6 +40,18 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return User.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        # prevent user to delete herself
+        try:
+            auth = get_authorization_header(request).split()
+        except:
+            auth = None
+        instance = self.get_object()
+        if auth is not None and instance.token == auth[1]:
+            return response.Response({"non_field_errors": [u"You are not able to delete the currently logged-in user."]}, status=status.HTTP_400_BAD_REQUEST)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SectionFilter(django_filters.FilterSet):
