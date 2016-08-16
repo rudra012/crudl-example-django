@@ -568,14 +568,6 @@
     },
     {
         "fields": {
-            "name": "server",
-            "slug": "server"
-        },
-        "model": "blog.tag",
-        "pk": 48
-    },
-    {
-        "fields": {
             "status": "0",
             "category": 9,
             "locked": false,
@@ -632,7 +624,7 @@
             "section": 3,
             "tags": [
                 21,
-                48
+                32
             ],
             "summary": "Quis necessitatibus reiciendis laboriosam nam sed. Autem eum quisquam qui animi fuga qui. Voluptas ut eos aut autem. Deleniti quas quo iste cumque ea.",
             "sticky": false,
@@ -656,7 +648,7 @@
             "tags": [
                 30,
                 31,
-                48
+                32
             ],
             "summary": "Quia inventore beatae in earum ea vel. Laborum ipsam similique aperiam aut sed.",
             "sticky": false,
