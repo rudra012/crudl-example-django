@@ -19,7 +19,6 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allUsers.edges.map(e => e.node),
             createResponseData: data => {
@@ -46,7 +45,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.user,
             updateResponseData: data => {
@@ -78,7 +76,6 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
@@ -105,7 +102,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.section,
             updateResponseData: data => {
@@ -136,7 +132,6 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
@@ -163,7 +158,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.category,
             updateResponseData: data => {
@@ -194,7 +188,6 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
@@ -221,7 +214,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.tag,
             updateResponseData: data => {
@@ -252,7 +244,6 @@ module.exports = [
             }`,
         },
         pagination: continuousPagination,
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allEntries.edges.map(e => e.node),
             /* set owner on add. alternatively, we could use denormalize with
@@ -285,7 +276,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.entry,
             updateResponseData: data => {
@@ -314,7 +304,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.allLinks.edges.map(e => e.node),
             createResponseData: data => {
@@ -341,7 +330,6 @@ module.exports = [
                 }
             }`,
         },
-        transformErrors,
         transform: {
             readResponseData: data => data.data.entrylink,
             updateResponseData: data => {
@@ -418,7 +406,6 @@ module.exports = [
         id: 'login',
         url: '/rest-api/login/',
         mapping: { read: 'post', },
-        transformErrors,
         transform: {
             readResponseData: data => ({
                 requestHeaders: { "Authorization": `Token ${data.token}` },
