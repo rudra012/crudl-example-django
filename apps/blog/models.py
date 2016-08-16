@@ -84,10 +84,23 @@ class Section(models.Model):
     def __unicode__(self):
         return u"%s" % (self.name)
 
+    def clean(self):
+        # slug has to be unique
+        from django.core.exceptions import ValidationError
+        counter = 0
+        if self.slug:
+            if self.id:
+                counter = Section.objects.filter(slug=self.slug).exclude(id=self.id).count()
+            else:
+                counter = Section.objects.filter(slug=self.slug).count()
+            if counter:
+                raise ValidationError({"slug": "Section with this slug already exists."})
+
     def save(self, *args, **kwargs):
         """
         Slug should be set with the frontend/admin.
         """
+        self.full_clean()
         if not self.slug:
             self.slug = slugify(self.name)
         else:
