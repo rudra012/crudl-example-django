@@ -80,22 +80,23 @@ export function formatDate(date) {
 /* transform graphene error to redux-form (array) error
 graphene:
 [
-    "__all__": "message",
-    "key": "message"
+    "__all__", "message",
+    "key",  "message",
 ]
 redux-form:
-[
+{
     "_error": "message",
-    "key": "message"
-]
+    "key": "message",
+}
 */
-export function transformErrors(error) {
-    console.log("GRAPHQL transformErrors", error)
-    if (error !== null && Array === error.constructor) {
-        var index = error.indexOf("__all__");
-        if (index !== -1) {
-            error[index] = "_error";
+export function transformErrors(errors) {
+    const errorsObj = {}
+    if (errors !== null && Array === errors.constructor) {
+        for (let i = 0; i < errors.length - 1; i = i + 2) {
+            const name = errors[i] === '__all__' ? '_error' : errors[i]
+            errorsObj[name] = errors[i + 1]
         }
+        return errorsObj
     }
-    return error
+    return errors
 }
