@@ -72,7 +72,7 @@ class User(models.Model):
 
 
 class Section(models.Model):
-    name = models.CharField(u"Name", max_length=100)
+    name = models.CharField(u"Name", max_length=100, unique=True)
     slug = models.SlugField(u"Slug", max_length=100, db_index=True, blank=True)
     position = models.PositiveIntegerField(u"Position", blank=True, null=True)
 
@@ -109,7 +109,7 @@ class Section(models.Model):
 
 class Category(models.Model):
     section = models.ForeignKey(Section, verbose_name=u"Section", related_name="categories")
-    name = models.CharField(u"Name", max_length=100)
+    name = models.CharField(u"Name", max_length=100, unique=True)
     slug = models.SlugField(u"Slug", max_length=100, db_index=True, blank=True)
     position = models.PositiveIntegerField(u"Position", blank=True, null=True)
 
@@ -144,7 +144,7 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(u"Name", max_length=100)
+    name = models.CharField(u"Name", max_length=100, unique=True)
     slug = models.SlugField(u"Slug", max_length=100, db_index=True, blank=True)
 
     class Meta:
