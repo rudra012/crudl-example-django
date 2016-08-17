@@ -1,6 +1,5 @@
 import { continuousPagination, listQuery, transformErrors } from '../utils'
 
-
 module.exports = [
 
     // USERS
@@ -46,7 +45,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.user,
+            readResponseData: data => {
+                if (!data.data.user) {
+                    throw crudl.notFoundError('The requested user was not found')
+                }
+                return data.data.user
+            },
             updateResponseData: data => {
                 console.log("updateResponseData", data)
                 if (data.data.changeUser.errors) {
@@ -103,7 +107,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.section,
+            readResponseData: data => {
+                if (!data.data.section) {
+                    throw crudl.notFoundError('The requested section was not found')
+                }
+                return data.data.section
+            },
             updateResponseData: data => {
                 if (data.data.changeSection.errors) {
                     throw transformErrors(data.data.changeSection.errors)
@@ -159,7 +168,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.category,
+            readResponseData: data => {
+                if (!data.data.category) {
+                    throw crudl.notFoundError('The requested category was not found')
+                }
+                return data.data.category
+            },
             updateResponseData: data => {
                 if (data.data.changeCategory.errors) {
                     throw transformErrors(data.data.changeCategory.errors)
@@ -215,7 +229,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.tag,
+            readResponseData: data => {
+                if (!data.data.tag) {
+                    throw crudl.notFoundError('The requested tag was not found')
+                }
+                return data.data.tag
+            },
             updateResponseData: data => {
                 if (data.data.changeTag.errors) {
                     throw transformErrors(data.data.changeTag.errors)
@@ -277,7 +296,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.entry,
+            readResponseData: data => {
+                if (!data.data.entry) {
+                    throw crudl.notFoundError('The requested entry was not found')
+                }
+                return data.data.entry
+            },
             updateResponseData: data => {
                 if (data.data.changeEntry.errors) {
                     throw transformErrors(data.data.changeEntry.errors)
@@ -331,7 +355,12 @@ module.exports = [
             }`,
         },
         transform: {
-            readResponseData: data => data.data.entrylink,
+            readResponseData: data => {
+                if (!data.data.entrylink) {
+                    throw crudl.notFoundError('The requested entry link was not found')
+                }
+                return data.data.entrylink
+            },
             updateResponseData: data => {
                 if (data.data.changeEntrylink.errors) {
                     throw transformErrors(data.data.changeEntrylink.errors)

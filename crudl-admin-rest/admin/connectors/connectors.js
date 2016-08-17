@@ -8,7 +8,6 @@ function transform(readResponseData, other) {
 
     function transformResponse(res) {
         if (res.status >= 400) {
-            console.warn('HERE');
             throw (res.data ? transformErrors(res.data) : res)
         }
         return res
