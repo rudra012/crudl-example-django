@@ -73,7 +73,7 @@ class User(models.Model):
 
 class Section(models.Model):
     name = models.CharField(u"Name", max_length=100, unique=True)
-    slug = models.SlugField(u"Slug", max_length=100, db_index=True, blank=True)
+    slug = models.SlugField(u"Slug", max_length=100, db_index=True, blank=True, unique=True)
     position = models.PositiveIntegerField(u"Position", blank=True, null=True)
 
     class Meta:
@@ -84,23 +84,10 @@ class Section(models.Model):
     def __unicode__(self):
         return u"%s" % (self.name)
 
-    def clean(self):
-        # slug has to be unique
-        from django.core.exceptions import ValidationError
-        counter = 0
-        if self.slug:
-            if self.id:
-                counter = Section.objects.filter(slug=self.slug).exclude(id=self.id).count()
-            else:
-                counter = Section.objects.filter(slug=self.slug).count()
-            if counter:
-                raise ValidationError({"slug": "Section with this slug already exists."})
-
     def save(self, *args, **kwargs):
         """
         Slug should be set with the frontend/admin.
         """
-        self.full_clean()
         if not self.slug:
             self.slug = slugify(self.name)
         else:
