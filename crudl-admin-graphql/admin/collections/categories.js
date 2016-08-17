@@ -48,7 +48,7 @@ listView.filters = {
             initialValue: '',
         },
         {
-            name: 'name_Icontains',  // Graphene required syntax
+            name: 'name',
             label: 'Name Contains',
             field: 'String',
         },

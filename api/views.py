@@ -5,6 +5,7 @@ from distutils.util import strtobool
 
 # DJANGO IMPORTS
 import django_filters
+from django_filters.filters import BaseInFilter, NumberFilter
 
 # REST IMPORTS
 from rest_framework import viewsets, filters, response, parsers, renderers, status
@@ -20,6 +21,10 @@ from apps.blog.models import *  # NOQA
 from api.serializers import *  # NOQA
 
 BOOLEAN_CHOICES = (('false', 'False'), ('0', 'False'), ('true', 'True'), ('1', 'True'),)
+
+
+class IDInFilter(BaseInFilter, NumberFilter):
+    pass
 
 
 class UserFilter(django_filters.FilterSet):
@@ -55,11 +60,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class SectionFilter(django_filters.FilterSet):
+    id_in = IDInFilter(name="id", lookup_expr="in")
     name = django_filters.CharFilter(name="name", lookup_type="icontains")
 
     class Meta:
         model = Section
-        fields = ("name",)
+        fields = ("id_in", "name",)
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -73,12 +79,13 @@ class SectionViewSet(viewsets.ModelViewSet):
 
 
 class CategoryFilter(django_filters.FilterSet):
+    id_in = IDInFilter(name="id", lookup_expr="in")
     section = django_filters.NumberFilter(name="section", lookup_type="exact")
     name = django_filters.CharFilter(name="name", lookup_type="icontains")
 
     class Meta:
         model = Category
-        fields = ("section", "name",)
+        fields = ("id_in", "section", "name",)
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -92,11 +99,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 class TagFilter(django_filters.FilterSet):
+    id_in = IDInFilter(name="id", lookup_expr="in")
     name = django_filters.CharFilter(name="name", lookup_type="icontains")
 
     class Meta:
         model = Tag
-        fields = ("name",)
+        fields = ("id_in", "name",)
 
 
 class TagViewSet(viewsets.ModelViewSet):

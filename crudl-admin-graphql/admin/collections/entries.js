@@ -255,23 +255,29 @@ changeView.fieldsets = [
                     showAll: true,
                     helpText: 'Select a category',
                 },
+                /* FIXME: make it easier to reference fields/fieldsets */
                 onChange: listView.filters.fields[2].onChange,
                 actions: {
                     select: (req) => {
-                        return Promise.all(req.data.selection.map(item => {
-                            return crudl.connectors.category(item.value).read(req)
-                            .then(res => res.setData({
-                                value: res.data.id,
-                                label: res.data.name,
-                            }))
-                        })).then(responses => ({ data: responses.map(r => r.data) }))
+                        return crudl.connectors.categories_options.read(req
+                            .filter('idIn', req.data.selection.map(item => item.value).toString()))
+                        .then(res => res.setData(res.data.options))
+                        /* the code below is an alternative, if an id_in filter is not available
+                        and if the options are build manually */
+                        // return Promise.all(req.data.selection.map(item => {
+                        //     return crudl.connectors.category(item.value).read(req)
+                        //     .then(res => res.setData({
+                        //         value: res.data.id,
+                        //         label: res.data.name,
+                        //     }))
+                        // })).then(responses => ({ data: responses.map(r => r.data) }))
                     },
                     search: (req) => {
                         if (!crudl.context.data.section) {
                             return Promise.resolve({data: []})
                         } else {
                             return crudl.connectors.categories.read(req
-                                .filter('name_Icontains', req.data.query)
+                                .filter('name', req.data.query)
                                 .filter('section', crudl.context.data.section))
                             .then(res => res.setData(res.data.map(d => ({
                                 value: d.id,
@@ -334,17 +340,14 @@ changeView.fieldsets = [
                 },
                 actions: {
                     search: (req) => {
-                        return crudl.connectors.tags_options.read(req.filter('name_Icontains', req.data.query.toLowerCase()))
+                        return crudl.connectors.tags_options.read(req
+                            .filter('name', req.data.query.toLowerCase()))
                         .then(res => res.setData(res.data.options))
                     },
                     select: (req) => {
-                        return Promise.all(req.data.selection.map(item => {
-                            return crudl.connectors.tag(item.value).read(req)
-                            .then(res => res.setData({
-                                value: res.data.id,
-                                label: res.data.name,
-                            }))
-                        })).then(responses => ({ data: responses.map(r => r.data) }))
+                        return crudl.connectors.tags_options.read(req
+                            .filter('idIn', req.data.selection.map(item => item.value).toString()))
+                        .then(res => res.setData(res.data.options))
                     },
                 },
             }

@@ -4,6 +4,10 @@
 from django.core.exceptions import ValidationError
 from rest_framework.authentication import get_authorization_header
 
+# DJANGO IMPORTS
+import django_filters
+from django_filters.filters import BaseInFilter, NumberFilter, CharFilter
+
 # GRAPHENE IMPORTS
 import graphene
 from graphene import relay, ObjectType, Field, String, Int, ID, Boolean, List
@@ -23,6 +27,18 @@ def getErrors(e):
     messages = ['; '.join(m) for m in e.message_dict.values()]
     errors = [i for pair in zip(fields, messages) for i in pair]
     return errors
+
+
+def get_id_list(value):
+    original_id_list = []
+    id_list = value.split(",")
+    for item in id_list:
+        if item:
+            try:
+                original_id_list.append(from_global_id(item)[1])
+            except:
+                pass
+    return original_id_list
 
 
 class Connection(DjangoConnection):
@@ -48,6 +64,22 @@ class UserNode(DjangoNode):
         return self.id
 
 
+class SectionFilter(django_filters.FilterSet):
+    id_in = django_filters.MethodFilter()
+    name = django_filters.MethodFilter()
+
+    class Meta:
+        model = Category
+        fields = ("id_in", "name",)
+        order_by = ['id', '-id', 'name', '-name', 'slug', '-slug', 'position', '-position']
+
+    def filter_id_in(self, queryset, value):
+        return queryset.filter(id__in=get_id_list(value))
+
+    def filter_name(self, queryset, value):
+        return queryset.filter(name__icontains=value)
+
+
 class SectionNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
@@ -55,16 +87,32 @@ class SectionNode(DjangoNode):
 
     class Meta:
         model = Section
-        filter_fields = {
-            'name': ['icontains'],
-        }
-        filter_order_by = ['id', '-id', 'name', '-name', 'slug', '-slug', 'position', '-position']
 
     def resolve_original_id(self, args, info):
         return self.id
 
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
+
+
+class CategoryFilter(django_filters.FilterSet):
+    id_in = django_filters.MethodFilter()
+    section = django_filters.MethodFilter()
+    name = django_filters.MethodFilter()
+
+    class Meta:
+        model = Category
+        fields = ("id_in", "section", "name",)
+        order_by = ['id', '-id', 'section', '-section', 'name', '-name', 'slug', '-slug', 'position', '-position']
+
+    def filter_id_in(self, queryset, value):
+        return queryset.filter(id__in=get_id_list(value))
+
+    def filter_section(self, queryset, value):
+        return queryset.filter(section=get_section(value))
+
+    def filter_name(self, queryset, value):
+        return queryset.filter(name__icontains=value)
 
 
 class CategoryNode(DjangoNode):
@@ -74,17 +122,28 @@ class CategoryNode(DjangoNode):
 
     class Meta:
         model = Category
-        filter_fields = {
-            'section': ['exact'],
-            'name': ['icontains'],
-        }
-        filter_order_by = ['id', '-id', 'section', '-section', 'name', '-name', 'slug', '-slug', 'position', '-position']
 
     def resolve_original_id(self, args, info):
         return self.id
 
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
+
+
+class TagFilter(django_filters.FilterSet):
+    id_in = django_filters.MethodFilter()
+    name = django_filters.MethodFilter()
+
+    class Meta:
+        model = Category
+        fields = ("id_in", "name",)
+        order_by = ['id', '-id', 'name', '-name', 'slug', '-slug']
+
+    def filter_id_in(self, queryset, value):
+        return queryset.filter(id__in=get_id_list(value))
+
+    def filter_name(self, queryset, value):
+        return queryset.filter(name__icontains=value)
 
 
 class TagNode(DjangoNode):
@@ -94,10 +153,6 @@ class TagNode(DjangoNode):
 
     class Meta:
         model = Tag
-        filter_fields = {
-            'name': ['icontains'],
-        }
-        filter_order_by = ['id', '-id', 'name', '-name', 'slug', '-slug']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -721,13 +776,13 @@ class Query(ObjectType):
     all_users = DjangoFilterConnectionField(UserNode, s=graphene.String())
     # category
     section = relay.NodeField(SectionNode)
-    all_sections = DjangoFilterConnectionField(SectionNode, s=graphene.String())
+    all_sections = DjangoFilterConnectionField(SectionNode, filterset_class=SectionFilter, s=graphene.String())
     # category
     category = relay.NodeField(CategoryNode)
-    all_categories = DjangoFilterConnectionField(CategoryNode, s=graphene.String())
+    all_categories = DjangoFilterConnectionField(CategoryNode, filterset_class=CategoryFilter, s=graphene.String())
     # tag
     tag = relay.NodeField(TagNode)
-    all_tags = DjangoFilterConnectionField(TagNode, s=graphene.String())
+    all_tags = DjangoFilterConnectionField(TagNode, filterset_class=TagFilter, s=graphene.String())
     # entry
     entry = relay.NodeField(EntryNode)
     all_entries = DjangoFilterConnectionField(EntryNode, s=graphene.String())
