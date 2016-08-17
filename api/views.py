@@ -47,16 +47,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return User.objects.all()
 
     def destroy(self, request, *args, **kwargs):
-        # prevent user to delete herself
-        try:
-            auth = get_authorization_header(request).split()
-        except:
-            auth = None
-        instance = self.get_object()
-        if auth is not None and instance.token == auth[1]:
-            return response.Response({"non_field_errors": [u"You are not able to delete the currently logged-in user."]}, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_destroy(instance)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return response.Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class SectionFilter(django_filters.FilterSet):

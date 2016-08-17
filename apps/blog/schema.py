@@ -375,32 +375,6 @@ class ChangeUser(relay.ClientIDMutation):
             return ChangeUser(user=user, errors=getErrors(e))
 
 
-class DeleteUser(relay.ClientIDMutation):
-
-    class Input:
-        id = String(required=True)
-
-    deleted = Boolean()
-    user = Field(UserNode)
-
-    @classmethod
-    @graphene.with_context
-    def mutate_and_get_payload(cls, input, context, info):
-        try:
-            auth = get_authorization_header(context).split()
-        except:
-            auth = None
-        try:
-            user = get_user(input.get('id'))
-            if auth is not None and user.token == auth[1]:
-                # FIXME: make sure a user cannot delete herself
-                pass
-            user.delete()
-            return DeleteUser(deleted=True, user=user)
-        except:
-            return DeleteUser(deleted=False, user=None)
-
-
 class CreateSection(relay.ClientIDMutation):
 
     class Input:
@@ -798,7 +772,6 @@ class Mutation(ObjectType):
     # user
     create_user = Field(CreateUser)
     change_user = Field(ChangeUser)
-    delete_user = Field(DeleteUser)
     # section
     create_section = Field(CreateSection)
     change_section = Field(ChangeSection)
