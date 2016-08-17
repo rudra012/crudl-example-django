@@ -1,3 +1,5 @@
+import React from 'react'
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'users',
@@ -11,9 +13,9 @@ var listView = {
         if (!item.last_name) {
             item.full_name = item.first_name
         } else if (!item.first_name) {
-            item.full_name = `<b>${item.last_name}</b>`
+            item.full_name = <span><b>{item.last_name}</b></span>
         } else {
-            item.full_name = `<b>${item.last_name}</b>, ${item.first_name}`
+            item.full_name = <span><b>{item.last_name}</b>, {item.first_name}</span>
         }
         return item
     })
@@ -100,7 +102,7 @@ changeView.fieldsets = [
         expanded: true,
         description: () => {
             if (crudl.auth.username == crudl.context('username')) {
-                return "<span style='color: #CC293C;'>WARNING: If you remove crudl access for the currently logged-in user, you'll be logged out.</span>"
+                return <span style={{color: '#CC293C'}}>WARNING: If you remove crudl access for the currently logged-in user, you will be logged out.</span>
             }
         },
         fields: [
