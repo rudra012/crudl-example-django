@@ -15,7 +15,9 @@ export default (
                     Please note that crudl is still under development and not production ready.
                     A temporary documentation is available on <a href="https://github.com/crudlio/crudl-example-django/blob/master/README.md" target="_blank">GitHub</a>.
                 </p>
-                <h3>Credits & Links</h3>
+            </div>
+            <div className="box">
+                <h3>Links</h3>
                 <ul>
                     <li><a href="http://crudl.io" target="_blank">crudl.io</a></li>
                     <li><a href="https://twitter.com/crudlio" target="_blank">Twitter</a></li>
