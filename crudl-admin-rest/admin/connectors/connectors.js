@@ -7,8 +7,17 @@ import { continuousPagination, numberedPagination, urlQuery, transformErrors } f
 function transform(readResponseData, other) {
 
     function transformResponse(res) {
-        if (res.status >= 400) {
-            throw (res.data ? transformErrors(res.data) : res)
+        if (res.status === 400) {
+            throw new crudl.ValidationError(transformErrors(res.data))
+        }
+        if (res.status === 401) {
+            throw new crudl.AuthorizationError()
+        }
+        if (res.status === 404) {
+            throw new crudl.NotFoundError(`Page ${res.url} was not found.`)
+        }
+        if (res.status === 405) {
+            throw new crudl.PermissionError('You are not allowed to do that.')
         }
         return res
     }
