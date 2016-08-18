@@ -6,7 +6,6 @@ from rest_framework.authentication import get_authorization_header
 
 # DJANGO IMPORTS
 import django_filters
-from django_filters.filters import BaseInFilter, NumberFilter, CharFilter
 
 # GRAPHENE IMPORTS
 import graphene
@@ -63,6 +62,8 @@ class UserNode(DjangoNode):
     def resolve_original_id(self, args, info):
         return self.id
 
+    connection_type = Connection
+
 
 class SectionFilter(django_filters.FilterSet):
     id_in = django_filters.MethodFilter()
@@ -93,6 +94,8 @@ class SectionNode(DjangoNode):
 
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
+
+    connection_type = Connection
 
 
 class CategoryFilter(django_filters.FilterSet):
@@ -129,6 +132,8 @@ class CategoryNode(DjangoNode):
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
 
+    connection_type = Connection
+
 
 class TagFilter(django_filters.FilterSet):
     id_in = django_filters.MethodFilter()
@@ -159,6 +164,8 @@ class TagNode(DjangoNode):
 
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
+
+    connection_type = Connection
 
 
 class StatusEnum(graphene.Enum):
@@ -203,6 +210,8 @@ class EntryNode(DjangoNode):
 
     def resolve_counter_tags(self, args, info):
         return self.counter_tags()
+
+    connection_type = Connection
 
 
 class EntrylinkNode(DjangoNode):
