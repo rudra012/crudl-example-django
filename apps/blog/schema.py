@@ -42,9 +42,18 @@ def get_id_list(value):
 
 class Connection(DjangoConnection):
     total_count = graphene.Int()
+    filtered_count = graphene.Int()
 
     def resolve_total_count(self, args, info):
+        pass
+
+    def resolve_filtered_count(self, args, info):
         return len(self.get_connection_data())
+
+
+class UserConnection(Connection):
+    def resolve_total_count(self, args, info):
+        return User.objects.all().count()
 
 
 class UserNode(DjangoNode):
@@ -62,7 +71,7 @@ class UserNode(DjangoNode):
     def resolve_original_id(self, args, info):
         return self.id
 
-    connection_type = Connection
+    connection_type = UserConnection
 
 
 class SectionFilter(django_filters.FilterSet):
@@ -81,6 +90,11 @@ class SectionFilter(django_filters.FilterSet):
         return queryset.filter(name__icontains=value)
 
 
+class SectionConnection(Connection):
+    def resolve_total_count(self, args, info):
+        return Section.objects.all().count()
+
+
 class SectionNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
@@ -95,7 +109,7 @@ class SectionNode(DjangoNode):
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
 
-    connection_type = Connection
+    connection_type = SectionConnection
 
 
 class CategoryFilter(django_filters.FilterSet):
@@ -118,6 +132,11 @@ class CategoryFilter(django_filters.FilterSet):
         return queryset.filter(name__icontains=value)
 
 
+class CategoryConnection(Connection):
+    def resolve_total_count(self, args, info):
+        return Category.objects.all().count()
+
+
 class CategoryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
@@ -132,7 +151,7 @@ class CategoryNode(DjangoNode):
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
 
-    connection_type = Connection
+    connection_type = CategoryConnection
 
 
 class TagFilter(django_filters.FilterSet):
@@ -151,6 +170,11 @@ class TagFilter(django_filters.FilterSet):
         return queryset.filter(name__icontains=value)
 
 
+class TagConnection(Connection):
+    def resolve_total_count(self, args, info):
+        return Tag.objects.all().count()
+
+
 class TagNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
@@ -165,12 +189,17 @@ class TagNode(DjangoNode):
     def resolve_counter_entries(self, args, info):
         return self.counter_entries()
 
-    connection_type = Connection
+    connection_type = TagConnection
 
 
 class StatusEnum(graphene.Enum):
     Draft = "0"
     Online = "1"
+
+
+class EntryConnection(Connection):
+    def resolve_total_count(self, args, info):
+        return Entry.objects.all().count()
 
 
 class EntryNode(DjangoNode):
@@ -211,7 +240,7 @@ class EntryNode(DjangoNode):
     def resolve_counter_tags(self, args, info):
         return self.counter_tags()
 
-    connection_type = Connection
+    connection_type = EntryConnection
 
 
 class EntrylinkNode(DjangoNode):
