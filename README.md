@@ -206,12 +206,12 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
                 }))
             }))
         },
-        /* return the value and a custom label when searching for a category */
+        /* return the value and a custom label (rect component) when searching for a category */
         search: (req) => {
             return crudl.connectors.categories.read(req.filter('name', req.data.query)
             .then(res => res.setData(res.data.map(d => ({
                 value: d.id,
-                label: `<b>${d.name}</b> (${d.slug})`,
+                label: <span><b>{d.name}</b> ({d.slug})</span>,
             }))))
         },
     },

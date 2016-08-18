@@ -273,7 +273,7 @@ changeView.fieldsets = [
                                 .filter('section', crudl.context.data.section))
                             .then(res => res.setData(res.data.map(d => ({
                                 value: d.id,
-                                label: `<b>${d.name}</b> (${d.slug})`,
+                                label: <span><b>{d.name}</b> ({d.slug})</span>,
                             }))))
                         }
                     },
