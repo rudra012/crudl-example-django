@@ -7,6 +7,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.conf import settings
 
 # REST
 from rest_framework.authentication import get_authorization_header
@@ -54,8 +55,8 @@ urlpatterns = [
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', admin.site.urls),
     # CRUDL
-    url(r'^crudl-rest/', TemplateView.as_view(template_name="crudl-admin-rest/index.html")),
-    url(r'^crudl-graphql/', TemplateView.as_view(template_name="crudl-admin-graphql/index.html")),
+    url(r'^crudl-rest/', TemplateView.as_view(template_name="crudl-admin-rest/index.html"), {'crudl_js': settings.CRUDL_JS, 'crudl_css': settings.CRUDL_CSS}),
+    url(r'^crudl-graphql/', TemplateView.as_view(template_name="crudl-admin-graphql/index.html"), {'crudl_js': settings.CRUDL_JS, 'crudl_css': settings.CRUDL_CSS}),
     # DRF
     url(r'^rest-api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^rest-api/login/', login_view),
