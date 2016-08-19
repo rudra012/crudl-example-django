@@ -4,5 +4,6 @@
 /crudl-admin-rest/static/
 /crudl-admin-graphql/node_modules/
 /crudl-admin-graphql/static/
+/static/crudl
 /static/crudl/
 NOTES.md
