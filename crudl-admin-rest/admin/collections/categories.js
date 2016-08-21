@@ -13,7 +13,7 @@ var listView = {
         for the alternative solution) */
         list: function (req) {
             let categories = crudl.connectors.categories.read(req)
-            let sections = crudl.connectors.sections.read(req)
+            let sections = crudl.connectors.sections.read(crudl.req())
             return join(categories, sections, 'section', 'id')
         },
     }
