@@ -1,5 +1,5 @@
 # crudl django example
-DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This example mainly shows how to use crudl. It is not intended for development on crudl itself.
+DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This example mainly shows how to use CRUDL. It is not intended for development on CRUDL itself.
 
 ## TOC
 * [About](#about)
@@ -7,7 +7,6 @@ DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This ex
 * [Installation](#installation)
     * [Optional: Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
     * [Optional: Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
-* [URLs](#urls)
 * [Notes](#notes)
     * [Connectors and Descriptors](#connectors-and-descriptors)
     * [Authentication](#authentication)
@@ -23,15 +22,14 @@ DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This ex
     * [Filtering with listView](#filtering-with-listview)
     * [Change password](#change-password)
 * [Limitations](#limitations)
-* [Development](#development)
 * [Credits & Links](#credits--links)
 
 ## About
-This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
+This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
-* crudl is still under development and the syntax might change (esp. with connectors and descriptors).
-* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are usually given when using crudl.
-* The descriptors are intentionally verbose in order to illustrate the possibilites with crudl.
+* CRUDL is still under development and the syntax might change (esp. with connectors and descriptors).
+* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are usually given when using CRUDL.
+* The collections are intentionally verbose in order to illustrate the possibilites with CRUDL.
 
 ## Requirements
 * Node.js
@@ -90,21 +88,11 @@ $ npm install
 $ npm run watchify
 ```
 
-## URLs
-```
-/rest-api/          # REST API (DRF)
-/graphiql-api/      # GraphQL Query Interface
-/crudl-rest/        # Crudl Admin (REST)
-/crudl-graphql/     # Crudl Admin (GraphQL)
-/admin/             # Django Admin (Grappelli)
-```
-If you want to use /admin/ you need to create a superuser first.
-
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
 ### Connectors and Descriptors
-In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ consists of _collections_ and the _authentification_.
+In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ mainly consists of _collections_ and the _authentification_.
 
 Here is the basic structure of a REST connector:
 ```javascript
@@ -280,9 +268,7 @@ var addView = {
     denormalize: (data) => {
         /* set owner on add. alternatively, we could manipulate the data
         with the connector by using createRequestData */
-        if (crudl.auth.user) {
-            data.owner = crudl.auth.user
-        }
+        if (crudl.auth.user) data.owner = crudl.auth.user
         return data
     }
 }
@@ -415,7 +401,7 @@ You can only change the password of the currently logged-in _User_ (see collecti
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
 
 ## Credits & Links
-crudl and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
+CRUDL and crudl-django-example is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
 
 * http://crudl.io
 * https://twitter.com/crudlio
