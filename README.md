@@ -1,17 +1,9 @@
 # crudl django example
-This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
-
-* crudl is still under development and the syntax might change (esp. with connectors and descriptors).
-* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are generally given when using crudl.
-* The descriptors are intentionally verbose in order to illustrate the possibilites with crudl.
-
-## Requirements
-* Node.js
-* python
-* virtualenv
-* SQLite
+DISCLAIMER: FIXME XXX. This example mainly shows how to use crudl. It is not intended for development on crudl itself.
 
 ## TOC
+* [About](#about)
+* [Requirements](#requirements)
 * [Installation](#installation)
     * [Optional: Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
     * [Optional: Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
@@ -33,6 +25,19 @@ This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproj
 * [Limitations](#limitations)
 * [Development](#development)
 * [Credits & Links](#credits--links)
+
+## About
+This is a [crudl](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
+
+* crudl is still under development and the syntax might change (esp. with connectors and descriptors).
+* The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are usually given when using crudl.
+* The descriptors are intentionally verbose in order to illustrate the possibilites with crudl.
+
+## Requirements
+* Node.js
+* python
+* virtualenv
+* SQLite
 
 ## Installation
 1. Create and activate a python **virtual environment**.
@@ -106,10 +111,9 @@ Here is the basic structure of a REST connector:
 {
     id: 'entries',
     url: 'entries/',
-    urlQuery,
-    pagination,
+    pagination: numberedPagination,
     transform: {
-        readResponseData: data => data.results,
+        readResponseData: data => data.results
     },
 },
 ```
@@ -121,7 +125,7 @@ And here is a similar connector with GraphQL:
     query: {
         read: `{allEntries{id, title, status, date}}`,
     },
-    pagination,
+    pagination: continuousPagination,
     transform: {
         readResponseData: data => data.data.allEntries.edges.map(e => e.node)
     },
@@ -166,15 +170,25 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
     onChange: [
         {
             in: 'section',
-            setProps: section => ({
-                disabled: !section.value,
-                helpText: !section.value ? "In order to select a category, you have to select a section first" : "Select a category",
-            }),
+            setProps: (section) => {
+                if (!section.value) {
+                    return {
+                        readOnly: true,
+                        helpText: 'In order to select a category, you have to select a section first',
+                    }
+                }
+                return crudl.connectors.categories_options.read(crudl.req()
+                .filter('section', section.value))
+                .then(res => {
+                    return {
+                        readOnly: false,
+                        helpText: 'Select a category',
+                        ...res.data,
+                    }
+                })
+            }
         }
     ],
-    props: () => {
-        /* return the filtered categories based on crudl.context.data.section */
-    }
 }
 ```
 
@@ -195,24 +209,16 @@ There are a couple of foreign keys being used (e.g. _Section_ or _Category_ with
     label: 'Category',
     field: 'Autocomplete',
     actions: {
-        /* return the value and label when selecting a category.
-        please note that this is easier solved with a custom connector */
         select: (req) => {
-            return Promise.all(req.data.selection.map(item => {
-                return crudl.connectors.category(item.value).read(req)
-                .then(res => res.setData({
-                    value: res.data.id,
-                    label: res.data.name,
-                }))
-            }))
+            return crudl.connectors.categories_options.read(req
+            .filter('id_in', req.data.selection.map(item => item.value).toString()))
+            .then(res => res.setData(res.data.options))
         },
-        /* return the value and a custom label (rect component) when searching for a category */
         search: (req) => {
-            return crudl.connectors.categories.read(req.filter('name', req.data.query)
-            .then(res => res.setData(res.data.map(d => ({
-                value: d.id,
-                label: <span><b>{d.name}</b> ({d.slug})</span>,
-            }))))
+            return crudl.connectors.categories_options.read(req
+            .filter('name', req.data.query)
+            .filter('section', crudl.context.data.section))
+            .then(res => res.setData(res.data.options))
         },
     },
 },
@@ -267,28 +273,31 @@ changeView.tabs = [
 ```
 
 ### Normalize/denormalize
-With _Users_, we added a custom field _full_name_ which is not part of the database or the API. We achieve this by using the methods _normalize_ and _denormalize_ in order to manipulate the data stream.
+With _Entries_, we set the owner to the currently logged-in user with denormalize:
 
 ```javascript
-var changeView = {
-    /* manipulate data sent by the API */
-    normalize: (data, error) => {
-        data.full_name = data.last_name + ', ' + data.first_name
-        return data
-    },
-    /* manipulate data before sending to the API  */
+var addView = {
     denormalize: (data) => {
-        let index = data.full_name.indexOf(',')
-        if (index >= 0) {
-            data.last_name = data.full_name.slice(0, index)
-            data.first_name = data.full_name.slice(index+1)
+        /* set owner on add. alternatively, we could manipulate the data
+        with the connector by using createRequestData */
+        if (crudl.auth.user) {
+            data.owner = crudl.auth.user
         }
         return data
     }
 }
 ```
 
-Please note that it is probably better to add that field to the API. We just added this case in order to demonstrate the maniuplation of data.
+With _Users_, we add a custom column full_name with the listView:
+
+```javascript
+var listView = {
+    normalize: (list) => list.map(item => {
+        item.full_name = <span><b>{item.last_name}</b>, {item.first_name}</span>
+        return item
+    })
+}
+```
 
 ### Custom components
 We have added a custom component _SplitDateTimeField.jsx_ (see admin/fields) in order to show how you're able to implement fields which are not part of the core package.
@@ -313,10 +322,9 @@ You can set initial values with every field (based on context, if needed).
     initialValue: () => formatDate(new Date())
 },
 {
-    name: 'user',
-    label: 'User',
+    name: 'entry',
     field: 'hidden',
-    initialValue: () => crudl.auth.user
+    initialValue: () => crudl.context.data.id,
 },
 ```
 
@@ -375,7 +383,8 @@ var listView = {
             let entries = crudl.connectors.entries.read(req)
             /* here we add a custom column based on the currently logged-in user */
             let entriesWithCustomColumn = transform(entries, (item) => {
-                item.is_owner = crudl.auth.user == item.owner
+                item.is_owner = false
+                if (item.owner) item.is_owner = crudl.auth.user == item.owner
                 return item
             })
             return entriesWithCustomColumn
@@ -401,9 +410,6 @@ Filtering is done by defining fields with _listView.filters_ (see entries.js). Y
 
 ### Change password
 You can only change the password of the currently logged-in _User_ (see collections/users.js)
-
-## Development
-This example mainly shows how to use crudl. It is not intended for development on crudl itself.
 
 ## Limitations
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
