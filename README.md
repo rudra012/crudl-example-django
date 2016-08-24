@@ -21,6 +21,7 @@ DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This ex
     * [Filtering with listView](#filtering-with-listview)
     * [Change password](#change-password)
 * [Limitations](#limitations)
+* [Known issues](#known-issues)
 * [Credits & Links](#credits--links)
 
 ## About
@@ -393,6 +394,18 @@ You can only change the password of the currently logged-in _User_ (see collecti
 
 ## Limitations
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
+
+## Known issues
+* Submitting forms (and filters) with enter.
+* Image fields.
+* Reordering items within tabs.
+* Intermediate pages.
+* Bulk actions with ListView.
+* Keyboard navigation.
+* Richtext editor.
+* ReadView.
+* Permissions.
+* Generic relations.
 
 ## Credits & Links
 CRUDL and crudl-example-django is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
