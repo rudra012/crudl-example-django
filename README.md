@@ -36,7 +36,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 * SQLite
 
 ## Installation
-1. Create and activate a python **virtual environment**.
+1. Create and activate a python virtual environment.
 
     ```
     $ virtualenv crudlexample
@@ -53,14 +53,14 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 3. Install the python requirements:
 
     ```
-    (crudlexample) $ pip install -r conf/requirements.txt
+    (crudlexample) crudl-example-django $ pip install -r conf/requirements.txt
     ```
 
 4. Setup the database (SQLite) and add contents:
 
     ```
-    (crudlexample) $ python manage.py migrate
-    (crudlexample) $ python manage.py loaddata apps/blog/fixtures/blog.json
+    (crudlexample) crudl-example-django $ python manage.py migrate
+    (crudlexample) crudl-example-django $ python manage.py loaddata apps/blog/fixtures/blog.json
     ```
 
 5. Install the Node.js dependencies and build/watch the crudl admin file. Go to either /crudl-admin-rest/ or /crudl-admin-graphql/ and type:
@@ -73,7 +73,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 6. Start the django development server:
 
     ```
-    (crudlexample) $ python manage.py runserver
+    (crudlexample) crudl-example-django $ python manage.py runserver
     ```
 
 Open your browser and go to either ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
