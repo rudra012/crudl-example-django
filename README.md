@@ -1,5 +1,5 @@
 # crudl django example
-DISCLAIMER: FIXME XXX. This example mainly shows how to use crudl. It is not intended for development on crudl itself.
+DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This example mainly shows how to use crudl. It is not intended for development on crudl itself.
 
 ## TOC
 * [About](#about)
