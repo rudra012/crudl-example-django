@@ -1,4 +1,4 @@
-import { continuousPagination, numberedPagination, urlQuery, transformErrors } from '../utils'
+import { numberedPagination, urlQuery, transformErrors } from '../utils'
 
 /**
 * Transform helper. Takes care of errors and allows a quick definition of the
@@ -76,7 +76,7 @@ module.exports = [
         id: 'tags',
         url: 'tags/',
         urlQuery,
-        pagination: continuousPagination,
+        pagination: numberedPagination,
         transform: transform(data => data.results),
     },
     {
