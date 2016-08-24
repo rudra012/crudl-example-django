@@ -63,17 +63,17 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
     (crudlexample) crudl-example-django $ python manage.py loaddata apps/blog/fixtures/blog.json
     ```
 
-5. Install the Node.js dependencies and build/watch the crudl admin file. Go to either /crudl-admin-rest/ or /crudl-admin-graphql/ and type:
+5. Start the django development server:
+
+    ```shell
+    (crudlexample) crudl-example-django $ python manage.py runserver
+    ```
+
+6. Build the crudl admin file. Go to either /crudl-admin-rest/ or /crudl-admin-graphql/ and type:
 
     ```shell
     (crudlexample) crudl-admin-rest $ npm install
     (crudlexample) crudl-admin-rest $ npm run watchify
-    ```
-
-6. Start the django development server:
-
-    ```shell
-    (crudlexample) crudl-example-django $ python manage.py runserver
     ```
 
 Open your browser and go to either ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
