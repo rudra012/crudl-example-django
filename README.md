@@ -5,8 +5,6 @@ DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This ex
 * [About](#about)
 * [Requirements](#requirements)
 * [Installation](#installation)
-    * [Optional: Install crudl-admin-rest (REST)](#install-crudl-admin-rest-rest)
-    * [Optional: Install crudl-admin-graphql (GraphQL)](#install-crudl-admin-graphql-graphql)
 * [Notes](#notes)
     * [Connectors and Descriptors](#connectors-and-descriptors)
     * [Authentication](#authentication)
@@ -65,33 +63,20 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
     (crudlexample) $ python manage.py loaddata apps/blog/fixtures/blog.json
     ```
 
-5. Start the django development server:
+5. Install the Node.js dependencies and build/watch the crudl admin file. Go to either /crudl-admin-rest/ or /crudl-admin-graphql/ and type:
+
+    ```
+    (crudlexample) crudl-admin-rest $ npm install
+    (crudlexample) crudl-admin-rest $ npm run watchify
+    ```
+
+6. Start the django development server:
 
     ```
     (crudlexample) $ python manage.py runserver
     ```
 
-Open your browser and go to ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
-
-### Install crudl-admin-rest (REST)
-IMPORTANT: This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-rest/.
-
-Go to /crudl-admin-rest/ and install the npm packages, then run watchify:
-
-```
-$ npm install
-$ npm run watchify
-```
-
-### Install crudl-admin-graphql (GraphQL)
-IMPORTANT: This step is optional and you only need to run watchify if you actually change files within the folder /crudl-admin-graphql/.
-
-Go to /crudl-admin-graphql/ and install the npm packages, then run watchify:
-
-```
-$ npm install
-$ npm run watchify
-```
+Open your browser and go to either ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
