@@ -80,7 +80,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 Open your browser and go to either ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ## CRUDL documentation
-There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
+There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
 
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
