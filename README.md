@@ -71,7 +71,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
     (crudlexample) crudl-example-django $ python manage.py runserver
     ```
 
-6. Open a new terminal window/tab and build the crudl admin file. Go to either /crudl-admin-rest/ and type:
+6. Open a new terminal window/tab and build the crudl admin file. Go to /crudl-admin-rest/ and type:
 
     ```shell
     (crudlexample) crudl-admin-rest $ npm install
@@ -80,7 +80,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 
 7. Open your browser and go to either ``http://localhost:8000/crudl-rest/`` and login with the demo user (demo/demo).
 
-GraphQL instead of REST: If you want to use the GraphQL interface instead of REST, you need to build the admin file (step 6) inside /crudl-admin-graphql/. Then, go to ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
+GraphQL instead of REST: If you want to use the GraphQL interface instead of REST, you need to build the admin file (step 6) inside /crudl-admin-graphql/ and use ``http://localhost:8000/crudl-graphql/`` (step 7).
 
 ## CRUDL documentation
 There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
