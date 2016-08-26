@@ -78,7 +78,7 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
     (crudlexample) crudl-admin-rest $ npm run watchify
     ```
 
-7. Open your browser and go to either ``http://localhost:8000/crudl-rest/`` and login with the demo user (demo/demo).
+7. Open your browser, go to ``http://localhost:8000/crudl-rest/`` and login with the demo user (demo/demo).
 
 GraphQL instead of REST: If you want to use the GraphQL interface instead of REST, you need to build the admin file (step 6) inside /crudl-admin-graphql/ and use ``http://localhost:8000/crudl-graphql/`` (step 7).
 
