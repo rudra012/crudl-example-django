@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.conf import settings
+from django.views.generic.base import RedirectView
 
 # REST
 from rest_framework.authentication import get_authorization_header
@@ -64,5 +65,7 @@ urlpatterns = [
     # GRAPHQL
     url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
     url(r'^graphiql', include('django_graphiql.urls')),
+    # INDEX
+    url(r'^.*$', RedirectView.as_view(url='crudl-rest/', permanent=False), name='index')
 ]
 urlpatterns += staticfiles_urlpatterns()
