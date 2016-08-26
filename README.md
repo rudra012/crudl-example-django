@@ -5,7 +5,7 @@ DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This ex
 * [About](#about)
 * [Requirements](#requirements)
 * [Installation](#installation)
-* [CRUDL documentation](#crudl-docs)
+* [CRUDL documentation](#crudl-documentation)
 * [Notes](#notes)
     * [Connectors and Descriptors](#connectors-and-descriptors)
     * [Authentication](#authentication)
@@ -32,8 +32,8 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 * The collections are intentionally verbose in order to illustrate the possibilites with CRUDL.
 
 ## Requirements
-* Node.js
-* python
+* Node.js 5+
+* Python 2.7
 * virtualenv
 * SQLite
 
@@ -71,14 +71,16 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
     (crudlexample) crudl-example-django $ python manage.py runserver
     ```
 
-6. Build the crudl admin file. Go to either /crudl-admin-rest/ or /crudl-admin-graphql/ and type:
+6. Open a new terminal window/tab and build the crudl admin file. Go to either /crudl-admin-rest/ and type:
 
     ```shell
     (crudlexample) crudl-admin-rest $ npm install
     (crudlexample) crudl-admin-rest $ npm run watchify
     ```
 
-Open your browser and go to either ``http://localhost:8000/crudl-rest/`` or ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
+7. Open your browser and go to either ``http://localhost:8000/crudl-rest/`` and login with the demo user (demo/demo).
+
+GraphQL instead of REST: If you want to use the GraphQL interface instead of REST, you need to build the admin file (step 6) inside /crudl-admin-graphql/. Then, go to ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ## CRUDL documentation
 There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
@@ -396,16 +398,20 @@ You can only change the password of the currently logged-in _User_ (see collecti
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
 
 ## Known issues
+We've been working on CRUDL for almost a year and (from our point of view) we've solved the most important and difficult issues. That said, there's still a lot to and here's an incomplete list of some upcoming features:
+
+* Tests.
 * Submitting forms (and filters) with enter.
 * Image fields.
 * Reordering items within tabs.
 * Intermediate pages.
-* Bulk actions with ListView.
+* Bulk actions with listView.
 * Keyboard navigation.
 * Richtext editor.
-* ReadView.
+* readView.
 * Permissions.
 * Generic relations.
+* Better documentation.
 
 ## Credits & Links
 CRUDL and crudl-example-django is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
