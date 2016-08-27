@@ -1,10 +1,14 @@
 # crudl django example
 DISCLAIMER: This is a preliminary, sketchy and incomplete documentation. This example mainly shows how to use CRUDL. It is not intended for development on CRUDL itself.
 
+PLEASE NOTE that CRUDL is not yet finished. Your kind feedback will help us to optimize CRUDL – so please use the issue tracker if you find a bug or if you think there's something we should improve.
+
 ## Contents
 * [About](#about)
 * [Requirements](#requirements)
 * [Installation](#installation)
+    * [Installation (REST)](#installation-rest)
+    * [Installation (GraphQL)](#installation-graphql)
 * [CRUDL documentation](#crudl-documentation)
 * [Notes](#notes)
     * [Connectors and Descriptors](#connectors-and-descriptors)
@@ -38,6 +42,9 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 * SQLite
 
 ## Installation
+In order to use this example, you need to setup the API and serve the CRUDL admin interface (either REST or GraphQL or both).
+
+### Installation (REST)
 1. Create and activate a python virtual environment.
 
     ```shell
@@ -80,7 +87,17 @@ This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproj
 
 7. Open your browser, go to ``http://localhost:8000/crudl-rest/`` and login with the demo user (demo/demo).
 
-GraphQL instead of REST: If you want to use the GraphQL interface instead of REST, you need to build the admin file (step 6) inside /crudl-admin-graphql/ and use ``http://localhost:8000/crudl-graphql/`` (step 7).
+### Installation (GraphQL)
+Steps 1 to 5 are equal to [Installation (REST)](#installation-rest).
+
+6. Open a new terminal window/tab and build the crudl admin file. Go to /crudl-admin-graphql/ and type:
+
+    ```shell
+    (crudlexample) crudl-admin-graphql $ npm install
+    (crudlexample) crudl-admin-graphql $ npm run watchify
+    ```
+
+7. Open your browser, go to ``http://localhost:8000/crudl-graphql/`` and login with the demo user (demo/demo).
 
 ## CRUDL documentation
 There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
