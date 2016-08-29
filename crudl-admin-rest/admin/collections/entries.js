@@ -92,6 +92,9 @@ listView.filters = {
             name: 'search',
             label: 'Search',
             field: 'Search',
+            props: {
+                helpText: 'Section, Category, Title'
+            }
         },
         {
             name: 'section',

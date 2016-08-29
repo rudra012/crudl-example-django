@@ -33,6 +33,19 @@ listView.fields = [
     },
 ]
 
+listView.filters = {
+    fields: [
+        {
+            name: 'name',
+            label: 'Search',
+            field: 'Search',
+            props: {
+                helpText: 'Name'
+            }
+        }
+    ]
+}
+
 //-------------------------------------------------------------------
 var changeView = {
     path: 'tags/:id',

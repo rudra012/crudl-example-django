@@ -42,9 +42,12 @@ listView.fields = [
 listView.filters = {
     fields: [
         {
-            name: 'name',
+            name: 'search',
             label: 'Search',
-            field: 'Search'
+            field: 'Search',
+            props: {
+                helpText: 'Section, Name'
+            }
         },
         {
             name: 'section',

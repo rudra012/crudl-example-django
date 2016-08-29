@@ -89,9 +89,12 @@ listView.filters = {
 
     fields: [
         {
-            name: 'title_Icontains',
+            name: 'search',
             label: 'Search',
             field: 'Search',
+            props: {
+                helpText: 'Section, Category, Title'
+            }
         },
         {
             name: 'section',

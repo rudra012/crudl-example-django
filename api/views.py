@@ -81,9 +81,10 @@ class CategoryFilter(django_filters.FilterSet):
 
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter, filters.SearchFilter,)
     filter_class = CategoryFilter
     ordering_fields = ('id', 'section', 'name', 'slug', 'position',)
+    search_fields = ('name', 'section__name',)
 
     def get_queryset(self):
         return Category.objects.all()
@@ -123,10 +124,11 @@ class EntryFilter(django_filters.FilterSet):
 
 class EntryViewSet(viewsets.ModelViewSet):
     serializer_class = EntrySerializer
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter,)
+    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter, filters.SearchFilter,)
     filter_class = EntryFilter
     search_fields = ('title',)
     ordering_fields = ('id', 'title', 'date', 'sticky', 'section', 'category', 'tags',)
+    search_fields = ('title', 'section__name', 'category__name',)
 
     def get_queryset(self):
         return Entry.objects.all()

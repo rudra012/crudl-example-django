@@ -1,8 +1,15 @@
 # coding: utf-8
 
+# PYTHON IMPORTS
+import operator
+from functools import reduce
+
 # GENERAL DJANGO IMPORTS
 from django.core.exceptions import ValidationError
 from rest_framework.authentication import get_authorization_header
+from rest_framework.compat import distinct
+from django.utils import six
+from django.db import models
 
 # DJANGO IMPORTS
 import django_filters
@@ -116,6 +123,7 @@ class CategoryFilter(django_filters.FilterSet):
     id_in = django_filters.MethodFilter()
     section = django_filters.MethodFilter()
     name = django_filters.MethodFilter()
+    search = django_filters.MethodFilter()
 
     class Meta:
         model = Category
@@ -130,6 +138,27 @@ class CategoryFilter(django_filters.FilterSet):
 
     def filter_name(self, queryset, value):
         return queryset.filter(name__icontains=value)
+
+    def filter_search(self, queryset, value):
+        search_fields = ("name", "section__name",)
+        search_terms = value.replace(',', ' ').split()
+        if not search_fields or not search_terms:
+            return queryset
+        orm_lookups = [
+            self.construct_search(six.text_type(search_field))
+            for search_field in search_fields
+        ]
+        base = queryset
+        for search_term in search_terms:
+            queries = [
+                models.Q(**{orm_lookup: search_term})
+                for orm_lookup in orm_lookups
+            ]
+            queryset = queryset.filter(reduce(operator.or_, queries))
+        return distinct(queryset, base)
+
+    def construct_search(self, field_name):
+        return "%s__icontains" % field_name
 
 
 class CategoryConnection(Connection):
@@ -202,6 +231,46 @@ class EntryConnection(Connection):
         return Entry.objects.all().count()
 
 
+class EntryFilter(django_filters.FilterSet):
+    search = django_filters.MethodFilter()
+
+    class Meta:
+        model = Entry
+        fields = {
+            'title': ['icontains'],
+            'date': ['gt'],
+            'sticky': ['exact'],
+            'status': ['exact'],
+            'section': ['exact'],
+            'category': ['exact'],
+            'tags': ['exact'],
+            'owner': ['exact'],
+            'summary': ['icontains'],
+        }
+        order_by = ['id', '-id', 'title', '-title', 'status', '-status', 'date', '-date', 'section', '-section', 'category', '-category']
+
+    def filter_search(self, queryset, value):
+        search_fields = ("title", "section__name", "category__name",)
+        search_terms = value.replace(',', ' ').split()
+        if not search_fields or not search_terms:
+            return queryset
+        orm_lookups = [
+            self.construct_search(six.text_type(search_field))
+            for search_field in search_fields
+        ]
+        base = queryset
+        for search_term in search_terms:
+            queries = [
+                models.Q(**{orm_lookup: search_term})
+                for orm_lookup in orm_lookups
+            ]
+            queryset = queryset.filter(reduce(operator.or_, queries))
+        return distinct(queryset, base)
+
+    def construct_search(self, field_name):
+        return "%s__icontains" % field_name
+
+
 class EntryNode(DjangoNode):
     connection_type = Connection
     original_id = graphene.Int()
@@ -215,18 +284,6 @@ class EntryNode(DjangoNode):
         model = Entry
         # error with image (therefore we currently use only_fields)
         only_fields = ('id', 'title', 'status', 'date', 'sticky', 'section', 'category', 'tags', 'summary', 'body', 'owner', 'locked', 'createdate', 'updatedate', 'counter_links', 'counter_tags',)
-        filter_fields = {
-            'title': ['icontains'],
-            'date': ['gt'],
-            'sticky': ['exact'],
-            'status': ['exact'],
-            'section': ['exact'],
-            'category': ['exact'],
-            'tags': ['exact'],
-            'owner': ['exact'],
-            'summary': ['icontains'],
-        }
-        filter_order_by = ['id', '-id', 'title', '-title', 'status', '-status', 'date', '-date', 'section', '-section', 'category', '-category']
 
     def resolve_original_id(self, args, info):
         return self.id
@@ -797,7 +854,7 @@ class Query(ObjectType):
     all_tags = DjangoFilterConnectionField(TagNode, filterset_class=TagFilter, s=graphene.String())
     # entry
     entry = relay.NodeField(EntryNode)
-    all_entries = DjangoFilterConnectionField(EntryNode, s=graphene.String())
+    all_entries = DjangoFilterConnectionField(EntryNode, filterset_class=EntryFilter, s=graphene.String())
     # entrylink
     link = relay.NodeField(EntrylinkNode)
     all_links = DjangoFilterConnectionField(EntrylinkNode, s=graphene.String())
