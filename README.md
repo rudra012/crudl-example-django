@@ -104,12 +104,21 @@ Steps 1 to 5 are equal to [Installation (REST)](#installation-rest).
 There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
 
 ## Interface
-What you get with CRUDL is an administration interface which consists of these elements:
+What you get with CRUDL is an administration interface which mainly consists of these elements:
 
-1. Menu/Navigation: On the left hand side.
-2. Dashboard: The main entry page (currently just contains a description).
-3. listView (per ressource): Listing all objects for a ressource (usually paginated). Includes a sidebar with search and filters.
-4. changeView (per object): The form for adding/updating an object. Optionally using tabs for complex relations (e.g. links with entries).
+**Dashboard**
+* The main entry page (currently just contains a description).
+
+**listView** (per ressource)
+* A sortable table with all objects per ressource.
+* The objects are usually paginated (either numbered or continuous).
+* Includes a sidebar with search and filters.
+
+**changeView** (per object)
+* The form (fields and fieldsets) for adding/updating an object.
+* Optionally with tabs for complex relations (e.g. links with entries).
+
+Moreover, you'll have a **Menu/Navigation** (on the left hand side), a **Login/Logout** page and **Messages**.
 
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
