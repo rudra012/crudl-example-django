@@ -449,7 +449,7 @@ We've been working on CRUDL for almost a year and (from our point of view) we've
 * Better documentation.
 
 ## Credits & Links
-CRUDL and crudl-example-django is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda).
+CRUDL and crudl-example-django is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda, Václav Pfeifer-Mikolášek).
 
 * http://crudl.io
 * https://twitter.com/crudlio
