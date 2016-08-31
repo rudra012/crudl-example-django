@@ -79,7 +79,7 @@ In order to use this example, you need to setup the API and serve the CRUDL admi
     (crudlexample) crudl-example-django $ python manage.py runserver
     ```
 
-6. Open a new terminal window/tab and build the crudl admin file. Go to /crudl-admin-rest/ and type:
+6. Open a new terminal window/tab and build the CRUDL admin file. Go to /crudl-admin-rest/ and type:
 
     ```shell
     (crudlexample) crudl-admin-rest $ npm install
@@ -91,7 +91,7 @@ In order to use this example, you need to setup the API and serve the CRUDL admi
 ### Installation (GraphQL)
 Steps 1 to 5 are equal to [Installation (REST)](#installation-rest).
 
-6. Open a new terminal window/tab and build the crudl admin file. Go to /crudl-admin-graphql/ and type:
+6. Open a new terminal window/tab and build the CRUDL admin file. Go to /crudl-admin-graphql/ and type:
 
     ```shell
     (crudlexample) crudl-admin-graphql $ npm install
@@ -433,7 +433,7 @@ You can only change the password of the currently logged-in _User_ (see collecti
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
 
 ## Known issues
-We've been working on CRUDL for almost a year and (from our point of view) we've solved the most important and difficult issues. That said, there's still a lot to and here's an incomplete list of some upcoming features:
+We've been working on CRUDL for almost a year and (from our point of view) we've solved the most important and difficult issues. That said, there's still a lot to do and here's an incomplete list of some upcoming features:
 
 * Tests.
 * Submitting forms (and filters) with enter.
