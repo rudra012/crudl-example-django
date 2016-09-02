@@ -11,8 +11,10 @@ PLEASE NOTE that CRUDL is not yet finished. Your kind feedback will help us to o
     * [Installation (GraphQL)](#installation-graphql)
 * [CRUDL documentation](#crudl-documentation)
 * [Interface](#interface)
+* [Connectors & Collections](#connectors--collections)
+    * [Connectors](#connectors)
+    * [Collections](#collections)
 * [Notes](#notes)
-    * [Connectors and Descriptors](#connectors-and-descriptors)
     * [Authentication](#authentication)
     * [Field dependency](#field-dependency)
     * [Foreign Key, Many-to-Many](#foreign-key-many-to-many)
@@ -26,13 +28,12 @@ PLEASE NOTE that CRUDL is not yet finished. Your kind feedback will help us to o
     * [Filtering with listView](#filtering-with-listview)
     * [Change password](#change-password)
 * [Limitations](#limitations)
-* [Known issues](#known-issues)
 * [Credits & Links](#credits--links)
 
 ## About
 This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
 
-* CRUDL is still under development and the syntax might change (esp. with connectors and descriptors).
+* CRUDL is still under development and the syntax might change (esp. with connectors and collections).
 * The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are usually given when using CRUDL.
 * The collections are intentionally verbose in order to illustrate the possibilites with CRUDL.
 
@@ -104,7 +105,7 @@ Steps 1 to 5 are equal to [Installation (REST)](#installation-rest).
 There is currently no official CRUDL documentation available, but we tried to summarize the most important building blocks. You can read it [here](https://github.com/crudlio/crudl-example-django/blob/master/static/crudl-core/README.md).
 
 ## Interface
-What you get with CRUDL is an administration interface which mainly consists of these elements:
+What you get with CRUDL is an administration interface which consists of these elements:
 
 **Dashboard**
 * The main entry page (currently just contains a description).
@@ -114,7 +115,7 @@ What you get with CRUDL is an administration interface which mainly consists of 
 * The objects are usually paginated (either numbered or continuous).
 * Includes a sidebar with search and filters.
 
-**changeView** (per object)
+**change/addView** (per object)
 * The form (fields and fieldsets) for adding/updating an object.
 * Optionally with tabs for complex relations (e.g. links with entries).
 
@@ -123,8 +124,11 @@ Moreover, you'll have a **Menu/Navigation** (on the left hand side), a **Login/L
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
-### Connectors and Descriptors
-In order for CRUDL to work, you need to define _connectors_ (API endpoints) and a _descriptor_ (visual representation). The _descriptor_ mainly consists of _collections_ and the _authentification_.
+## Connectors & Collections
+In order for CRUDL to work, you mainly need to define _connectors_ and _collections_.
+
+### Connectors
+The _connectors_ provide the views with a unified access to different APIs like REST or GraphQL. Each _connector_ usually represents a single API endpoint and implements the CRUD methods (create, read, update, delete). Moreover, the _connector_ handles pagination and transforms the request/response.
 
 Here is the basic structure of a REST connector:
 ```javascript
@@ -133,7 +137,7 @@ Here is the basic structure of a REST connector:
     url: 'entries/',
     pagination: numberedPagination,
     transform: {
-        readResponseData: data => data.results
+        readResponseData: data => data.docs,
     },
 },
 ```
@@ -152,15 +156,41 @@ And here is a similar connector with GraphQL:
 },
 ```
 
+### Collections
 With collections, you create the visual representation by defining the _listView_, _changeView_ and _addView_ of each object:
+
 ```javascript
-var listView = {}
-listView.fields = []
-listView.filters = []
-var changeView = {}
-changeView.fields = []
-changeView.tabs = []
-var addView = {}
+var listView = {
+    // Required
+    path: "",
+    title: "",
+    actions: {
+        list: function (req) { return crudl.connectors.entries.read(req) }
+    }
+    fields: [],
+    // Optional
+    filters: [],
+    normalize: (data) => { },
+}
+
+var changeView = {
+    // Required
+    path: "",
+    title: "",
+    actions: {
+        get: function (req) { return crudl.connectors.entries(crudl.path.id).read(req) },
+        delete: function (req) { return crudl.connectors.entries(crudl.path.id).delete(req) },
+        save: function (req) { return crudl.connectors.entries(crudl.path.id).update(req) },
+    },
+    // Either fields or fieldsets
+    fields: [],
+    fieldsets: [],
+    // Optional
+    tabs: [],
+    normalize: (data) => { },
+    denormalize: (data) => { },
+    validate: function (values) { },
+}
 ```
 
 ### Authentication
@@ -431,22 +461,6 @@ You can only change the password of the currently logged-in _User_ (see collecti
 
 ## Limitations
 * Ordering by multiple fields is currently not possible with GraphQL due to in issue with Graphene (see https://github.com/graphql-python/graphene/issues/218).
-
-## Known issues
-We've been working on CRUDL for almost a year and (from our point of view) we've solved the most important and difficult issues. That said, there's still a lot to do and here's an incomplete list of some upcoming features:
-
-* Tests.
-* Submitting forms (and filters) with enter.
-* Image fields.
-* Reordering items within tabs.
-* Intermediate pages.
-* Bulk actions with listView.
-* Keyboard navigation.
-* Richtext editor.
-* readView.
-* Permissions.
-* Generic relations.
-* Better documentation.
 
 ## Credits & Links
 CRUDL and crudl-example-django is written and maintained by vonautomatisch (Patrick Kranzlmüller, Axel Swoboda, Václav Pfeifer-Mikolášek).
