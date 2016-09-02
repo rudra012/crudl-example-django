@@ -190,6 +190,7 @@ listView.filters = {
 var changeView = {
     path: 'entries/:id',
     title: 'Blog Entry',
+    tabtitle: 'Main',
     actions: {
         get: function (req) { return crudl.connectors.entry(crudl.path.id).read(req) },
         delete: function (req) { return crudl.connectors.entry(crudl.path.id).delete(req) },
