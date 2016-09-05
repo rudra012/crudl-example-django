@@ -8,3 +8,4 @@
 /static/crudl/
 /conf/requirements_local.txt
 NOTES.md
+fabfile.py
