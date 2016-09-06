@@ -11,9 +11,9 @@ PLEASE NOTE that CRUDL is not yet finished. Your kind feedback will help us to o
     * [Installation (GraphQL)](#installation-graphql)
 * [CRUDL documentation](#crudl-documentation)
 * [Interface](#interface)
-* [Connectors & Descriptors](#connectors--descriptors)
+* [Connectors & Views](#connectors--views)
     * [Connectors](#connectors)
-    * [Descriptors](#descriptors)
+    * [Views](#views)
 * [Notes](#notes)
     * [Authentication](#authentication)
     * [Field dependency](#field-dependency)
@@ -31,11 +31,11 @@ PLEASE NOTE that CRUDL is not yet finished. Your kind feedback will help us to o
 * [Credits & Links](#credits--links)
 
 ## About
-This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproject.com/) and [DRF](http://www.django-rest-framework.org/) for the REST-API as well as [Graphene](http://graphene-python.org/) for GraphQL.
+This is a [CRUDL](http://crudl.io/) example with [Django](https://www.djangoproject.com/), [DRF](http://www.django-rest-framework.org/) (REST), [Graphene](http://graphene-python.org/) (GraphQL) and [SQLite](https://www.sqlite.org/).
 
-* CRUDL is still under development and the syntax might change (esp. with connectors and descriptors).
+* CRUDL is still under development and the syntax might change (esp. with connectors and views).
 * The relevant part for your admin interface is within the folder crudl-admin-rest/admin/ (resp. crudl-admin-graphql/admin/). All other files and folders are usually given when using CRUDL.
-* The descriptors are intentionally verbose in order to illustrate the possibilites with CRUDL.
+* The views are intentionally verbose in order to illustrate the possibilites with CRUDL.
 
 ## Requirements
 * Node.js 5+
@@ -124,8 +124,8 @@ Moreover, you'll have a **Menu/Navigation** (on the left hand side), a **Login/L
 ## Notes
 While this example is simple, there's still a couple of more advanced features in order to represent a real-world scenario.
 
-## Connectors & Descriptors
-In order for CRUDL to work, you mainly need to define _connectors_ and _descriptors_.
+## Connectors & Views
+In order for CRUDL to work, you mainly need to define _connectors_ and _views_.
 
 ### Connectors
 The _connectors_ provide the views with a unified access to different APIs like REST or GraphQL. Each _connector_ usually represents a single API endpoint and implements the CRUD methods (create, read, update, delete). Moreover, the _connector_ handles pagination and transforms the request/response.
@@ -156,8 +156,8 @@ And here is a similar connector with GraphQL:
 },
 ```
 
-### Descriptors
-With descriptors, you create the visual representation by defining the _listView_, _changeView_ and _addView_ options:
+### Views
+With views, you create the visual representation by defining the _listView_, _changeView_ and _addView_ options:
 
 ```javascript
 var listView = {
