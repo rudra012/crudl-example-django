@@ -83,7 +83,7 @@ In order to use this example, you need to setup the API and serve the CRUDL admi
 6. Open a new terminal window/tab and build the CRUDL admin file. Go to /crudl-admin-rest/ and type:
 
     ```shell
-    (crudlexample) crudl-admin-rest $ npm install
+    (crudlexample) crudl-admin-rest $ npm install --no-optional
     (crudlexample) crudl-admin-rest $ npm run watchify
     ```
 
@@ -95,7 +95,7 @@ Steps 1 to 5 are equal to [Installation (REST)](#installation-rest).
 6. Open a new terminal window/tab and build the CRUDL admin file. Go to /crudl-admin-graphql/ and type:
 
     ```shell
-    (crudlexample) crudl-admin-graphql $ npm install
+    (crudlexample) crudl-admin-graphql $ npm install --no-optional
     (crudlexample) crudl-admin-graphql $ npm run watchify
     ```
 
