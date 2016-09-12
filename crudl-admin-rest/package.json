@@ -1,6 +1,6 @@
 {
   "name": "crudl-django-rest",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "crudl example django (rest)",
   "main": "index.js",
   "scripts": {
