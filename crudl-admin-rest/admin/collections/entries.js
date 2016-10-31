@@ -106,8 +106,8 @@ listView.filters = {
             name: 'category',
             label: 'Category',
             field: 'Select',
-            /* this field depends on section (so we add a watch function in
-            order to react to any changes on the field section). */
+            /* this field depends on a section (so we add a watch function in
+            order to react to any changes in the section field). */
             onChange: [
                 {
                     in: 'section',
@@ -141,7 +141,6 @@ listView.filters = {
                     }
                 }
             ],
-            // props: () => crudl.connectors.categories_options.read(crudl.req()).then(res => res.data)
         },
         {
             name: 'status',
