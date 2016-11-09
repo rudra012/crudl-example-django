@@ -11,17 +11,17 @@ var { login, logout } = require('./auth')
 
 var descriptor = {
     title: 'crudl.io Django REST Example',
+    views: {
+        users,
+        sections,
+        categories,
+        tags,
+        entries,
+    },
     dashboard: <CustomDashboard />,
     connectors,
-    collections: [],
     login,
     logout,
 }
-
-descriptor.collections.push(users)
-descriptor.collections.push(sections)
-descriptor.collections.push(categories)
-descriptor.collections.push(tags)
-descriptor.collections.push(entries)
 
 export default descriptor
