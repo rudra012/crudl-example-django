@@ -1,10 +1,9 @@
 import { continuousPagination, listQuery, transformErrors } from '../utils'
 
-module.exports = [
+module.exports = {
 
     // USERS
-    {
-        id: 'users',
+    users: {
         query: {
             read: listQuery({
                 name: 'allUsers',
@@ -28,8 +27,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'user',
+    user: {
         query: {
             read: `{user(id: "%id"){id, originalId, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
             update: `mutation ($input: ChangeUserInput!) {
@@ -64,8 +62,7 @@ module.exports = [
     },
 
     // SECTIONS
-    {
-        id: 'sections',
+    sections: {
         query: {
             read: listQuery({
                 name: 'allSections',
@@ -90,8 +87,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'section',
+    section: {
         query: {
             read: `{section(id: "%id"){id, name, slug, position}}`,
             update: `mutation ($input: ChangeSectionInput!) {
@@ -125,8 +121,7 @@ module.exports = [
     },
 
     // CATEGORIES
-    {
-        id: 'categories',
+    categories: {
         query: {
             read: listQuery({
                 name: 'allCategories',
@@ -151,8 +146,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'category',
+    category: {
         query: {
             read: `{category(id: "%id"){id, section{id,name}, name, slug, position}}`,
             update: `mutation ($input: ChangeCategoryInput!) {
@@ -186,8 +180,7 @@ module.exports = [
     },
 
     // TAGS
-    {
-        id: 'tags',
+    tags: {
         query: {
             read: listQuery({
                 name: 'allTags',
@@ -212,8 +205,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'tag',
+    tag: {
         query: {
             read: `{tag(id: "%id"){id, name, slug}}`,
             update: `mutation ($input: ChangeTagInput!) {
@@ -247,8 +239,7 @@ module.exports = [
     },
 
     // ENTRIES
-    {
-        id: 'entries',
+    entries: {
         query: {
             read: listQuery({
                 name: 'allEntries',
@@ -279,8 +270,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'entry',
+    entry:{
         query: {
             read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, tags{id, name}, summary, body, owner{id, username}, createdate, updatedate}}`,
             update: `mutation ($input: ChangeEntryInput!) {
@@ -314,8 +304,7 @@ module.exports = [
     },
 
     // ENTRYLINKS
-    {
-        id: 'links',
+    links: {
         query: {
             read: listQuery({
                 name: 'allLinks',
@@ -338,8 +327,7 @@ module.exports = [
             },
         },
     },
-    {
-        id: 'link',
+    link: {
         query: {
             read: `{link(id: "%id"){id, entry{id}, url, title, description, position}}`,
             update: `mutation ($input: ChangeEntrylinkInput!) {
@@ -374,10 +362,9 @@ module.exports = [
 
     // SPECIAL CONNECTORS
 
-    // sections_options
+    // sectionsOptions
     // a helper for retrieving the sections used with select fields
-    {
-        id: 'sections_options',
+    sectionsOptions: {
         query: {
             read: `{allSections(orderBy:\"slug\"){edges{node{id, name}}}}`,
         },
@@ -390,10 +377,9 @@ module.exports = [
         },
     },
 
-    // category_options
+    // categoryOptions
     // a helper for retrieving the categories used with select fields
-    {
-        id: 'categories_options',
+    categoriesOptions: {
         query: {
             read: listQuery({
                 name: 'allCategories',
@@ -410,10 +396,9 @@ module.exports = [
         },
     },
 
-    // tags_options
+    // tagsOptions
     // a helper for retrieving the tags used with select fields
-    {
-        id: 'tags_options',
+    tagsOptions: {
         query: {
             read: listQuery({
                 name: 'allTags',
@@ -431,8 +416,7 @@ module.exports = [
     },
 
     // AUTHENTICATION
-    {
-        id: 'login',
+    login: {
         url: '/rest-api/login/',
         mapping: { read: 'post', },
         transform: {
@@ -452,4 +436,4 @@ module.exports = [
             })
         }
     }
-]
+}

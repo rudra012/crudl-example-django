@@ -100,7 +100,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            props: () => crudl.connectors.sections_options.read(crudl.req()).then(res => res.data),
+            props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
         },
         {
             name: 'category',
@@ -123,7 +123,7 @@ listView.filters = {
                             }
                         }
                         // Get the catogories options filtered by section
-                        return crudl.connectors.categories_options.read(crudl.req().filter('section', section.value))
+                        return crudl.connectors.categoriesOptions.read(crudl.req().filter('section', section.value))
                         .then(res => {
                             if (res.data.options.length > 0) {
                                 return {
@@ -237,7 +237,7 @@ changeView.fieldsets = [
                 /* we set required to false, although this field is actually
                 required with the API. */
                 required: false,
-                props: () => crudl.connectors.sections_options.read(crudl.req()).then(res => ({
+                props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => ({
                     helpText: 'Select a section',
                     ...res.data
                 }))
@@ -254,7 +254,7 @@ changeView.fieldsets = [
                 onChange: listView.filters.fields[2].onChange,
                 actions: {
                     select: (req) => {
-                        return crudl.connectors.categories_options.read(req
+                        return crudl.connectors.categoriesOptions.read(req
                             .filter('id_in', req.data.selection.map(item => item.value).toString()))
                         .then(res => res.setData(res.data.options))
                         /* the code below is an alternative, if an id_in filter is not available
@@ -334,11 +334,11 @@ changeView.fieldsets = [
                 },
                 actions: {
                     search: (req) => {
-                        return crudl.connectors.tags_options.read(req.filter('name', req.data.query.toLowerCase()))
+                        return crudl.connectors.tagsOptions.read(req.filter('name', req.data.query.toLowerCase()))
                         .then(res => res.setData(res.data.options))
                     },
                     select: (req) => {
-                        return crudl.connectors.tags_options.read(req
+                        return crudl.connectors.tagsOptions.read(req
                             .filter('id_in', req.data.selection.map(item => item.value).toString()))
                         .then(res => res.setData(res.data.options))
                     },
