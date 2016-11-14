@@ -11,6 +11,7 @@ var { login, logout } = require('./auth')
 
 var descriptor = {
     title: 'crudl.io Django GraphQL Example',
+    connectors,
     views: {
         users,
         sections,
@@ -18,10 +19,11 @@ var descriptor = {
         tags,
         entries,
     },
+    auth: {
+        login,
+        logout,
+    },
     dashboard: <CustomDashboard />,
-    connectors,
-    login,
-    logout,
 }
 
 export default descriptor
