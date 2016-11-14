@@ -10,7 +10,7 @@ var connectors = require('./connectors/connectors')
 var { login, logout } = require('./auth')
 
 var admin = {
-    title: 'crudl.io Django REST Example',
+    title: 'crudl.io Django GraphQL Example',
     connectors,
     views: {
         users,
@@ -23,7 +23,9 @@ var admin = {
         login,
         logout,
     },
-    dashboard: <CustomDashboard />,
+    custom: {
+        dashboard: <CustomDashboard />,
+    },
 }
 
 export default admin
