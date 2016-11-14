@@ -9,7 +9,7 @@ var entries = require('./collections/entries')
 var connectors = require('./connectors/connectors')
 var { login, logout } = require('./auth')
 
-var descriptor = {
+var admin = {
     title: 'crudl.io Django REST Example',
     connectors,
     views: {
@@ -26,4 +26,4 @@ var descriptor = {
     dashboard: <CustomDashboard />,
 }
 
-export default descriptor
+export default admin
