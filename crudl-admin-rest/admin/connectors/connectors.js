@@ -37,14 +37,12 @@ module.exports = {
 
     // SECTIONS
     sections: {
-        id: 'sections',
         url: 'sections/',
         urlQuery,
         pagination: numberedPagination,
         transform: transform(data => data.results),
     },
     section: {
-        id: 'section',
         url: 'sections/:id/',
         transform: transform(),
     },
@@ -106,7 +104,6 @@ module.exports = {
     // SPECIAL CONNECTORS
     // a helper for retrieving the sections used with select fields
     sectionsOptions: {
-        id: 'sectionsOptions',
         url: 'sections/',
         transform: transform(data => ({
             options: data.results.map(function(item) {

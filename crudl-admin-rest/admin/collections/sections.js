@@ -7,7 +7,7 @@ var listView = {
     title: 'Sections',
     actions: {
         list: function (req) { return crudl.connectors.sections.read(req) }
-    }
+    },
 }
 
 listView.fields = [
