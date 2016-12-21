@@ -103,8 +103,13 @@ changeView.fields = [
                 label: section.name,
             }))
         })),
-        add: 'sections/new',
-        edit: () => `sections/${crudl.context('section')}`,
+        add: {
+            path: 'sections/new',
+            returnValue: data => data.id,
+        },
+        edit: {
+            path: () => `sections/${crudl.context('section')}`,
+        }
     },
     {
         name: 'name',
