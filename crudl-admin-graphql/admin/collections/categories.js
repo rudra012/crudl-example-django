@@ -82,8 +82,13 @@ changeView.fields = [
         field: 'Select',
         required: true,
         props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
-        add: 'sections/new',
-        edit: () => `sections/${crudl.context('section')}`,
+        add: {
+            path: 'sections/new',
+            returnValue: data => data.id,
+        },
+        edit: {
+            path: () => `sections/${crudl.context('section')}`,
+        }
     },
     {
         name: 'name',
