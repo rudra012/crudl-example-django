@@ -4,8 +4,8 @@
   "description": "crudl example django (graphql)",
   "main": "index.js",
   "scripts": {
-    "browserify": "mkdir -p ./static/crudl-admin-graphql/js && browserify . --extension=.jsx > ./static/crudl-admin-graphql/js/admin.js",
-    "watchify": "mkdir -p ./static/crudl-admin-graphql/js && watchify . --extension=.jsx -o ./static/crudl-admin-graphql/js/admin.js -v"
+    "browserify": "mkdir -p ./static/crudl-admin-graphql && browserify . --extension=.jsx > ./static/crudl-admin-graphql/admin.js",
+    "watchify": "mkdir -p ./static/crudl-admin-graphql && watchify . --extension=.jsx -o ./static/crudl-admin-graphql/admin.js -v"
   },
   "browserify": {
     "presets": [

@@ -4,8 +4,8 @@
   "description": "crudl example django (rest)",
   "main": "index.js",
   "scripts": {
-    "browserify": "mkdir -p ./static/crudl-admin-rest/js && browserify . --extension=.jsx > ./static/crudl-admin-rest/js/admin.js",
-    "watchify": "mkdir -p ./static/crudl-admin-rest/js && watchify . --extension=.jsx -o ./static/crudl-admin-rest/js/admin.js -v"
+    "browserify": "mkdir -p ./static/crudl-admin-rest && browserify . --extension=.jsx > ./static/crudl-admin-rest/admin.js",
+    "watchify": "mkdir -p ./static/crudl-admin-rest && watchify . --extension=.jsx -o ./static/crudl-admin-rest/admin.js -v"
   },
   "browserify": {
     "presets": [
