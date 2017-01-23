@@ -9,10 +9,10 @@ PROJECT_PATH = os.path.dirname(BASE_PATH)
 # check if static/crudl is given, otherwise use static/crudl-core
 if os.path.exists(os.path.join(BASE_PATH, 'static', 'crudl')):
     CRUDL_JS = "crudl/crudl.js"
-    CRUDL_CSS = "crudl/crudl-ui/stylesheets/crudl-ui.css"
+    CRUDL_CSS = "crudl/crudl-ui/css/crudl-ui.css"
 else:
     CRUDL_JS = "crudl-core/crudl.min.js"
-    CRUDL_CSS = "crudl-core/crudl-ui/stylesheets/crudl-ui.css"
+    CRUDL_CSS = "crudl-core/crudl-ui/css/crudl-ui.css"
 
 # ALLOWED HOSTS#
 DEBUG = True
