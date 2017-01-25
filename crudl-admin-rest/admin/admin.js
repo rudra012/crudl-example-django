@@ -29,16 +29,10 @@ var admin = {
     },
     options,
     messages: {
-        'changeView.button.delete': 'Löschen',
-        'changeView.button.saveAndContinue': 'Speichern und weiter bearbeiten',
-        'changeView.button.save': 'Speichern',
-        'changeView.button.saveAndBack': 'Speichern und zurück',
-        'modal.labelCancel.default': 'Abbrechen',
         'login.button': 'Sign in',
-        'logout.affirmation': 'Tchüß!',
-        'logout.loginLink': 'Nochmal einloggen?',
-        'logout.button': 'Abmelden',
-        'pageNotFound': 'Die gewünschte Seite wurde nicht gefunden!',
+        'logout.button': 'Sign out',
+        'logout.affirmation': 'Have a nice day!',
+        'pageNotFound': 'Sorry, page not found.',
     }
 }
 
