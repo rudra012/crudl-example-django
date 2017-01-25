@@ -13,8 +13,8 @@ var admin = {
     title: 'crudl.io Django REST Example',
     options: {
         debug: false,
-        basePath: '/crudl-graphql/',
-        baseURL: '/graphql-api/',
+        basePath: '/crudl-rest/',
+        baseURL: '/rest-api/',
     },
     connectors,
     views: {
