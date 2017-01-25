@@ -5,15 +5,6 @@ import os
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_PATH = os.path.dirname(BASE_PATH)
 
-# CRUDL STATIC
-# check if static/crudl is given, otherwise use static/crudl-core
-if os.path.exists(os.path.join(BASE_PATH, 'static', 'crudl')):
-    CRUDL_JS = "crudl/crudl.js"
-    CRUDL_CSS = "crudl/crudl-ui/css/crudl-ui.css"
-else:
-    CRUDL_JS = "crudl-core/crudl.min.js"
-    CRUDL_CSS = "crudl-core/crudl-ui/css/crudl-ui.css"
-
 # ALLOWED HOSTS#
 DEBUG = True
 ALLOWED_HOSTS = ['*']
@@ -93,6 +84,16 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
+
+# CRUDL STATIC
+# check if static/crudl is given, otherwise use cdn
+if os.path.exists(os.path.join(BASE_PATH, 'static', 'crudl')):
+    from django.contrib.staticfiles.templatetags.staticfiles import static
+    CRUDL_JS = static("crudl/crudl.js")
+    CRUDL_CSS = static("crudl/crudl-ui/css/crudl-ui.css")
+else:
+    CRUDL_JS = "http://cdn.crudl.io/static/releases/0.2.0/crudl.min.js"
+    CRUDL_CSS = "http://cdn.crudl.io/static/releases/0.2.0/crudl-ui/css/crudl-ui.css"
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
