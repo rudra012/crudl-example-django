@@ -1,4 +1,5 @@
 import React from 'react'
+import SplitDateTimeField from '../fields/SplitDateTimeField'
 
 //-------------------------------------------------------------------
 var listView = {
@@ -10,12 +11,12 @@ var listView = {
         },
     },
     normalize: (list) => list.map(item => {
-        if (!item.lastName) {
-            item.fullName = item.firstName
-        } else if (!item.firstName) {
-            item.fullName = <span><b>{item.lastName}</b></span>
+        if (!item.last_name) {
+            item.full_name = item.first_name
+        } else if (!item.first_name) {
+            item.full_name = <span><b>{item.last_name}</b></span>
         } else {
-            item.fullName = <span><b>{item.lastName}</b>, {item.firstName}</span>
+            item.full_name = <span><b>{item.last_name}</b>, {item.first_name}</span>
         }
         return item
     })
@@ -23,18 +24,21 @@ var listView = {
 
 listView.fields = [
     {
-        name: 'originalId',
+        name: 'id',
         label: 'ID',
     },
     {
         name: 'username',
         label: 'Username',
+        main: true,
         sortable: false,
         sorted: 'ascending',
-        main: true,
+        // When avatars are part of API response then do e.g.:
+        // render: (username, all) => `<img src="${all.avatar}"/> ${username}`
+        // render: (username, all) => `<img src="https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-32.png"/> ${username}`
     },
     {
-        name: 'fullName',
+        name: 'full_name',
         label: 'Full name',
     },
     {
@@ -42,12 +46,12 @@ listView.fields = [
         label: 'Email address',
     },
     {
-        name: 'isActive',
+        name: 'is_active',
         label: 'Active',
         render: 'boolean',
     },
     {
-        name: 'isStaff',
+        name: 'is_staff',
         label: 'Staff member',
         render: 'boolean',
     },
@@ -55,32 +59,17 @@ listView.fields = [
 
 //-------------------------------------------------------------------
 var changeView = {
-    path: 'users/:username/:id',
+    path: 'users/:id',
     title: 'User',
     actions: {
         get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
         save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
     },
-    denormalize: (data) => {
-        /* prevent unknown field ... with query */
-        delete(data.dateJoined)
-        delete(data.password_confirm)
-        delete(data.originalId)
-        return data
-    }
 }
 
 changeView.fieldsets = [
     {
         fields: [
-            {
-                name: 'id',
-                field: 'hidden',
-            },
-            {
-                name: 'originalId',
-                field: 'hidden',
-            },
             {
                 name: 'username',
                 label: 'Username',
@@ -91,12 +80,12 @@ changeView.fieldsets = [
     {
         fields: [
             {
-                name: 'firstName',
-                label: 'First Name',
+                name: 'first_name',
+                label: 'Name',
                 field: 'String',
             },
             {
-                name: 'lastName',
+                name: 'last_name',
                 label: 'Last Name',
                 field: 'String',
             },
@@ -104,7 +93,7 @@ changeView.fieldsets = [
                 name: 'email',
                 label: 'Email address',
                 field: 'String',
-                readOnly: () => crudl.auth.user !== crudl.context('originalId'),
+                readOnly: () => crudl.auth.username !== crudl.context('username'),
             }
         ],
     },
@@ -112,13 +101,13 @@ changeView.fieldsets = [
         title: 'Roles',
         expanded: true,
         description: () => {
-            if (crudl.auth.user == crudl.context('originalId')) {
+            if (crudl.auth.username == crudl.context('username')) {
                 return <span style={{color: '#CC293C'}}>WARNING: If you remove crudl access for the currently logged-in user, you will be logged out and unable to login with this user again.</span>
             }
         },
         fields: [
             {
-                name: 'isActive',
+                name: 'is_active',
                 label: 'Active',
                 field: 'Checkbox',
                 initialValue: true,
@@ -127,7 +116,7 @@ changeView.fieldsets = [
                 },
             },
             {
-                name: 'isStaff',
+                name: 'is_staff',
                 label: 'Staff member',
                 field: 'Checkbox',
                 props: {
@@ -142,10 +131,10 @@ changeView.fieldsets = [
         description: 'This is an example of a custom field (see admin/fields/SplitDateTimeField.jsx).',
         fields: [
             {
-                name: 'dateJoined',
+                name: 'date_joined',
                 label: 'Date joined',
                 readOnly: true,
-                field: 'SplitDateTime',
+                field: SplitDateTimeField,
                 props: {
                     getTime: (date) => {
                         let T = date.indexOf('T')
@@ -160,8 +149,9 @@ changeView.fieldsets = [
         ],
     },
     {
+
         title: 'Password',
-        hidden: () => crudl.auth.user !== crudl.context('originalId'),
+        hidden: () => crudl.auth.username !== crudl.context('username'),
         expanded: false,
         description: "Raw passwords are not stored, so there is no way to see this user's password, but you can set a new password.",
         fields: [
@@ -180,7 +170,7 @@ changeView.fieldsets = [
                     }
                 }
             },
-        ],
+        ]
     },
 ]
 
@@ -188,7 +178,6 @@ changeView.fieldsets = [
 var addView = {
     path: 'users/new',
     title: 'New User',
-    denormalize: changeView.denormalize,
     actions: {
         add: function (req) { return crudl.connectors.users.create(req) },
     },
@@ -197,14 +186,6 @@ var addView = {
 addView.fieldsets = [
     {
         fields: [
-            {
-                name: 'id',
-                field: 'hidden',
-            },
-            {
-                name: 'originalId',
-                field: 'hidden',
-            },
             {
                 name: 'username',
                 label: 'Username',
@@ -215,12 +196,12 @@ addView.fieldsets = [
     {
         fields: [
             {
-                name: 'firstName',
-                label: 'First Name',
+                name: 'first_name',
+                label: 'Name',
                 field: 'String',
             },
             {
-                name: 'lastName',
+                name: 'last_name',
                 label: 'Last Name',
                 field: 'String',
             },
@@ -236,7 +217,7 @@ addView.fieldsets = [
         expanded: true,
         fields: [
             {
-                name: 'isActive',
+                name: 'is_active',
                 label: 'Active',
                 field: 'Checkbox',
                 initialValue: true,
@@ -245,7 +226,7 @@ addView.fieldsets = [
                 },
             },
             {
-                name: 'isStaff',
+                name: 'is_staff',
                 label: 'Staff member',
                 field: 'Checkbox',
                 props: {
@@ -255,6 +236,7 @@ addView.fieldsets = [
         ],
     },
     {
+
         title: 'Password',
         expanded: true,
         fields: [
@@ -273,7 +255,7 @@ addView.fieldsets = [
                     }
                 }
             },
-        ],
+        ]
     },
 ]
 

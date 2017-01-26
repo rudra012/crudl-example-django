@@ -23,71 +23,57 @@ function transform(readResponseData, other) {
     }
 }
 
-module.exports = [
-
+module.exports = {
     // USERS
-    {
-        id: 'users',
+    users: {
         url: 'users/',
         pagination: numberedPagination,
         transform: transform(data => data.results),
     },
-    {
-        id: 'user',
+    user: {
         url: 'users/:id/',
         transform: transform(),
     },
 
     // SECTIONS
-    {
-        id: 'sections',
+    sections: {
         url: 'sections/',
         urlQuery,
         pagination: numberedPagination,
         transform: transform(data => data.results),
     },
-    {
-        id: 'section',
+    section: {
         url: 'sections/:id/',
         transform: transform(),
     },
 
     // CATEGORIES
-    {
-        id: 'categories',
+    categories: {
         url: 'categories/',
         urlQuery,
         pagination: numberedPagination,
         enableDepagination: true,
         transform: transform(data => data.results),
     },
-    {
-        id: 'category',
+    category: {
         url: 'categories/:id/',
         transform: transform(),
     },
-    {
-        id: 'allCategories',
-        use: 'categories',
-    },
 
     // TAGS
-    {
-        id: 'tags',
+    tags: {
         url: 'tags/',
         urlQuery,
         pagination: numberedPagination,
         transform: transform(data => data.results),
     },
-    {
-        id: 'tag',
+    tag: {
         url: 'tags/:id/',
         transform: transform(),
     },
 
     // ENTRIES
-    {
-        id: 'entries',
+    entries: {
         url: 'entries/',
         urlQuery,
         pagination: numberedPagination,
@@ -98,32 +84,26 @@ module.exports = [
             }
         }),
     },
-    {
-        id: 'entry',
+    entry: {
         url: 'entries/:id/',
         transform: transform(),
     },
 
     // ENTRIELINKS
-    {
-        id: 'links',
+    links: {
         url: 'entrylinks/',
         pagination: numberedPagination,
         enableDepagination: true,
         transform: transform(data => data.results),
     },
-    {
-        id: 'link',
+    link: {
         url: 'entrylinks/:id/',
         transform: transform(),
     },
 
     // SPECIAL CONNECTORS
-
-    // sections_options
     // a helper for retrieving the sections used with select fields
-    {
-        id: 'sections_options',
+    sectionsOptions: {
         url: 'sections/',
         transform: transform(data => ({
             options: data.results.map(function(item) {
@@ -131,11 +111,8 @@ module.exports = [
             }),
         })),
     },
-
-    // category_options
     // a helper for retrieving the categories used with select fields
-    {
-        id: 'categories_options',
+    categoriesOptions: {
         url: 'categories/',
         transform: transform(data => ({
             options: data.results.map(function(item) {
@@ -143,11 +120,8 @@ module.exports = [
             }),
         })),
     },
-
-    // tags_options
     // a helper for retrieving the tags used with select fields
-    {
-        id: 'tags_options',
+    tagsOptions: {
         url: 'tags/',
         transform: transform(data => ({
             options: data.results.map(function(item) {
@@ -155,11 +129,8 @@ module.exports = [
             }),
         })),
     },
-
-    // users_options
     // a helper for retrieving the users used with select fields
-    {
-        id: 'users_options',
+    usersOptions: {
         url: 'users/',
         transform: transform(data => ({
             options: data.results.map(function(item) {
@@ -169,8 +140,7 @@ module.exports = [
     },
 
     // AUTHENTICATION
-    {
-        id: 'login',
+    login: {
         url: '/rest-api/login/',
         mapping: { read: 'post', },
         transform: transform(data => ({
@@ -178,5 +148,4 @@ module.exports = [
             info: data,
         })),
     },
-
-]
+}

@@ -1,10 +1,9 @@
 import { continuousPagination, listQuery, transformErrors } from '../utils'
 
-module.exports = [
+module.exports = {
 
     // USERS
-    {
-        id: 'users',
+    users: {
         query: {
             read: listQuery({
                 name: 'allUsers',
@@ -22,14 +21,13 @@ module.exports = [
             readResponseData: data => data.data.allUsers.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createUser.errors) {
-                    throw transformErrors(data.data.createUser.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createUser.errors))
                 }
                 return data.data.createUser.user
             },
         },
     },
-    {
-        id: 'user',
+    user: {
         query: {
             read: `{user(id: "%id"){id, originalId, username, firstName, lastName, email, isStaff, isActive, dateJoined}}`,
             update: `mutation ($input: ChangeUserInput!) {
@@ -54,7 +52,7 @@ module.exports = [
             updateResponseData: data => {
                 console.log("updateResponseData", data)
                 if (data.data.changeUser.errors) {
-                    throw transformErrors(data.data.changeUser.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeUser.errors))
                 }
                 return data.data.changeUser.user
             },
@@ -64,8 +62,7 @@ module.exports = [
     },
 
     // SECTIONS
-    {
-        id: 'sections',
+    sections: {
         query: {
             read: listQuery({
                 name: 'allSections',
@@ -84,14 +81,13 @@ module.exports = [
             readResponseData: data => data.data.allSections.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createSection.errors) {
-                    throw transformErrors(data.data.createSection.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createSection.errors))
                 }
                 return data.data.createSection.section
             },
         },
     },
-    {
-        id: 'section',
+    section: {
         query: {
             read: `{section(id: "%id"){id, name, slug, position}}`,
             update: `mutation ($input: ChangeSectionInput!) {
@@ -115,7 +111,7 @@ module.exports = [
             },
             updateResponseData: data => {
                 if (data.data.changeSection.errors) {
-                    throw transformErrors(data.data.changeSection.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeSection.errors))
                 }
                 return data.data.changeSection.section
             },
@@ -125,8 +121,7 @@ module.exports = [
     },
 
     // CATEGORIES
-    {
-        id: 'categories',
+    categories: {
         query: {
             read: listQuery({
                 name: 'allCategories',
@@ -145,14 +140,13 @@ module.exports = [
             readResponseData: data => data.data.allCategories.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createCategory.errors) {
-                    throw transformErrors(data.data.createCategory.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createCategory.errors))
                 }
                 return data.data.createCategory.category
             },
         },
     },
-    {
-        id: 'category',
+    category: {
         query: {
             read: `{category(id: "%id"){id, section{id,name}, name, slug, position}}`,
             update: `mutation ($input: ChangeCategoryInput!) {
@@ -176,7 +170,7 @@ module.exports = [
             },
             updateResponseData: data => {
                 if (data.data.changeCategory.errors) {
-                    throw transformErrors(data.data.changeCategory.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeCategory.errors))
                 }
                 return data.data.changeCategory.category
             },
@@ -186,8 +180,7 @@ module.exports = [
     },
 
     // TAGS
-    {
-        id: 'tags',
+    tags: {
         query: {
             read: listQuery({
                 name: 'allTags',
@@ -206,14 +199,13 @@ module.exports = [
             readResponseData: data => data.data.allTags.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createTag.errors) {
-                    throw transformErrors(data.data.createTag.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createTag.errors))
                 }
                 return data.data.createTag.tag
             },
         },
     },
-    {
-        id: 'tag',
+    tag: {
         query: {
             read: `{tag(id: "%id"){id, name, slug}}`,
             update: `mutation ($input: ChangeTagInput!) {
@@ -237,7 +229,7 @@ module.exports = [
             },
             updateResponseData: data => {
                 if (data.data.changeTag.errors) {
-                    throw transformErrors(data.data.changeTag.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeTag.errors))
                 }
                 return data.data.changeTag.tag
             },
@@ -247,8 +239,7 @@ module.exports = [
     },
 
     // ENTRIES
-    {
-        id: 'entries',
+    entries: {
         query: {
             read: listQuery({
                 name: 'allEntries',
@@ -266,21 +257,20 @@ module.exports = [
         transform: {
             readResponseData: data => data.data.allEntries.edges.map(e => e.node),
             /* set owner on add. alternatively, we could use denormalize with
-            the descriptor, see collections/entries.js */
+            the admin, see views/entries.js */
             createRequestData: data => {
                 if (crudl.auth.user) data.owner = crudl.auth.user
                 return data
             },
             createResponseData: data => {
                 if (data.data.createEntry.errors) {
-                    throw transformErrors(data.data.createEntry.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createEntry.errors))
                 }
                 return data.data.createEntry.entry
             },
         },
     },
-    {
-        id: 'entry',
+    entry:{
         query: {
             read: `{entry(id: "%id"){id, title, status, date, sticky, section{id, name}, category{id, name}, tags{id, name}, summary, body, owner{id, username}, createdate, updatedate}}`,
             update: `mutation ($input: ChangeEntryInput!) {
@@ -304,7 +294,7 @@ module.exports = [
             },
             updateResponseData: data => {
                 if (data.data.changeEntry.errors) {
-                    throw transformErrors(data.data.changeEntry.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeEntry.errors))
                 }
                 return data.data.changeEntry.entry
             },
@@ -314,8 +304,7 @@ module.exports = [
     },
 
     // ENTRYLINKS
-    {
-        id: 'links',
+    links: {
         query: {
             read: listQuery({
                 name: 'allLinks',
@@ -332,14 +321,13 @@ module.exports = [
             readResponseData: data => data.data.allLinks.edges.map(e => e.node),
             createResponseData: data => {
                 if (data.data.createEntrylink.errors) {
-                    throw transformErrors(data.data.createEntrylink.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.createEntrylink.errors))
                 }
                 return data.data.createEntrylink.entrylink
             },
         },
     },
-    {
-        id: 'link',
+    link: {
         query: {
             read: `{link(id: "%id"){id, entry{id}, url, title, description, position}}`,
             update: `mutation ($input: ChangeEntrylinkInput!) {
@@ -363,7 +351,7 @@ module.exports = [
             },
             updateResponseData: data => {
                 if (data.data.changeEntrylink.errors) {
-                    throw transformErrors(data.data.changeEntrylink.errors)
+                    throw new crudl.ValidationError(transformErrors(data.data.changeEntrylink.errors))
                 }
                 return data.data.changeEntrylink.entrylink
             },
@@ -374,10 +362,9 @@ module.exports = [
 
     // SPECIAL CONNECTORS
 
-    // sections_options
+    // sectionsOptions
     // a helper for retrieving the sections used with select fields
-    {
-        id: 'sections_options',
+    sectionsOptions: {
         query: {
             read: `{allSections(orderBy:\"slug\"){edges{node{id, name}}}}`,
         },
@@ -390,10 +377,9 @@ module.exports = [
         },
     },
 
-    // category_options
+    // categoryOptions
     // a helper for retrieving the categories used with select fields
-    {
-        id: 'categories_options',
+    categoriesOptions: {
         query: {
             read: listQuery({
                 name: 'allCategories',
@@ -410,10 +396,9 @@ module.exports = [
         },
     },
 
-    // tags_options
+    // tagsOptions
     // a helper for retrieving the tags used with select fields
-    {
-        id: 'tags_options',
+    tagsOptions: {
         query: {
             read: listQuery({
                 name: 'allTags',
@@ -431,8 +416,7 @@ module.exports = [
     },
 
     // AUTHENTICATION
-    {
-        id: 'login',
+    login: {
         url: '/rest-api/login/',
         mapping: { read: 'post', },
         transform: {
@@ -442,7 +426,7 @@ module.exports = [
                     if (error !== null && typeof error === 'object') {
                         error._error = error.non_field_errors
                     }
-                    throw error
+                    throw new crudl.ValidationError(error)
                 }
                 return res
             },
@@ -452,4 +436,4 @@ module.exports = [
             })
         }
     }
-]
+}
