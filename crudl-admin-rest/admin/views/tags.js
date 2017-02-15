@@ -40,9 +40,7 @@ listView.filters = {
             name: 'name',
             label: 'Search',
             field: 'Search',
-            props: {
-                helpText: 'Name'
-            }
+            helpText: 'Name'
         }
     ]
 }
@@ -74,9 +72,7 @@ changeView.fields = [
             in: 'name',
             setInitialValue: (name) => slugify(name.value),
         },
-        props: {
-            helpText: `Slug is automatically generated when saving the Tag.`,
-        }
+        helpText: `Slug is automatically generated when saving the Tag.`,
     },
 ]
 
