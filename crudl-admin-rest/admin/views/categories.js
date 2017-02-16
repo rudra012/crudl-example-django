@@ -26,7 +26,7 @@ listView.fields = [
     },
     {
         name: 'section',
-        getValue: data => data.name, // see actions for listView
+        getValue: data => data.section.name, // see actions for listView
         label: 'Section',
         sortable: true,
         sorted: 'ascending',
@@ -97,7 +97,7 @@ changeView.fields = [
         field: 'Select',
         required: true,
         /* Here we build the list of possible options with an extra API call */
-        props: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
+        lazy: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
             options: res.data.map(section => ({
                 value: section.id,
                 label: section.name,
