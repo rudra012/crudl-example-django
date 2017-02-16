@@ -215,7 +215,7 @@ changeView.fieldsets = [
         fields: [
             {
                 name: 'id',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'title',
@@ -404,11 +404,11 @@ changeView.tabs = [
             },
             {
                 name: 'id',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'entry',
-                field: 'hidden',
+                hidden: true,
                 initialValue: () => crudl.context.data.id,
             },
         ],

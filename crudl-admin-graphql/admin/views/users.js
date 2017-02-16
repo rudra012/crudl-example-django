@@ -76,11 +76,11 @@ changeView.fieldsets = [
         fields: [
             {
                 name: 'id',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'originalId',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'username',
@@ -200,11 +200,11 @@ addView.fieldsets = [
         fields: [
             {
                 name: 'id',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'originalId',
-                field: 'hidden',
+                hidden: true,
             },
             {
                 name: 'username',
