@@ -1,4 +1,4 @@
-import { join, slugify } from '../utils'
+import { join, slugify, select } from '../utils'
 import React from 'react'
 
 //-------------------------------------------------------------------
@@ -17,7 +17,7 @@ listView.fields = [
     },
     {
         name: 'section',
-        key: 'section.name',  // see actions for listView
+        getValue: select('section.name'), // see actions for listView
         label: 'Section',
     },
     {
@@ -45,15 +45,13 @@ listView.filters = {
             name: 'search',
             label: 'Search',
             field: 'Search',
-            props: {
-                helpText: 'Section, Name'
-            }
+            helpText: 'Section, Name'
         },
         {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
             initialValue: '',
         },
     ]
@@ -77,18 +75,18 @@ changeView.fields = [
     },
     {
         name: 'section',
-        key: 'section.id',
+        getValue: select('section.id'),
         label: 'Section',
         field: 'Select',
         required: true,
-        props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
         add: {
             path: 'sections/new',
             returnValue: data => data.id,
         },
         edit: {
             path: () => `sections/${crudl.context('section')}`,
-        }
+        },
+        lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
     },
     {
         name: 'name',
@@ -104,10 +102,8 @@ changeView.fields = [
             in: 'name',
             setInitialValue: (name) => slugify(name.value),
         },
-        props: {
-            helpText: <span>If left blank, the slug will be automatically generated.
+        helpText: <span>If left blank, the slug will be automatically generated.
             More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.</span>,
-        }
     },
 ]
 

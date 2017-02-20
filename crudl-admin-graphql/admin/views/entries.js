@@ -1,4 +1,4 @@
-import { formatDate } from '../utils'
+import { formatDate, select } from '../utils'
 import React from 'react'
 
 function transform(p, func) {
@@ -32,12 +32,12 @@ listView.fields = [
     },
     {
         name: 'section',
-        key: 'section.name',
+        getValue: select('section.name'),
         label: 'Section',
     },
     {
         name: 'category',
-        key: 'category.name',
+        getValue: select('category.name'),
         label: 'Category',
     },
     {
@@ -92,15 +92,13 @@ listView.filters = {
             name: 'search',
             label: 'Search',
             field: 'Search',
-            props: {
-                helpText: 'Section, Category, Title'
-            }
+            helpText: 'Section, Category, Title'
         },
         {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
         },
         {
             name: 'category',
@@ -146,12 +144,10 @@ listView.filters = {
             name: 'status',
             label: 'Status',
             field: 'Select',
-            props: {
-                options: [
-                    {value: '0', label: 'Draft'},
-                    {value: '1', label: 'Online'}
-                ]
-            },
+            options: [
+                {value: '0', label: 'Draft'},
+                {value: '1', label: 'Online'}
+            ]
         },
         {
             name: 'date_Gt',
@@ -170,13 +166,11 @@ listView.filters = {
             name: 'sticky',
             label: 'Sticky',
             field: 'Select',
-            props: {
-                options: [
-                    {value: 'true', label: 'True'},
-                    {value: 'false', label: 'False'}
-                ],
-                helpText: 'Note: We use Select in order to distinguish false and none.'
-            }
+            options: [
+                {value: 'true', label: 'True'},
+                {value: 'false', label: 'False'}
+            ],
+            helpText: 'Note: We use Select in order to distinguish false and none.'
         },
         {
             name: 'summary_Icontains',
@@ -230,36 +224,32 @@ changeView.fieldsets = [
                 required: true,
                 initialValue: 'Draft',
                 /* set options manually */
-                props: {
-                    options: [
-                        {value: 'Draft', label: 'Draft'},
-                        {value: 'Online', label: 'Online'}
-                    ]
-                },
+                options: [
+                    {value: 'Draft', label: 'Draft'},
+                    {value: 'Online', label: 'Online'}
+                ]
             },
             {
                 name: 'section',
-                key: 'section.id',
+                getValue: select('section.id'),
                 label: 'Section',
                 field: 'Select',
                 /* we set required to false, although this field is actually
                 required with the API. */
                 required: false,
-                props: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => ({
+                lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => ({
                     helpText: 'Select a section',
                     ...res.data
                 }))
             },
             {
                 name: 'category',
-                key: 'category.id',
+                getValue: select('category.id'),
                 label: 'Category',
                 field: 'Autocomplete',
                 required: false,
-                props: {
-                    showAll: true,
-                    helpText: 'Select a category',
-                },
+                showAll: true,
+                helpText: 'Select a category',
                 /* FIXME: make it easier to reference fields/fieldsets */
                 onChange: listView.filters.fields[2].onChange,
                 actions: {
@@ -304,9 +294,7 @@ changeView.fieldsets = [
                 field: 'Date',
                 required: true,
                 initialValue: () => formatDate(new Date()),
-                props: {
-                    formatDate: formatDate
-                }
+                formatDate: formatDate
             },
             {
                 name: 'sticky',
@@ -335,14 +323,12 @@ changeView.fieldsets = [
             },
             {
                 name: 'tags',
-                key: 'tags[*].id',
+                getValue: select('tags[*].id'),
                 label: 'Tags',
                 field: 'AutocompleteMultiple',
                 required: false,
-                props: {
-                    showAll: false,
-                    helpText: 'Select a tag',
-                },
+                showAll: false,
+                helpText: 'Select a tag',
                 actions: {
                     search: (req) => {
                         return crudl.connectors.tagsOptions.read(req
@@ -366,13 +352,13 @@ changeView.fieldsets = [
                 name: 'createdate',
                 label: 'Date (Create)',
                 field: 'Datetime',
-                props: { disabled: true },
+                disabled: true,
             },
             {
                 name: 'updatedate',
                 label: 'Date (Update)',
                 field: 'Datetime',
-                props: { disabled: true },
+                disabled: true,
             },
         ]
     }
@@ -393,9 +379,7 @@ changeView.tabs = [
                 name: 'url',
                 label: 'URL',
                 field: 'URL',
-                props: {
-                    link: true,
-                },
+                link: true,
             },
             {
                 name: 'title',

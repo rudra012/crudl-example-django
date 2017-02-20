@@ -50,7 +50,6 @@ module.exports = {
                 return data.data.user
             },
             updateResponseData: data => {
-                console.log("updateResponseData", data)
                 if (data.data.changeUser.errors) {
                     throw new crudl.ValidationError(transformErrors(data.data.changeUser.errors))
                 }
