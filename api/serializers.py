@@ -127,6 +127,7 @@ class EntrySerializer(serializers.ModelSerializer):
             "category",
             "category_name",
             "tags",
+            "image",
             "summary",
             "body",
             "counter_links",
