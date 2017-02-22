@@ -7,6 +7,7 @@ from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
 
 # PROJECT IMPORTS
+from api.fields import Base64FileField
 from apps.blog.models import *  # NOQA
 
 
@@ -112,6 +113,7 @@ class EntrySerializer(serializers.ModelSerializer):
     section_name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
     owner_username = serializers.SerializerMethodField()
+    image = Base64FileField()
 
     class Meta:
         model = Entry
