@@ -217,10 +217,11 @@ changeView.fieldsets = [
                 initialValue: { value: undefined },
                 normalize: image => ({ value: image.name, label: image.name, previewURL: image.url }),
                 denormalize: field => field.value,
-                onSelect: (file, urlData) => ({
-                    value: { name: file.name, file: urlData.split(',')[1] },
+                readAs: 'DataURL', // Other options are 'Text', 'ArrayBuffer', see also https://goo.gl/YYrlGu
+                onSelect: (file, dataURL) => ({
+                    value: { name: file.name, file: dataURL.split(',')[1] },
                     label: file.name,
-                    previewURL: file.size < 1000000 ? urlData : undefined,
+                    previewURL: file.size < 1000000 ? dataURL : undefined,
                 }),
             },
             {
