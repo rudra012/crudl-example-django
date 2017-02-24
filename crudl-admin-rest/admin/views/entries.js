@@ -194,7 +194,7 @@ var changeView = {
         if ((!values.category || values.category == "") && (!values.tags || values.tags.length == 0)) {
             return { _error: 'Either `Category` or `Tags` is required.' }
         }
-    }
+    },
 }
 
 changeView.fieldsets = [
@@ -209,6 +209,19 @@ changeView.fieldsets = [
                 label: 'Title',
                 field: 'Text',
                 required: true,
+            },
+            {
+                name: 'image',
+                label: 'Image',
+                field: 'File',
+                initialValue: { value: undefined },
+                normalize: image => ({ value: image.name, label: image.name, previewURL: image.url }),
+                denormalize: field => field.value,
+                onSelect: (file, urlData) => ({
+                    value: { name: file.name, file: urlData.split(',')[1] },
+                    label: file.name,
+                    previewURL: file.size < 1000000 ? urlData : undefined,
+                }),
             },
             {
                 name: 'status',
@@ -232,7 +245,7 @@ changeView.fieldsets = [
                 lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => ({
                     helpText: 'Select a section',
                     ...res.data
-                }))
+                })),
             },
             {
                 name: 'category',

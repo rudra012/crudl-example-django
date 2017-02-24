@@ -157,6 +157,10 @@ class EntrySerializer(serializers.ModelSerializer):
             return obj.owner.username
         return ""
 
+    def update(self, instance, validated_data):
+        if isinstance(validated_data['image'], basestring):
+            validated_data['image'] = instance.image
+        return super(EntrySerializer, self).update(instance, validated_data)
 
 class EntryLinkSerializer(serializers.ModelSerializer):
     class Meta:

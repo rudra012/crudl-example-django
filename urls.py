@@ -4,6 +4,7 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -66,6 +67,7 @@ urlpatterns = [
     url(r'^graphql-api', csrf_exempt(api_auth_required(GraphQLView.as_view(schema=schema)))),
     url(r'^graphiql', include('django_graphiql.urls')),
     # INDEX
-    url(r'^.*$', RedirectView.as_view(url='crudl-rest/', permanent=False), name='index')
+    url(r'^$', RedirectView.as_view(url='crudl-rest/', permanent=False), name='index')
 ]
 urlpatterns += staticfiles_urlpatterns()
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

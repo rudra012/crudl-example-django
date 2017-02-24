@@ -59,11 +59,17 @@ class Base64FileField(serializers.FileField):
                 return super(Base64FileField, self).to_internal_value(data)
             else:
                 raise ValidationError('This is not an base64 string')
+        elif isinstance(data, basestring):
+            if len(data) > 0:
+                return data
+            return None
         else:
-            raise ValidationError(u"Invalid keys.")
+            raise ValidationError(u"Invalid value.")
 
     def to_representation(self, value):
-        return self.get_filename(value)
+        if value:
+            return {'name': self.get_filename(value), 'url': value.url}
+        return {}
 
     def get_filename(self, value):
         if value:
