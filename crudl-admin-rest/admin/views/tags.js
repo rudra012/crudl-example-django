@@ -1,3 +1,4 @@
+import React from 'react'
 import { slugify } from '../utils'
 
 //-------------------------------------------------------------------
@@ -6,6 +7,22 @@ var listView = {
     title: 'Tags',
     actions: {
         list: function (req) { return crudl.connectors.tags.read(req) }
+    },
+    bulkActions: {
+        delete: {
+            description: 'Delete selected',
+            modalConfirm: {
+                message: "All the selected items will be deleted. This action cannot be reversed!",
+                modalType: 'modal-delete',
+                labelConfirm: "Delete All",
+            },
+            action: (selection) => {
+                return Promise.all(selection.map(
+                    item => crudl.connectors.tag(item.id).delete(crudl.req()))
+                )
+                .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
+            },
+        },
     }
 }
 

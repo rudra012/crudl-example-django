@@ -16,6 +16,45 @@ var listView = {
             let sections = crudl.connectors.sections.read(crudl.req())
             return join(categories, sections, 'section', 'id')
         },
+    },
+    bulkActions: {
+        delete: {
+            description: 'Delete selected',
+            modalConfirm: {
+                message: "All the selected items will be deleted. This action cannot be reversed!",
+                modalType: 'modal-delete',
+                labelConfirm: "Delete All",
+            },
+            action: selection => Promise.all(selection.map(
+                item => crudl.connectors.category(item.id).delete(crudl.req())
+            ))
+        },
+        changeSection: {
+            description: 'Change Section',
+            before: (selection) => ({ onProceed, onCancel }) => (
+                <div>
+                    {crudl.createForm({
+                        id: 'select-section',
+                        title: 'Select Section',
+                        fields: [{
+                            name: 'section',
+                            label: 'Section',
+                            field: 'Select',
+                            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+                        }],
+                        onSubmit: values => onProceed(
+                            selection.map(s => Object.assign({}, s, { section: values.section }))
+                        ),
+                        onCancel,
+                    })}
+                </div>
+            ),
+            action: (selection) => {
+                return Promise.all(selection.map(
+                    item => crudl.connectors.category(item.id).update(crudl.req(item)))
+                ).then(() => crudl.successMessage('Successfully changed the sections'))
+            },
+        },
     }
 }
 
@@ -102,12 +141,56 @@ changeView.fields = [
             }))
         })),
         add: {
-            path: 'sections/new',
-            returnValue: data => data.id,
+            title: 'New section',
+            actions: {
+                add: req => crudl.connectors.sections.create(req).then(res => res.data.id),
+            },
+            fields: [
+                {
+                    name: 'name',
+                    label: 'Name',
+                    field: 'String',
+                    required: true
+                },
+                {
+                    name: 'slug',
+                    label: 'Slug',
+                    field: 'String',
+                    onChange: {
+                        in: 'name',
+                        setInitialValue: (name) => slugify(name.value),
+                    },
+                    helpText: <span>If left blank, the slug will be automatically generated.
+                    More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.</span>,
+                },
+            ],
         },
         edit: {
-            path: () => `sections/${crudl.context('section')}`,
-        }
+            title: 'Section',
+            actions: {
+                get: (req) => crudl.connectors.section(crudl.context('section')).read(req),
+                save: (req) => crudl.connectors.section(crudl.context('section')).update(req).then(res => res.data.id),
+            },
+            fields: [
+                {
+                    name: 'name',
+                    label: 'Name',
+                    field: 'String',
+                    required: true
+                },
+                {
+                    name: 'slug',
+                    label: 'Slug',
+                    field: 'String',
+                    onChange: {
+                        in: 'name',
+                        setInitialValue: (name) => slugify(name.value),
+                    },
+                    helpText: <span>If left blank, the slug will be automatically generated.
+                    More about slugs <a href="http://en.wikipedia.org/wiki/Slug" target="_blank">here</a>.</span>,
+                },
+            ],
+        },
     },
     {
         name: 'name',
