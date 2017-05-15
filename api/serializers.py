@@ -113,7 +113,7 @@ class EntrySerializer(serializers.ModelSerializer):
     section_name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
     owner_username = serializers.SerializerMethodField()
-    image = Base64FileField()
+    image = Base64FileField(required=False)
 
     class Meta:
         model = Entry
@@ -158,7 +158,7 @@ class EntrySerializer(serializers.ModelSerializer):
         return ""
 
     def update(self, instance, validated_data):
-        if isinstance(validated_data['image'], basestring):
+        if 'image' in validated_data and isinstance(validated_data['image'], basestring):
             validated_data['image'] = instance.image
         return super(EntrySerializer, self).update(instance, validated_data)
 
