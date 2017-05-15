@@ -1,5 +1,11 @@
 import { join, slugify } from '../utils'
 import React from 'react'
+import { list, detail, options } from '../connectors'
+
+const categories = list('categories');
+const category = detail('categories'); // The id parameter is not yet bound
+const sections = list('sections');
+const section = detail('sections'); // The id parameter is not yet bound
 
 //-------------------------------------------------------------------
 var listView = {
@@ -11,11 +17,7 @@ var listView = {
         Instead, we could also add the section object (or name) to the list of
         categories within the API. In that case, no join is required (see entries.js
         for the alternative solution) */
-        list: function (req) {
-            let categories = crudl.connectors.categories.read(req)
-            let sections = crudl.connectors.sections.read(crudl.req())
-            return join(categories, sections, 'section', 'id')
-        },
+        list: req => join(categories.read(req), sections.read(crudl.req()), 'section', 'id'),
     },
     bulkActions: {
         delete: {
@@ -26,7 +28,7 @@ var listView = {
                 labelConfirm: "Delete All",
             },
             action: selection => Promise.all(selection.map(
-                item => crudl.connectors.category(item.id).delete(crudl.req())
+                item => category(item.id).delete(crudl.req())
             ))
         },
         changeSection: {
@@ -40,7 +42,7 @@ var listView = {
                             name: 'section',
                             label: 'Section',
                             field: 'Select',
-                            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+                            lazy: () => options('sections', 'id', 'name').read(crudl.req()),
                         }],
                         onSubmit: values => onProceed(
                             selection.map(s => Object.assign({}, s, { section: values.section }))
@@ -51,7 +53,7 @@ var listView = {
             ),
             action: (selection) => {
                 return Promise.all(selection.map(
-                    item => crudl.connectors.category(item.id).update(crudl.req(item)))
+                    item => category(item.id).update(crudl.req(item)))
                 ).then(() => crudl.successMessage('Successfully changed the sections'))
             },
         },
@@ -104,13 +106,15 @@ listView.filters = {
             label: 'Section',
             field: 'Select',
             /* we manually build the available options. please note that you could also
-            use a connector, making this a one-liner */
-            lazy: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
-                options: res.data.map(section => ({
+            use a connector, making this a one-liner (see bellow) */
+            lazy: () => sections.read(crudl.req()).then(data => ({
+                options: data.map(section => ({
                     value: section.id,
                     label: section.name,
                 }))
             })),
+            // The one-liner alternative:
+            // lazy: () => options('sections', 'id', 'name').read(crudl.req()),
             initialValue: '',
         },
     ]
@@ -121,9 +125,9 @@ var changeView = {
     path: 'categories/:id',
     title: 'Category',
     actions: {
-        get: function (req) { return crudl.connectors.category(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.category(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.category(crudl.path.id).update(req) },
+        get: (req) => category(crudl.path.id).read(req),
+        delete: (req) => category(crudl.path.id).delete(req),
+        save: (req) => category(crudl.path.id).update(req),
     },
 }
 
@@ -133,17 +137,11 @@ changeView.fields = [
         label: 'Section',
         field: 'Select',
         required: true,
-        /* Here we build the list of possible options with an extra API call */
-        lazy: () => crudl.connectors.sections.read(crudl.req()).then(res => ({
-            options: res.data.map(section => ({
-                value: section.id,
-                label: section.name,
-            }))
-        })),
+        lazy: () => options('sections', 'id', 'name').read(crudl.req()),
         add: {
             title: 'New section',
             actions: {
-                add: req => crudl.connectors.sections.create(req).then(res => res.data.id),
+                add: req => sections.create(req).then(data => data.id),
             },
             fields: [
                 {
@@ -168,8 +166,8 @@ changeView.fields = [
         edit: {
             title: 'Section',
             actions: {
-                get: (req) => crudl.connectors.section(crudl.context('section')).read(req),
-                save: (req) => crudl.connectors.section(crudl.context('section')).update(req).then(res => res.data.id),
+                get: (req) => section(crudl.context('section')).read(req),
+                save: (req) => section(crudl.context('section')).update(req).then(data => data.id),
             },
             fields: [
                 {
@@ -217,7 +215,7 @@ var addView = {
     title: 'New Category',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.categories.create(req) },
+        add: categories.create,
     },
 }
 
