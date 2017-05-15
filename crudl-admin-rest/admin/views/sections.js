@@ -1,12 +1,18 @@
 import { slugify } from '../utils'
 import React from 'react'
 
+import { list, detail, options } from '../connectors'
+
+const sections = list('sections');
+const section = detail('sections'); // The id parameter is not yet bound
+
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'sections',
     title: 'Sections',
     actions: {
-        list: function (req) { return crudl.connectors.sections.read(req) }
+        list: sections.read,
     },
 }
 
@@ -45,7 +51,7 @@ listView.bulkActions = {
         },
         action: (selection) => {
             return Promise.all(selection.map(
-                item => crudl.connectors.section(item.id).delete(crudl.req()))
+                item => section(item.id).delete(crudl.req()))
             )
             .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
         },
@@ -57,9 +63,9 @@ var changeView = {
     path: 'sections/:id',
     title: 'Section',
     actions: {
-        get: function (req) { return crudl.connectors.section(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.section(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.section(crudl.path.id).update(req) },
+        get: req => section(crudl.path.id).read(req),
+        delete: req => section(crudl.path.id).delete(req),
+        save: req => section(crudl.path.id).update(req),
     },
 }
 
@@ -89,7 +95,7 @@ var addView = {
     title: 'New Section',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.sections.create(req) },
+        add: sections.create,
     },
 }
 
