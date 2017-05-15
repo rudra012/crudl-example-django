@@ -1,27 +1,28 @@
 import { formatDate } from '../utils'
 import React from 'react'
 
-function transform(p, func) {
-    return p.then(response => {
-        return response.set('data', response.data.map(func))
-    })
-}
+import { list, detail, options } from '../connectors'
+
+const entries = list('entries');
+const entry = detail('entries'); // The id parameter is not yet bound
+const links = list('entrylinks');
+const link = detail('entrylinks'); // The id parameter is not yet bound
+const categories = list('categories');
+
+const sectionOpts = options('sections', 'id', 'name');
+const tagOpts = options('tags', 'id', 'name');
+const categoryOpts = options('categories', 'id', 'name');
 
 //-------------------------------------------------------------------
 var listView = {
     path: 'entries',
     title: 'Blog Entries',
     actions: {
-        list: function (req) {
-            let entries = crudl.connectors.entries.read(req)
-            /* here we add a custom column based on the currently logged-in user */
-            let entriesWithCustomColumn = transform(entries, (item) => {
-                item.is_owner = false
-                if (item.owner) item.is_owner = crudl.auth.user == item.owner
-                return item
-            })
-            return entriesWithCustomColumn
-        }
+        /* here we add a custom column based on the currently logged-in user */
+        list: req => entries.read(req).then(data => data.map((item) => {
+            item.is_owner = crudl.auth.user === item.owner
+            return item
+        })),
     },
 }
 
@@ -98,7 +99,7 @@ listView.filters = {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+            lazy: () => sectionOpts.read(crudl.req()),
         },
         {
             name: 'category',
@@ -121,13 +122,13 @@ listView.filters = {
                             }
                         }
                         // Get the catogories options filtered by section
-                        return crudl.connectors.categoriesOptions.read(crudl.req().filter('section', section.value))
-                        .then(res => {
-                            if (res.data.options.length > 0) {
+                        return categoryOpts.read(crudl.req().filter('section', section.value))
+                        .then(({ options }) => {
+                            if (options.length > 0) {
                                 return {
                                     readOnly: false,
                                     helpText: 'Select a category',
-                                    ...res.data,
+                                    options,
                                 }
                             } else {
                                 return {
@@ -186,9 +187,9 @@ var changeView = {
     title: 'Blog Entry',
     tabtitle: 'Main',
     actions: {
-        get: function (req) { return crudl.connectors.entry(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.entry(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.entry(crudl.path.id).update(req) },
+        get: req => entry(crudl.path.id).read(req),
+        delete: req => entry(crudl.path.id).delete(req),
+        save: req => entry(crudl.path.id).update(req),
     },
     validate: function (values) {
         if ((!values.category || values.category == "") && (!values.tags || values.tags.length == 0)) {
@@ -243,9 +244,9 @@ changeView.fieldsets = [
                 /* we set required to false, although this field is actually
                 required with the API. */
                 required: false,
-                lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => ({
+                lazy: () => sectionOpts.read(crudl.req()).then(({ options }) => ({
                     helpText: 'Select a section',
-                    ...res.data
+                    options,
                 })),
             },
             {
@@ -257,10 +258,13 @@ changeView.fieldsets = [
                 helpText: 'Select a category',
                 onChange: listView.filters.fields[2].onChange,
                 actions: {
-                    select: (req) => {
-                        return crudl.connectors.categoriesOptions.read(req
-                            .filter('id_in', req.data.selection.map(item => item.value).toString()))
-                        .then(res => res.setData(res.data.options))
+                    select: req => categoryOpts.read(
+                        req.filter('id_in', req.data.selection.map(item => item.value).toString())
+                    ).then(({ options }) => options),
+                    // select: (req) => {
+                    //     return crudl.connectors.categoriesOptions.read(req
+                    //         .filter('id_in', req.data.selection.map(item => item.value).toString()))
+                    //     .then(res => res.setData(res.data.options))
                         /* the code below is an alternative, if an id_in filter is not available
                         and if the options are build manually */
                         // return Promise.all(req.data.selection.map(item => {
@@ -270,18 +274,18 @@ changeView.fieldsets = [
                         //         label: res.data.name,
                         //     }))
                         // })).then(responses => ({ data: responses.map(r => r.data) }))
-                    },
+                    // },
                     search: (req) => {
                         if (!crudl.context.data.section) {
                             return Promise.resolve({data: []})
                         } else {
-                            return crudl.connectors.categories.read(req
+                            return categories.read(req
                                 .filter('name', req.data.query)
                                 .filter('section', crudl.context.data.section))
-                            .then(res => res.setData(res.data.map(d => ({
+                            .then(data => data.map(d => ({
                                 value: d.id,
                                 label: <span><b>{d.name}</b> ({d.slug})</span>,
-                            }))))
+                            })))
                         }
                     },
                 },
@@ -334,13 +338,13 @@ changeView.fieldsets = [
                 helpText: 'Select a tag',
                 actions: {
                     search: (req) => {
-                        return crudl.connectors.tagsOptions.read(req.filter('name', req.data.query.toLowerCase()))
-                        .then(res => res.setData(res.data.options))
+                        return tagOpts.read(req.filter('name', req.data.query.toLowerCase()))
+                        .then(({ options }) => options)
                     },
                     select: (req) => {
-                        return crudl.connectors.tagsOptions.read(req
+                        return tagOpts.read(req
                             .filter('id_in', req.data.selection.map(item => item.value).toString()))
-                        .then(res => res.setData(res.data.options))
+                        .then(({ options }) => options)
                     },
                 },
             }
@@ -370,10 +374,10 @@ changeView.tabs = [
     {
         title: 'Links',
         actions: {
-            list: (req) => crudl.connectors.links.read(req.filter('entry', crudl.path.id)),
-            add: (req) => crudl.connectors.links.create(req),
-            save: (req) => crudl.connectors.link(req.data.id).update(req),
-            delete: (req) => crudl.connectors.link(req.data.id).delete(req)
+            list: req => links.read(req.filter('entry', crudl.path.id)),
+            add: req => links.create(req),
+            save: req => link(req.data.id).update(req),
+            delete: req => link(req.data.id).delete(req),
         },
         itemTitle: '{url}',
         fields: [
@@ -408,7 +412,7 @@ var addView = {
     fieldsets: changeView.fieldsets,
     validate: changeView.validate,
     actions: {
-        add: function (req) { return crudl.connectors.entries.create(req) },
+        add: entries.create,
     },
     denormalize: (data) => {
         /* set owner on add. alternatively, we could manipulate the data
