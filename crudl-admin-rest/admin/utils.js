@@ -1,84 +1,13 @@
-
-function url2page(url) {
-    let match = /page=(\d+)/.exec(url)
-    return match ? parseInt(match[1]) : 1
-}
-
-export function continuousPagination(res) {
-
-    let nextPage = res.data.next && url2page(res.data.next)
-    // Return the pagination descriptor
-    return {
-        type: 'continuous',
-        next: nextPage,
-        resultsTotal: res.data.total,
-        filteredTotal: res.data.count,
-    }
-}
-
-export function numberedPagination(res) {
-
-    // total number of results
-    let resultsTotal = res.data.total
-    // total number of filtered results
-    let filteredTotal = res.data.count
-
-    // next page as number
-    let nextPage = res.data.next && url2page(res.data.next)
-    // previous page as number
-    let previousPage = res.data.previous && url2page(res.data.previous)
-    // the page size
-    let pageSize = res.data.results.length
-
-    // compute the currentPage number and the total number of pages
-    let currentPage, pagesTotal
-    if (nextPage) { // We're not on the last page
-        currentPage = nextPage - 1
-        pagesTotal = resultsTotal / pageSize
-    } else { // We're on the last page
-        currentPage = previousPage ? previousPage + 1 : 1
-        pagesTotal = currentPage
-    }
-
-    // Compute all page cursors
-    let allPages = []
-    for (let i = 0; i < pagesTotal; i++) {
-        allPages[i] = `${(i+1)}` // We return string, so that the page will be preserved in the path query
-    }
-
-    return {
-        type: 'numbered',
-        allPages,
-        currentPage,
-        resultsTotal,
-        filteredTotal,
-    }
-}
-
-
-export function urlQuery(req) {
-    return Object.assign({},
-        req.filters,
-        req.page && { page: req.page },
-        {
-            ordering: req.sorting.map(field => {
-                let prefix = field.sorted == 'ascending' ? '' : '-'
-                return prefix + field.sortKey
-            }).join(',')
-        }
-    )
-}
-
 export function join(p1, p2, var1, var2, defaultValue={}) {
     return Promise.all([p1, p2])
-    .then(responses => {
-        return responses[0].set('data', responses[0].data.map(item => {
-            item[var1] = responses[1].data.find(obj => obj[var2] == item[var1])
+    .then(data => {
+        return data[0].map(item => {
+            item[var1] = data[1].find(obj => obj[var2] == item[var1])
             if (!item[var1]) {
                 item[var1] = defaultValue
             }
             return item
-        }))
+        })
     })
 }
 
@@ -97,24 +26,4 @@ export function slugify(text) {
 
 export function formatDate(date) {
     return date.toJSON().slice(0, 10)
-}
-
-/* transform django error to redux-form (object) error
-django:
-{
-    "non_field_errors": ["message"],
-    "key": ["message"]
-}
-redux-form:
-{
-    "_error": ["message"],
-    "key": ["message"]
-}
-*/
-export function transformErrors(error) {
-    console.log("REST transformErrors", error)
-    if (error !== null && typeof error === 'object') {
-        error._error = error.non_field_errors
-    }
-    return error
 }

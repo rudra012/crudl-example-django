@@ -1,8 +1,8 @@
-
+import { login as loginConnector } from './connectors'
 //-------------------------------------------------------------------
 var login = {
     actions: {
-        login: function (req) { return crudl.connectors.login.read(req) },
+        login: function (req) { return loginConnector.create(req) },
     },
 }
 
