@@ -1,14 +1,17 @@
 import React from 'react'
 import SplitDateTimeField from '../fields/SplitDateTimeField'
 
+import { list, detail } from '../connectors'
+
+const users = list('users');
+const user = detail('users'); // Partial parametrization of a detail connector: the id parameter is not yet bound
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'users',
     title: 'Users',
     actions: {
-        list: function (req) {
-            return crudl.connectors.users.read(req)
-        },
+        list: users.read,
     },
     normalize: (list) => list.map(item => {
         if (!item.last_name) {
@@ -62,8 +65,8 @@ var changeView = {
     path: 'users/:id',
     title: 'User',
     actions: {
-        get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
-        save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
+        get: req => user(crudl.path.id).read(req),
+        save: req => user(crudl.path.id).update(req),
     },
 }
 
@@ -173,7 +176,7 @@ var addView = {
     path: 'users/new',
     title: 'New User',
     actions: {
-        add: function (req) { return crudl.connectors.users.create(req) },
+        add: users.create,
     },
 }
 
