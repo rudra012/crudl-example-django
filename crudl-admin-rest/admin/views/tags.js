@@ -1,12 +1,17 @@
 import React from 'react'
 import { slugify } from '../utils'
 
+import { list, detail } from '../connectors'
+
+const tags = list('tags');
+const tag = detail('tags'); // Partial parametrization of a detail connector: the id parameter is not yet bound
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'tags',
     title: 'Tags',
     actions: {
-        list: function (req) { return crudl.connectors.tags.read(req) }
+        list: tags.read,
     },
     bulkActions: {
         delete: {
@@ -18,7 +23,7 @@ var listView = {
             },
             action: (selection) => {
                 return Promise.all(selection.map(
-                    item => crudl.connectors.tag(item.id).delete(crudl.req()))
+                    item => tag(item.id).delete(crudl.req()))
                 )
                 .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
             },
@@ -68,9 +73,9 @@ var changeView = {
     path: 'tags/:id',
     title: 'Tag',
     actions: {
-        get: function (req) { return crudl.connectors.tag(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.tag(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.tag(crudl.path.id).update(req) },
+        get: function (req) { return tag(crudl.path.id).read(req) },
+        delete: function (req) { return tag(crudl.path.id).delete(req) },
+        save: function (req) { return tag(crudl.path.id).update(req) },
     },
 }
 
@@ -99,7 +104,13 @@ var addView = {
     title: 'New Tag',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.tags.create(req) },
+        add: (req) => {
+            console.log('req:', req);
+            return tags.create(req).then(result => {
+                console.log('res:', result);
+                return result;
+            });
+        },
     },
 }
 
