@@ -261,20 +261,6 @@ changeView.fieldsets = [
                     select: req => categoryOpts.read(
                         req.filter('id_in', req.data.selection.map(item => item.value).toString())
                     ).then(({ options }) => options),
-                    // select: (req) => {
-                    //     return crudl.connectors.categoriesOptions.read(req
-                    //         .filter('id_in', req.data.selection.map(item => item.value).toString()))
-                    //     .then(res => res.setData(res.data.options))
-                        /* the code below is an alternative, if an id_in filter is not available
-                        and if the options are build manually */
-                        // return Promise.all(req.data.selection.map(item => {
-                        //     return crudl.connectors.category(item.value).read(req)
-                        //     .then(res => res.setData({
-                        //         value: res.data.id,
-                        //         label: res.data.name,
-                        //     }))
-                        // })).then(responses => ({ data: responses.map(r => r.data) }))
-                    // },
                     search: (req) => {
                         if (!crudl.context.data.section) {
                             return Promise.resolve({data: []})

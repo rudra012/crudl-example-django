@@ -3,8 +3,10 @@ import React from 'react'
 
 import { createResourceConnector, createOptionsConnector } from '../connectors'
 
-const categoryFields = 'id, originalId, section{id,name}, name, slug, position, counterEntries'
-const categories = createResourceConnector('categories', categoryFields)
+const categories = createResourceConnector('categories', `
+    id, originalId, name, slug, position, counterEntries,
+    section{id,name}
+`)
 const sectionOptions = createOptionsConnector('sections', 'id', 'name')
 
 //-------------------------------------------------------------------

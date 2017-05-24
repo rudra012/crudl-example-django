@@ -856,8 +856,8 @@ class Query(ObjectType):
     entry = relay.NodeField(EntryNode)
     all_entries = DjangoFilterConnectionField(EntryNode, filterset_class=EntryFilter, s=graphene.String())
     # entrylink
-    link = relay.NodeField(EntrylinkNode)
-    all_links = DjangoFilterConnectionField(EntrylinkNode, s=graphene.String())
+    entrylink = relay.NodeField(EntrylinkNode)
+    all_entrylinks = DjangoFilterConnectionField(EntrylinkNode, s=graphene.String())
 
     class Meta:
         abstract = True
