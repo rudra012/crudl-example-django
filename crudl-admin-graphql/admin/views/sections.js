@@ -1,12 +1,17 @@
 import { slugify } from '../utils'
 import React from 'react'
 
+import { createResourceConnector } from '../connectors'
+
+const sectionFields = 'id, originalId name, slug, counterEntries'
+const sections = createResourceConnector('sections', sectionFields)
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'sections',
     title: 'Sections',
     actions: {
-        list: function (req) { return crudl.connectors.sections.read(req) }
+        list: sections.read,
     }
 }
 
@@ -39,9 +44,9 @@ var changeView = {
     path: 'sections/:id',
     title: 'Section',
     actions: {
-        get: function (req) { return crudl.connectors.section(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.section(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.section(crudl.path.id).update(req) },
+        get: function (req) { return sections(crudl.path.id).read(req) },
+        delete: function (req) { return sections(crudl.path.id).delete(req) },
+        save: function (req) { return sections(crudl.path.id).update(req) },
     },
 }
 
@@ -75,7 +80,7 @@ var addView = {
     title: 'New Section',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.sections.create(req) },
+        add: sections.create,
     },
 }
 
