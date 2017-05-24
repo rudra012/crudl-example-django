@@ -1,11 +1,19 @@
 import { slugify } from '../utils'
 
+import { createResourceConnector } from '../connectors'
+import continuousPagination from '../connectors/middleware/continuousPagination'
+
+const tagFields = 'id, originalId, name, slug, counterEntries'
+const tags = createResourceConnector('tags', tagFields)
+.use(continuousPagination(20))
+
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'tags',
     title: 'Tags',
     actions: {
-        list: function (req) { return crudl.connectors.tags.read(req) }
+        list: tags.read,
     }
 }
 
@@ -49,9 +57,9 @@ var changeView = {
     path: 'tags/:id',
     title: 'Tag',
     actions: {
-        get: function (req) { return crudl.connectors.tag(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.tag(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.tag(crudl.path.id).update(req) },
+        get: function (req) { return tags(crudl.path.id).read(req) },
+        delete: function (req) { return tags(crudl.path.id).delete(req) },
+        save: function (req) { return tags(crudl.path.id).update(req) },
     },
 }
 
@@ -84,7 +92,7 @@ var addView = {
     title: 'New Tag',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.tags.create(req) },
+        add: tags.create,
     },
 }
 
