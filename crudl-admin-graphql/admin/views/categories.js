@@ -1,12 +1,59 @@
-import { join, slugify, select } from '../utils'
+import { slugify, select } from '../utils'
 import React from 'react'
+
+import { createResourceConnector, createOptionsConnector } from '../connectors'
+
+const categoryFields = 'id, originalId, section{id,name}, name, slug, position, counterEntries'
+const categories = createResourceConnector('categories', categoryFields)
+const sectionOptions = createOptionsConnector('sections', 'id', 'name')
 
 //-------------------------------------------------------------------
 var listView = {
     path: 'categories',
     title: 'Categories',
     actions: {
-        list: function (req) { return crudl.connectors.categories.read(req) }
+        list: categories.read,
+    },
+    bulkActions: {
+        delete: {
+            description: 'Delete selected',
+            modalConfirm: {
+                message: "All the selected items will be deleted. This action cannot be reversed!",
+                modalType: 'modal-delete',
+                labelConfirm: "Delete All",
+            },
+            action: selection => Promise.all(selection.map(
+                item => categories(item.id).delete(crudl.req()).then(
+                    () => crudl.successMessage(`Deleted ${selection.length} items.`)
+                )
+            ))
+        },
+        changeSection: {
+            description: 'Change Section',
+            before: (selection) => ({ onProceed, onCancel }) => (
+                <div>
+                    {crudl.createForm({
+                        id: 'select-section',
+                        title: 'Select Section',
+                        fields: [{
+                            name: 'section',
+                            label: 'Section',
+                            field: 'Select',
+                            lazy: () => sectionOptions.read(crudl.req()),
+                        }],
+                        onSubmit: values => onProceed(
+                            selection.map(s => Object.assign({}, s, { section: values.section }))
+                        ),
+                        onCancel,
+                    })}
+                </div>
+            ),
+            action: (selection) => {
+                return Promise.all(selection.map(
+                    item => categories(item.id).update(crudl.req({ section: item.section })))
+                ).then(() => crudl.successMessage('Successfully changed the sections'))
+            },
+        },
     }
 }
 
@@ -17,7 +64,7 @@ listView.fields = [
     },
     {
         name: 'section',
-        getValue: select('section.name'), // see actions for listView
+        getValue: select('section.name'),
         label: 'Section',
     },
     {
@@ -26,7 +73,6 @@ listView.fields = [
         main: true,
         sortable: true,
         sorted: 'ascending',
-        sortpriority: '1',
         sortKey: 'slug',
     },
     {
@@ -45,13 +91,13 @@ listView.filters = {
             name: 'search',
             label: 'Search',
             field: 'Search',
-            helpText: 'Section, Name'
+            helpText: 'Section, Name',
         },
         {
             name: 'section',
             label: 'Section',
             field: 'Select',
-            lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+            lazy: () => sectionOptions.read(crudl.req()),
             initialValue: '',
         },
     ]
@@ -62,9 +108,9 @@ var changeView = {
     path: 'categories/:id',
     title: 'Category',
     actions: {
-        get: function (req) { return crudl.connectors.category(crudl.path.id).read(req) },
-        delete: function (req) { return crudl.connectors.category(crudl.path.id).delete(req) },
-        save: function (req) { return crudl.connectors.category(crudl.path.id).update(req) },
+        get: function (req) { return categories(crudl.path.id).read(req) },
+        delete: function (req) { return categories(crudl.path.id).delete(req) },
+        save: function (req) { return categories(crudl.path.id).update(req) },
     },
 }
 
@@ -79,14 +125,7 @@ changeView.fields = [
         label: 'Section',
         field: 'Select',
         required: true,
-        add: {
-            path: 'sections/new',
-            returnValue: data => data.id,
-        },
-        edit: {
-            path: () => `sections/${crudl.context('section')}`,
-        },
-        lazy: () => crudl.connectors.sectionsOptions.read(crudl.req()).then(res => res.data),
+        lazy: () => sectionOptions.read(crudl.req()),
     },
     {
         name: 'name',
@@ -113,7 +152,7 @@ var addView = {
     title: 'New Category',
     fields: changeView.fields,
     actions: {
-        add: function (req) { return crudl.connectors.categories.create(req) },
+        add: function (req) { return categories.create(req) },
     },
 }
 
