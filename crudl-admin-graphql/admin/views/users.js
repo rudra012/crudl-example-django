@@ -1,14 +1,17 @@
 import React from 'react'
 import SplitDateTimeField from '../fields/SplitDateTimeField'
 
+import { createResourceConnector } from '../connectors'
+
+const userFields = 'id, originalId, username, firstName, lastName, email, isActive, isStaff, dateJoined'
+const users = createResourceConnector('users', userFields)
+
 //-------------------------------------------------------------------
 var listView = {
     path: 'users',
     title: 'Users',
     actions: {
-        list: function (req) {
-            return crudl.connectors.users.read(req)
-        },
+        list: users.read,
     },
     normalize: (list) => list.map(item => {
         if (!item.lastName) {
@@ -56,11 +59,11 @@ listView.fields = [
 
 //-------------------------------------------------------------------
 var changeView = {
-    path: 'users/:username/:id',
+    path: 'users/:id',
     title: 'User',
     actions: {
-        get: function (req) { return crudl.connectors.user(crudl.path.id).read(req) },
-        save: function (req) { return crudl.connectors.user(crudl.path.id).update(req) },
+        get: function (req) { return users(crudl.path.id).read(req) },
+        save: function (req) { return users(crudl.path.id).update(req) },
     },
     denormalize: (data) => {
         /* prevent unknown field ... with query */
@@ -185,7 +188,7 @@ var addView = {
     title: 'New User',
     denormalize: changeView.denormalize,
     actions: {
-        add: function (req) { return crudl.connectors.users.create(req) },
+        add: users.create,
     },
 }
 
