@@ -25,7 +25,7 @@ var listView = {
                 labelConfirm: "Delete All",
             },
             action: selection => Promise.all(selection.map(
-                item => categories(item.id).delete(crudl.req()).then(
+                item => categories.delete(crudl.req({ id: item.id })).then(
                     () => crudl.successMessage(`Deleted ${selection.length} items.`)
                 )
             ))
@@ -51,8 +51,12 @@ var listView = {
                 </div>
             ),
             action: (selection) => {
-                return Promise.all(selection.map(
-                    item => categories(item.id).update(crudl.req({ section: item.section })))
+                return Promise.all(selection.map(item => categories.update(crudl.req({
+                    id: item.id,
+                    section: item.section,
+                    name: item.name,
+                    slug: item.slug,
+                })))
                 ).then(() => crudl.successMessage('Successfully changed the sections'))
             },
         },
