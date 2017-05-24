@@ -6,7 +6,6 @@ var sections = require('./views/sections')
 var categories = require('./views/categories')
 var tags = require('./views/tags')
 var entries = require('./views/entries')
-var connectors = require('./connectors/connectors')
 var { login, logout } = require('./auth')
 
 const OPTIONS = {
@@ -18,7 +17,6 @@ const OPTIONS = {
 var admin = {}
 admin.title = 'crudl.io Django GraphQL Example'
 admin.options = OPTIONS
-admin.connectors = connectors,
 admin.views = { users, sections, categories, tags, entries }
 admin.auth = { login, logout }
 admin.custom = { dashboard: CustomDashboard }
