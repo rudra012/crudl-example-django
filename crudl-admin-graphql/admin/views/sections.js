@@ -15,6 +15,23 @@ var listView = {
     }
 }
 
+listView.bulkActions = {
+    delete: {
+        description: 'Delete selected',
+        modalConfirm: {
+            message: "All the selected items will be deleted. This action cannot be reversed!",
+            modalType: 'modal-delete',
+            labelConfirm: "Delete All",
+        },
+        action: (selection) => {
+            return Promise.all(selection.map(
+                item => sections.delete(crudl.req({ id: item.id })))
+            )
+            .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
+        },
+    }
+}
+
 listView.fields = [
     {
         name: 'originalId',
