@@ -150,7 +150,7 @@ var listView = {
     path: "api/path/to/collection",
     title: "Collection Name",
     actions: {
-        list: entries.read,
+        list: listConnector.read,
     }
     fields: [],
     // Optional
@@ -163,9 +163,9 @@ var changeView = {
     path: "api/path/to/collection/:id",
     title: "Detail Name",
     actions: {
-        get: req => entry(crudl.path.id).read(req),
-        save: req => entry(crudl.path.id).update(req),
-        delete: req => entry(crudl.path.id).delete(req),
+        get: req => detailConnector(crudl.path.id).read(req),
+        save: req => detailConnector(crudl.path.id).update(req),
+        delete: req => detailConnector(crudl.path.id).delete(req),
     },
     // Either fields or fieldsets
     fields: [],
@@ -181,7 +181,7 @@ var changeView = {
 ### Authentication
 Both the REST and GraphQL API is only accessible for logged-in users based on TokenAuthentication. Besides the Token, we also return an attribute _info_ in order to subsequently have access to the currently logged-in user (e.g. for filtering). The _info_ is exposed in the global variable `crudl.auth`.
 
-The login connector looks like this:
+The REST login [connector](crudl-admin-rest/admin/connectors.js) looks like this:
 ```js
 const login = createDRFConnector('login/')
 .use(transformData('create',
