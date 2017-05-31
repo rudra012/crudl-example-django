@@ -147,8 +147,8 @@ With views, you create the visual representation by defining the _listView_, _ch
 ```js
 var listView = {
     // Required
-    path: "",
-    title: "",
+    path: "api/path/to/collection",
+    title: "Collection Name",
     actions: {
         list: entries.read,
     }
@@ -160,8 +160,8 @@ var listView = {
 
 var changeView = {
     // Required
-    path: "",
-    title: "",
+    path: "api/path/to/collection/:id",
+    title: "Resource Name",
     actions: {
         get: req => entry(crudl.path.id).read(req),
         save: req => entry(crudl.path.id).update(req),
@@ -210,7 +210,8 @@ With _Entries_, the _Categories_ depend on the selected _Section_. If you change
                         helpText: 'In order to select a category, you have to select a section first',
                     }
                 }
-                return options('catogories', 'id', 'name').read(crudl.req().filter('section', section.value))
+                return options('catogories', 'id', 'name')
+                .read(crudl.req().filter('section', section.value))
                 .then(({ options }) => {
                     if (options.length > 0) {
                         return {
@@ -425,6 +426,7 @@ var listView = {
     path: 'entries',
     title: 'Blog Entries',
     actions: {
+        /* here we add a custom column based on the currently logged-in user */
         list: req => entries.read(req).then(data => data.map((item) => {
             item.is_owner = crudl.auth.user === item.owner
             return item
