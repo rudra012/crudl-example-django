@@ -124,20 +124,22 @@ In order for CRUDL to work, you mainly need to define _connectors_ and _views_.
 ### Connectors
 The _connectors_ provide the views with a unified access to different APIs like REST or GraphQL. Each _connector_ usually represents a single API endpoint (or query) and implements the CRUD methods (create, read, update, delete). Moreover, the _connector_ handles pagination and transforms the request/response.
 
-There is a npm package implementing general connectors [crudl-connectors-base](https://github.com/crudlio/crudl-connectors-base) that can be extended (using middleware) to fit your particular needs. We also provide a Django Rest Framework (DRF) connectors that do most of the heavy lifting for you [crudl-connectors-drf](https://github.com/crudlio/crudl-connectors-drf).
+There is a npm package implementing general connectors [crudl-connectors-base](https://github.com/crudlio/crudl-connectors-base) that can be extended (using middleware) to fit your particular needs. We also provide a Django Rest Framework (DRF) connectors package that does most of the heavy lifting for you [crudl-connectors-drf](https://github.com/crudlio/crudl-connectors-drf).
 
 Usage examples of DRF connectors:
 ```js
-const { createDRFConnector } = require('crudl-connectors-drf');
-const user = createDRFConnector('localhost:8080/api/v1/users/:username/');
+import { createDRFConnector, defaults } from 'crudl-connectors-drf'
+import { numberedPagination } from 'crudl-connectors-drf/lib/middleware'
 
-const john = user('john');
-const jane = user('jane');
+defaults.baseURL = '/rest-api/'
 
-jane.update({ data: { email: 'jane@crudl.io' }});
-john.delete();
+const list = createDRFConnector(':collection/').use(numberedPagination())
+const entries = list('entries')
+const users = list('users')
+
+entries.read(crudl.req()) // list all entries (results are paginated)
+users.read(crudl.req()) // list all users (results are paginated)
 ```
-
 
 ### Views
 With views, you create the visual representation by defining the _listView_, _changeView_ and _addView_ options:
