@@ -161,7 +161,7 @@ var listView = {
 var changeView = {
     // Required
     path: "api/path/to/collection/:id",
-    title: "Resource Name",
+    title: "Detail Name",
     actions: {
         get: req => entry(crudl.path.id).read(req),
         save: req => entry(crudl.path.id).update(req),
