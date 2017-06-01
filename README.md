@@ -135,7 +135,7 @@ defaults.baseURL = '/rest-api/'
 
 const list = createDRFConnector(':collection/').use(numberedPagination())
 const entries = list('entries') // URL resolves to '/rest-api/entries/'
-const users = list('users') // URL resolves to '/rest-api/entries/'
+const users = list('users') // URL resolves to '/rest-api/users/'
 
 const request = crudl.createRequest() // Creates an authenticated request
 
