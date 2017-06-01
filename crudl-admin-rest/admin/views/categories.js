@@ -167,7 +167,7 @@ changeView.fields = [
             title: 'Section',
             actions: {
                 get: (req) => section(crudl.context('section')).read(req),
-                save: (req) => section(crudl.context('section')).update(req).then(data => data.id),
+                save: (req) => section(crudl.context('section')).update(req),
             },
             fields: [
                 {
