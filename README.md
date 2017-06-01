@@ -124,7 +124,7 @@ In order for CRUDL to work, you mainly need to define _connectors_ and _views_.
 ### Connectors
 The _connectors_ provide the views with a unified access to different APIs like REST or GraphQL. Each _connector_ usually represents a single API endpoint (or query) and implements the CRUD methods (create, read, update, delete). Moreover, the _connector_ handles pagination and transforms the request/response.
 
-There is a npm package implementing general connectors [crudl-connectors-base](https://github.com/crudlio/crudl-connectors-base) that can be extended (using middleware) to fit your particular needs. We also provide a Django Rest Framework (DRF) connectors package that does most of the heavy lifting for you [crudl-connectors-drf](https://github.com/crudlio/crudl-connectors-drf).
+There is an npm package implementing [general connectors](https://github.com/crudlio/crudl-connectors-base) that can be extended (using middleware) to fit your particular needs. We also provide [Django Rest Framework connectors](https://github.com/crudlio/crudl-connectors-drf) that do most of the heavy lifting for you when you're using DRF at the backend.
 
 Usage examples of DRF connectors:
 ```js
@@ -134,11 +134,13 @@ import { numberedPagination } from 'crudl-connectors-drf/lib/middleware'
 defaults.baseURL = '/rest-api/'
 
 const list = createDRFConnector(':collection/').use(numberedPagination())
-const entries = list('entries')
-const users = list('users')
+const entries = list('entries') // URL resolves to '/rest-api/entries/'
+const users = list('users') // URL resolves to '/rest-api/entries/'
 
-entries.read(crudl.req()) // list all entries (results are paginated)
-users.read(crudl.req()) // list all users (results are paginated)
+const request = crudl.createRequest() // Creates an authenticated request
+
+entries.read(request) // list all entries (results are paginated)
+users.read(request.filter('is_staff', true)) // list all staff users (results are paginated)
 ```
 
 ### Views
