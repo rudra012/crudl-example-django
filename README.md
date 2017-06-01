@@ -137,7 +137,7 @@ const list = createDRFConnector(':collection/').use(numberedPagination())
 const entries = list('entries') // URL resolves to '/rest-api/entries/'
 const users = list('users') // URL resolves to '/rest-api/users/'
 
-const request = crudl.createRequest() // Creates an authenticated request
+const request = crudl.createRequest() // Creates an authenticated request (alias crudl.req())
 
 entries.read(request) // list all entries (results are paginated)
 users.read(request.filter('is_staff', true)) // list all staff users (results are paginated)
