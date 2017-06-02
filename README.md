@@ -289,14 +289,14 @@ The descriptor _Links_ is an example of related objects which are assigned throu
 ```js
 changeView.tabs = [
     {
-        title: 'Links',
-        actions: {
-            list: req => links.read(req.filter('entry', crudl.path.id)),
+        title: 'Links', // Required
+        actions: {      
+            list: req => links.read(req.filter('entry', crudl.path.id)), // Requi
             add: req => links.create(req),
             save: req => link(req.data.id).update(req),
             delete: req => link(req.data.id).delete(req),
         },
-        itemTitle: '{url}',
+        getItemTitle: (data) => `${data.url} (${data.title})`,
         fields: [
             {
                 name: 'url',
@@ -322,6 +322,9 @@ changeView.tabs = [
     },
 ]
 ```
+- The actions `list`, `add`, `save` and `delete` follow the same logic as the corresponding actions of list, change and add views.
+- `getItemTitle: (data) => <string>` defines the displayed title of the item form. If it is not provided, then the value of the first field is used (in this case it would be the URL value).
+- It's typical for the tab views to make use of hidden fields to include the related object's id in the form data.
 
 ### Normalize/denormalize
 With _Entries_, we set the owner to the currently logged-in user with denormalize:

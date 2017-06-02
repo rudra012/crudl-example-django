@@ -376,7 +376,7 @@ changeView.tabs = [
             save: (req) => links.update(req),
             delete: (req) => links.delete(req)
         },
-        itemTitle: '{url}',
+        getItemTitle: (data) => `${data.url} (${data.title})`,
         fields: [
             {
                 name: 'url',
