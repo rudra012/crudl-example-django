@@ -19,10 +19,12 @@ var listView = {
     title: 'Blog Entries',
     actions: {
         /* here we add a custom column based on the currently logged-in user */
-        list: req => entries.read(req).then(data => data.map((item) => {
-            item.is_owner = crudl.auth.user === item.owner
-            return item
-        })),
+        list: req => entries.read(req).then((data) => {
+            data.forEach((item) => {
+                item.is_owner = crudl.auth.user === item.owner
+            })
+            return data
+        })
     },
 }
 
