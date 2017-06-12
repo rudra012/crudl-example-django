@@ -128,8 +128,8 @@ There is an npm package implementing [general connectors](https://github.com/cru
 
 Usage examples of DRF connectors:
 ```js
-import { createDRFConnector, defaults } from 'crudl-connectors-drf'
-import { numberedPagination } from 'crudl-connectors-drf/lib/middleware'
+import { createDRFConnector, defaults } from '@crudlio/crudl-connectors-drf'
+import { numberedPagination } from '@crudlio/crudl-connectors-drf/lib/middleware'
 
 defaults.baseURL = '/rest-api/'
 

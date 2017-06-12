@@ -1,6 +1,6 @@
-import { createDRFConnector, defaults } from 'crudl-connectors-drf'
-import { numberedPagination } from 'crudl-connectors-drf/lib/middleware'
-import { transformData } from 'crudl-connectors-base/lib/middleware'
+import { createDRFConnector, defaults } from '@crudlio/crudl-connectors-drf'
+import { numberedPagination } from '@crudlio/crudl-connectors-drf/lib/middleware'
+import { transformData } from '@crudlio/crudl-connectors-base/lib/middleware'
 
 defaults.baseURL = '/rest-api/'
 

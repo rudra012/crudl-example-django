@@ -42,10 +42,10 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-      "crudl-connectors-base": "git+ssh://git@github.com/crudlio/crudl-connectors-base.git",
-      "lodash": "^4.17.4",
-      "pluralize": "^5.0.0",
-      "react": "^15.1.0",
-      "uuid": "^3.0.1"
+    "@crudlio/crudl-connectors-base": "^0.1.1",
+    "lodash": "^4.17.4",
+    "pluralize": "^5.0.0",
+    "react": "^15.1.0",
+    "uuid": "^3.0.1"
   }
 }

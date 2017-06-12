@@ -1,4 +1,4 @@
-import { consumeParams } from 'crudl-connectors-base'
+import { consumeParams } from '@crudlio/crudl-connectors-base'
 
 
 /**

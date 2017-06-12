@@ -42,7 +42,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "crudl-connectors-drf": "git+ssh://git@github.com/crudlio/crudl-connectors-drf.git",
+    "@crudlio/crudl-connectors-drf": "^0.1.1",
     "react": "^15.1.0"
   }
 }
