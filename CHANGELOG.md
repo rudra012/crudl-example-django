@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 (Not yet released)
+* NEW: compatibility with CRUDL 0.3.0. This includes:
+    - Using the [connectors package](https://github.com/crudlio/crudl-connectors-drf)
+    - Using the `admin.id` and `admin.crudlVersion` admin attributes
+    - Using the new custom field component logic.
+    - Using the new field props logic (all field descriptor attributes are now considered props)
+    - Using the new add/edit relations logic
+* NEW: A FielField example in blog entries.
+* NEW: Bulk actions examples (tags, sections and categories)
+
 ## 0.2.0 (2016-01-26)
 * NEW: compatibility with CRUDL 0.2.0
 * NEW: using CDN to serve CRUDL core (js/css).
