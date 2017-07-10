@@ -1,6 +1,8 @@
 # Changelog
 
-## 0.3.0 (Not yet released)
+## 0.4.0 (not yet released)
+
+## 0.3.0 (2017-07-10)
 * NEW: compatibility with CRUDL 0.3.0. This includes:
     - Using the [connectors package](https://github.com/crudlio/crudl-connectors-drf)
     - Using the `admin.id` and `admin.crudlVersion` admin attributes
