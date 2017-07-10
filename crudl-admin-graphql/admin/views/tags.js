@@ -15,22 +15,22 @@ var listView = {
     actions: {
         list: tags.read,
     },
-    bulkActions: {
-        delete: {
-            description: 'Delete selected',
-            modalConfirm: {
-                message: "All the selected items will be deleted. This action cannot be reversed!",
-                modalType: 'modal-delete',
-                labelConfirm: "Delete All",
-            },
-            action: (selection) => {
-                return Promise.all(selection.map(
-                    item => tags.delete(crudl.req({ id: item.id })))
-                )
-                .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
-            },
-        },
-    },
+    // bulkActions: {
+    //     delete: {
+    //         description: 'Delete selected',
+    //         modalConfirm: {
+    //             message: "All the selected items will be deleted. This action cannot be reversed!",
+    //             modalType: 'modal-delete',
+    //             labelConfirm: "Delete All",
+    //         },
+    //         action: (selection) => {
+    //             return Promise.all(selection.map(
+    //                 item => tags.delete(crudl.req({ id: item.id })))
+    //             )
+    //             .then(() => crudl.successMessage(`All items (${selection.length}) were deleted`))
+    //         },
+    //     },
+    // },
 }
 
 listView.fields = [
