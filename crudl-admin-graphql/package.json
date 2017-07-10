@@ -1,6 +1,6 @@
 {
   "name": "crudl-django-graphql",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "crudl example django (graphql)",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "@crudlio/crudl-connectors-base": "^0.1.1",
+    "@crudlio/crudl-connectors-base": "^0.1.2",
     "lodash": "^4.17.4",
     "pluralize": "^5.0.0",
     "react": "^15.1.0",

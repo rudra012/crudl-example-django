@@ -1,6 +1,6 @@
 {
   "name": "crudl-django-rest",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "crudl example django (rest)",
   "main": "index.js",
   "scripts": {
@@ -42,7 +42,7 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
-    "@crudlio/crudl-connectors-drf": "^0.1.1",
+    "@crudlio/crudl-connectors-drf": "^0.1.2",
     "react": "^15.1.0"
   }
 }
