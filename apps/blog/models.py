@@ -171,6 +171,10 @@ class Tag(models.Model):
     counter_entries.short_description = u"No. Entries"
 
 
+def image_upload_path(instance, filename):
+    return os.path.join(u"uploads", str(instance.id), filename)
+
+
 class Entry(models.Model):
     # main
     title = models.CharField(u"Title", max_length=200)
@@ -182,7 +186,7 @@ class Entry(models.Model):
     category = models.ForeignKey(Category, verbose_name=u"Category", related_name="entries", blank=True, null=True)
     tags = models.ManyToManyField(Tag, verbose_name=u"Tags", related_name="entries", blank=True)
     # contents
-    image = models.ImageField(upload_to='uploads/', blank=True, null=True)
+    image = models.ImageField(upload_to=image_upload_path, blank=True, null=True)
     summary = models.TextField(u"Summary", max_length=500, blank=True)
     body = models.TextField(u"Body", blank=True)
     # author (currently not used)
