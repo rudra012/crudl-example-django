@@ -92,8 +92,8 @@ if os.path.exists(os.path.join(BASE_PATH, 'static', 'crudl')):
     CRUDL_JS = static("crudl/crudl.js")
     CRUDL_CSS = static("crudl/crudl-ui/css/crudl-ui.css")
 else:
-    CRUDL_JS = "http://cdn.crudl.io/static/releases/0.2.0/crudl.min.js"
-    CRUDL_CSS = "http://cdn.crudl.io/static/releases/0.2.0/crudl-ui/css/crudl-ui.css"
+    CRUDL_JS = "http://cdn.crudl.io/static/releases/0.3.0/crudl.min.js"
+    CRUDL_CSS = "http://cdn.crudl.io/static/releases/0.3.0/crudl-ui/css/crudl-ui.css"
 
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
