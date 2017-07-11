@@ -21,7 +21,7 @@ admin.views = { users, sections, categories, tags, entries }
 admin.auth = { login, logout }
 admin.custom = { dashboard: CustomDashboard }
 admin.id = 'crudl-example-django'
-admin.crudlVersion = "^0.3.0"
+admin.crudlVersion = "^0.4.0"
 admin.messages = {
     'login.button': 'Sign in',
     'logout.button': 'Sign out',
